@@ -1,0 +1,105 @@
+[gd_scene format=3 uid="uid://blh3u2tutrnh5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ph7jy"]
+size = Vector2(2560, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ejfvi"]
+size = Vector2(220, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rqe2n"]
+size = Vector2(220, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4hbwe"]
+size = Vector2(220, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7h5uj"]
+size = Vector2(40, 720)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y4u2d"]
+size = Vector2(40, 720)
+
+[node name="AreaTeste" type="Node2D" unique_id=2017880410]
+
+[node name="Chao" type="StaticBody2D" parent="." unique_id=1205021038]
+position = Vector2(1280, 680)
+
+[node name="Colisao" type="CollisionShape2D" parent="Chao" unique_id=646284507]
+shape = SubResource("RectangleShape2D_ph7jy")
+
+[node name="Visual" type="ColorRect" parent="Chao" unique_id=181670161]
+offset_left = -1280.0
+offset_top = -40.0
+offset_right = 1280.0
+offset_bottom = 40.0
+mouse_filter = 2
+color = Color(0.3, 0.32, 0.42, 1)
+
+[node name="Plataforma1" type="StaticBody2D" parent="." unique_id=1123180270]
+position = Vector2(500, 550)
+
+[node name="Colisao" type="CollisionShape2D" parent="Plataforma1" unique_id=2001298608]
+shape = SubResource("RectangleShape2D_ejfvi")
+
+[node name="Visual" type="ColorRect" parent="Plataforma1" unique_id=1299989662]
+offset_left = -110.0
+offset_top = -12.0
+offset_right = 110.0
+offset_bottom = 12.0
+mouse_filter = 2
+color = Color(0.55, 0.6, 0.78, 1)
+
+[node name="Plataforma2" type="StaticBody2D" parent="." unique_id=1538988675]
+position = Vector2(820, 460)
+
+[node name="Colisao" type="CollisionShape2D" parent="Plataforma2" unique_id=1496987567]
+shape = SubResource("RectangleShape2D_rqe2n")
+
+[node name="Visual" type="ColorRect" parent="Plataforma2" unique_id=1326623525]
+offset_left = -110.0
+offset_top = -12.0
+offset_right = 110.0
+offset_bottom = 12.0
+mouse_filter = 2
+color = Color(0.55, 0.6, 0.78, 1)
+
+[node name="Plataforma3" type="StaticBody2D" parent="." unique_id=562430407]
+position = Vector2(1200, 550)
+
+[node name="Colisao" type="CollisionShape2D" parent="Plataforma3" unique_id=956505212]
+shape = SubResource("RectangleShape2D_4hbwe")
+
+[node name="Visual" type="ColorRect" parent="Plataforma3" unique_id=1152859468]
+offset_left = -110.0
+offset_top = -12.0
+offset_right = 110.0
+offset_bottom = 12.0
+mouse_filter = 2
+color = Color(0.55, 0.6, 0.78, 1)
+
+[node name="ParedeEsquerda" type="StaticBody2D" parent="." unique_id=1770702689]
+position = Vector2(-20, 360)
+
+[node name="Colisao" type="CollisionShape2D" parent="ParedeEsquerda" unique_id=8318131]
+shape = SubResource("RectangleShape2D_7h5uj")
+
+[node name="Visual" type="ColorRect" parent="ParedeEsquerda" unique_id=1128686011]
+offset_left = -20.0
+offset_top = -360.0
+offset_right = 20.0
+offset_bottom = 360.0
+mouse_filter = 2
+color = Color(0.3, 0.32, 0.42, 1)
+
+[node name="ParedeDireita" type="StaticBody2D" parent="." unique_id=182337948]
+position = Vector2(2580, 360)
+
+[node name="Colisao" type="CollisionShape2D" parent="ParedeDireita" unique_id=65884320]
+shape = SubResource("RectangleShape2D_y4u2d")
+
+[node name="Visual" type="ColorRect" parent="ParedeDireita" unique_id=1218966051]
+offset_left = -20.0
+offset_top = -360.0
+offset_right = 20.0
+offset_bottom = 360.0
+mouse_filter = 2
+color = Color(0.3, 0.32, 0.42, 1)
