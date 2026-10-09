@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://dvkyqfj5qsk48"]
+
+[ext_resource type="Script" uid="uid://dp2sdcqpe73md" path="res://scripts/jogador/jogador.gd" id="1_tm1li"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ismvl"]
+size = Vector2(32, 64)
+
+[node name="Jogador" type="CharacterBody2D" unique_id=1220948030]
+collision_layer = 2
+script = ExtResource("1_tm1li")
+
+[node name="Visual" type="Node2D" parent="." unique_id=487668044]
+
+[node name="Corpo" type="ColorRect" parent="Visual" unique_id=257882110]
+offset_left = -16.0
+offset_top = -64.0
+offset_right = 16.0
+mouse_filter = 2
+color = Color(0.93, 0.78, 0.35, 1)
+
+[node name="Frente" type="ColorRect" parent="Visual" unique_id=2058199819]
+offset_left = 6.0
+offset_top = -56.0
+offset_right = 16.0
+offset_bottom = -46.0
+mouse_filter = 2
+color = Color(0.15, 0.13, 0.2, 1)
+
+[node name="Colisao" type="CollisionShape2D" parent="." unique_id=985087858]
+position = Vector2(0, -32)
+shape = SubResource("RectangleShape2D_ismvl")
