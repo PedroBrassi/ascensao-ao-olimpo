@@ -29,3 +29,7 @@ color = Color(0.15, 0.13, 0.2, 1)
 [node name="Colisao" type="CollisionShape2D" parent="." unique_id=985087858]
 position = Vector2(0, -32)
 shape = SubResource("RectangleShape2D_ismvl")
+
+[node name="Camera" type="Camera2D" parent="." unique_id=2130659535]
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
