@@ -1,0 +1,16 @@
+# Godot 4: cache local do editor (cada pessoa gera o seu)
+.godot/
+/android/
+
+# Builds exportadas
+/build/
+*.exe
+*.pck
+*.x86_64
+
+# Sistema operacional e editores
+.DS_Store
+Thumbs.db
+*.tmp
+*~
+.vscode/
