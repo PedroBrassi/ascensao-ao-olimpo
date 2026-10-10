@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dvkyqfj5qsk48" path="res://cenas/jogador/jogador.tscn" id="1_ejfvi"]
 [ext_resource type="Script" uid="uid://duc02wmwkk3ha" path="res://scripts/fases/area_de_jogo.gd" id="1_rqe2n"]
+[ext_resource type="PackedScene" uid="uid://flqij84s5vsb" path="res://cenas/objetos/espinhos.tscn" id="3_4hbwe"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ph7jy"]
 size = Vector2(2560, 80)
@@ -110,3 +111,6 @@ color = Color(0.3, 0.32, 0.42, 1)
 
 [node name="Jogador" parent="." unique_id=1220948030 instance=ExtResource("1_ejfvi")]
 position = Vector2(200, 640)
+
+[node name="Espinhos" parent="." unique_id=604478841 instance=ExtResource("3_4hbwe")]
+position = Vector2(1000, 640)
