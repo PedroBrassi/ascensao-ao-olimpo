@@ -3,9 +3,11 @@
 [ext_resource type="PackedScene" uid="uid://dvkyqfj5qsk48" path="res://cenas/jogador/jogador.tscn" id="1_ejfvi"]
 [ext_resource type="Script" uid="uid://duc02wmwkk3ha" path="res://scripts/fases/area_de_jogo.gd" id="1_rqe2n"]
 [ext_resource type="PackedScene" uid="uid://flqij84s5vsb" path="res://cenas/objetos/espinhos.tscn" id="3_4hbwe"]
+[ext_resource type="Script" uid="uid://dqstreepw4ry4" path="res://scripts/objetos/zona_de_queda.gd" id="4_y4u2d"]
+[ext_resource type="PackedScene" uid="uid://bj7na3ehi027a" path="res://cenas/objetos/checkpoint.tscn" id="5_cn5tp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ph7jy"]
-size = Vector2(2560, 80)
+size = Vector2(1700, 80)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ejfvi"]
 size = Vector2(220, 24)
@@ -22,19 +24,25 @@ size = Vector2(40, 720)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y4u2d"]
 size = Vector2(40, 720)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5utae"]
+size = Vector2(700, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4w4ih"]
+size = Vector2(2960, 40)
+
 [node name="AreaTeste" type="Node2D" unique_id=2017880410]
 script = ExtResource("1_rqe2n")
 
 [node name="Chao" type="StaticBody2D" parent="." unique_id=1205021038]
-position = Vector2(1280, 680)
+position = Vector2(850, 680)
 
 [node name="Colisao" type="CollisionShape2D" parent="Chao" unique_id=646284507]
 shape = SubResource("RectangleShape2D_ph7jy")
 
 [node name="Visual" type="ColorRect" parent="Chao" unique_id=181670161]
-offset_left = -1280.0
+offset_left = -850.0
 offset_top = -40.0
-offset_right = 1280.0
+offset_right = 850.0
 offset_bottom = 40.0
 mouse_filter = 2
 color = Color(0.3, 0.32, 0.42, 1)
@@ -114,3 +122,29 @@ position = Vector2(200, 640)
 
 [node name="Espinhos" parent="." unique_id=604478841 instance=ExtResource("3_4hbwe")]
 position = Vector2(1000, 640)
+
+[node name="Chao2" type="StaticBody2D" parent="." unique_id=562762917]
+position = Vector2(2210, 680)
+
+[node name="Colisao" type="CollisionShape2D" parent="Chao2" unique_id=1974546762]
+shape = SubResource("RectangleShape2D_5utae")
+
+[node name="Visual" type="ColorRect" parent="Chao2" unique_id=1154249022]
+offset_left = -350.0
+offset_top = -40.0
+offset_right = 350.0
+offset_bottom = 40.0
+mouse_filter = 2
+color = Color(0.3, 0.32, 0.42, 1)
+
+[node name="ZonaDeQueda" type="Area2D" parent="." unique_id=1109941145]
+position = Vector2(1280, 800)
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("4_y4u2d")
+
+[node name="Colisao" type="CollisionShape2D" parent="ZonaDeQueda" unique_id=335810169]
+shape = SubResource("RectangleShape2D_4w4ih")
+
+[node name="Checkpoint" parent="." unique_id=1412923462 instance=ExtResource("5_cn5tp")]
+position = Vector2(1500, 640)
