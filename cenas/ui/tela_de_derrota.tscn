@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://b3g3cepdl0to2"]
+
+[ext_resource type="Script" uid="uid://da7v4uj51ec8v" path="res://scripts/ui/tela_de_derrota.gd" id="1_0faq8"]
+
+[node name="TelaDeDerrota" type="Control" unique_id=1090944684]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_0faq8")
+
+[node name="Fundo" type="ColorRect" parent="." unique_id=1007472143]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.05, 0.05, 0.09, 0.8)
+
+[node name="Centro" type="CenterContainer" parent="." unique_id=672230446]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Caixa" type="VBoxContainer" parent="Centro" unique_id=574663453]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Titulo" type="Label" parent="Centro/Caixa" unique_id=1395641955]
+layout_mode = 2
+theme_override_font_sizes/font_size = 56
+text = "Você perdeu"
+horizontal_alignment = 1
+
+[node name="Texto" type="Label" parent="Centro/Caixa" unique_id=2000015995]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "As três vidas acabaram."
+horizontal_alignment = 1
+
+[node name="TentarDeNovo" type="Button" parent="Centro/Caixa" unique_id=1657542312]
+custom_minimum_size = Vector2(260, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Tentar de novo"
