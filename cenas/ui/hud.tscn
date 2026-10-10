@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cfg36ue0u1gm6" path="res://scripts/ui/hud.gd" id="1_stylc"]
 [ext_resource type="PackedScene" uid="uid://b3g3cepdl0to2" path="res://cenas/ui/tela_de_derrota.tscn" id="2_dspji"]
+[ext_resource type="PackedScene" uid="uid://ddov5f1vyqe8h" path="res://cenas/ui/menu_de_pausa.tscn" id="3_lhbpl"]
 
 [node name="Hud" type="CanvasLayer" unique_id=1952125550]
 script = ExtResource("1_stylc")
@@ -15,4 +16,8 @@ mouse_filter = 2
 theme_override_constants/separation = 8
 
 [node name="TelaDeDerrota" parent="." unique_id=1090944684 instance=ExtResource("2_dspji")]
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuDePausa" parent="." unique_id=1120425217 instance=ExtResource("3_lhbpl")]
 anchors_preset = 15
