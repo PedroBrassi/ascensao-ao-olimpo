@@ -1,6 +1,7 @@
 class_name Jogador
 extends CharacterBody2D
-## Movimentação do personagem principal: andar, pular, cair e aterrissar.
+## Personagem principal: movimentação (andar, pular, cair e aterrissar),
+## ponto de retorno e reação à perda das vidas.
 ##
 ## A origem do nó fica nos pés do personagem. Os valores abaixo aparecem no
 ## Inspetor e podem ser ajustados sem mexer no código.
@@ -38,12 +39,22 @@ signal pulou
 
 ## 1 quando olha para a direita, -1 para a esquerda.
 var olhando_para := 1
+## Lugar onde o personagem reaparece depois de cair. Começa na posição
+## inicial e muda a cada checkpoint ativado.
+var ponto_de_retorno := Vector2.ZERO
 
 var _coyote := 0.0
 var _buffer_do_salto := 0.0
 var _estava_no_chao := false
 
 @onready var _visual: Node2D = $Visual
+@onready var _vida: Vida = $Vida
+@onready var _camera: Camera2D = $Camera
+
+
+func _ready() -> void:
+	ponto_de_retorno = global_position
+	_vida.morreu.connect(_ao_morrer)
 
 
 func _physics_process(delta: float) -> void:
@@ -55,6 +66,31 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_atualizar_estado_do_chao()
 	_atualizar_direcao(direcao)
+
+
+## Chamado pelo Checkpoint quando o personagem passa por ele.
+func definir_ponto_de_retorno(posicao: Vector2) -> void:
+	ponto_de_retorno = posicao
+
+
+## Chamado pela ZonaDeQueda: perde uma vida e, se ainda restar alguma,
+## volta ao ponto de retorno.
+func cair() -> void:
+	_vida.receber_dano(1)
+	if not _vida.esta_morto():
+		reaparecer()
+
+
+func reaparecer() -> void:
+	global_position = ponto_de_retorno
+	velocity = Vector2.ZERO
+	_camera.reset_smoothing()  # a câmera pula direto, sem deslizar pela área
+
+
+func _ao_morrer() -> void:
+	# Provisório: perder as três vidas reinicia a área. A tela de derrota
+	# entra no cartão de vitória e derrota.
+	get_tree().reload_current_scene.call_deferred()
 
 
 func _aplicar_gravidade(delta: float) -> void:
