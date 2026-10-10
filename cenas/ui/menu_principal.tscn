@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://b75pu0pd1fsk1"]
+
+[ext_resource type="Script" uid="uid://cj73iglg37vxt" path="res://scripts/ui/menu_principal.gd" id="1_4oe3b"]
+
+[node name="MenuPrincipal" type="Control" unique_id=1342041924]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_4oe3b")
+
+[node name="Fundo" type="ColorRect" parent="." unique_id=2005902678]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.09, 0.1, 0.16, 1)
+
+[node name="Centro" type="CenterContainer" parent="." unique_id=1700147445]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Caixa" type="VBoxContainer" parent="Centro" unique_id=883688617]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Titulo" type="Label" parent="Centro/Caixa" unique_id=1245056590]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93, 0.78, 0.35, 1)
+theme_override_font_sizes/font_size = 72
+text = "Ascensão ao Olimpo"
+horizontal_alignment = 1
+
+[node name="Espaco" type="Control" parent="Centro/Caixa" unique_id=376563414]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="Jogar" type="Button" parent="Centro/Caixa" unique_id=744873234]
+custom_minimum_size = Vector2(260, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 22
+text = "Jogar"
+
+[node name="Sair" type="Button" parent="Centro/Caixa" unique_id=1449911976]
+custom_minimum_size = Vector2(260, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 22
+text = "Sair"

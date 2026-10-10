@@ -54,7 +54,6 @@ var _estava_no_chao := false
 
 func _ready() -> void:
 	ponto_de_retorno = global_position
-	_vida.morreu.connect(_ao_morrer)
 
 
 func _physics_process(delta: float) -> void:
@@ -85,12 +84,6 @@ func reaparecer() -> void:
 	global_position = ponto_de_retorno
 	velocity = Vector2.ZERO
 	_camera.reset_smoothing()  # a câmera pula direto, sem deslizar pela área
-
-
-func _ao_morrer() -> void:
-	# Provisório: perder as três vidas reinicia a área. A tela de derrota
-	# entra no cartão de vitória e derrota.
-	get_tree().reload_current_scene.call_deferred()
 
 
 func _aplicar_gravidade(delta: float) -> void:

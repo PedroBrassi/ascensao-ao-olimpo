@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://ddov5f1vyqe8h"]
+
+[ext_resource type="Script" uid="uid://bhcnvarq0gx5h" path="res://scripts/ui/menu_de_pausa.gd" id="1_i6e0x"]
+
+[node name="MenuDePausa" type="Control" unique_id=1120425217]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_i6e0x")
+
+[node name="Fundo" type="ColorRect" parent="." unique_id=1960435130]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.05, 0.05, 0.09, 0.7)
+
+[node name="Centro" type="CenterContainer" parent="." unique_id=353460104]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Caixa" type="VBoxContainer" parent="Centro" unique_id=437153854]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Titulo" type="Label" parent="Centro/Caixa" unique_id=695601462]
+layout_mode = 2
+theme_override_font_sizes/font_size = 56
+text = "Pausa"
+horizontal_alignment = 1
+
+[node name="Continuar" type="Button" parent="Centro/Caixa" unique_id=1543622790]
+custom_minimum_size = Vector2(260, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Continuar"
+
+[node name="Reiniciar" type="Button" parent="Centro/Caixa" unique_id=1725175278]
+custom_minimum_size = Vector2(260, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Reiniciar área"
