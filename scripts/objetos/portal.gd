@@ -24,6 +24,5 @@ func _ao_entrar(corpo: Node2D) -> void:
 	if proxima_cena.is_empty():
 		push_warning("Portal sem próxima cena definida.")
 		return
-	# A troca é adiada para o fim do quadro: a cena atual não pode ser
-	# removida no meio do processamento da física.
-	get_tree().change_scene_to_file.call_deferred(proxima_cena)
+		Transicao.trocar_cena(proxima_cena)
+		

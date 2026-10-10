@@ -12,9 +12,13 @@ config_version=5
 
 config/name="Ascensão ao Olimpo"
 config/description="Jogo 2D de plataforma e combate: supere os desafios dos deuses e alcance o topo do Olimpo."
-run/main_scene="res://cenas/fases/teste/area_teste.tscn"
+run/main_scene="res://cenas/ui/menu_principal.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Transicao="*uid://bb1bgxisaj5ox"
 
 [display]
 
