@@ -18,7 +18,8 @@ como sprite sheets.
 7. [Regras para evitar conflitos](#7-regras-para-evitar-conflitos)
 8. [Se der conflito](#8-se-der-conflito)
 9. [Trello](#9-trello)
-10. [Configurações do projeto](#10-configurações-do-projeto)
+10. [Lista de controle (CHECK.md)](#10-lista-de-controle-checkmd)
+11. [Configurações do projeto](#11-configurações-do-projeto)
 
 ---
 
@@ -30,7 +31,7 @@ como sprite sheets.
 | Aurélio | `aurelio` | Modelos, animações, cenários, design das fases, efeitos sonoros        | `assets/sprites/`, `assets/tilesets/`, `assets/fundos/`, `assets/audio/efeitos/` |
 | Julia   | `julia`   | Definições de jogo, estilo visual, wireframes, textos, músicas, créditos, teste de menus | `assets/ui/`, `assets/fontes/`, `assets/audio/musicas/` |
 
-A divisão detalhada das tarefas está no quadro do Trello. Cada cartão tem um responsável.
+A divisão detalhada das tarefas está no quadro do Trello, onde cada cartão tem um responsável. A ordem em que as tarefas devem ser feitas e o que cada uma depende estão no [CHECK.md](CHECK.md).
 
 ## 2. O que instalar
 
@@ -56,6 +57,8 @@ para o repositório.
 
 ```
 ascensao-ao-olimpo/
+├── README.md            este arquivo
+├── CHECK.md             tarefas de cada um e ordem de implementação
 ├── project.godot        configuração do projeto
 ├── icon.svg             ícone do jogo
 ├── assets/              tudo o que é arte e áudio, já pronto para o jogo
@@ -78,6 +81,7 @@ ascensao-ao-olimpo/
 │   ├── objetos/         plataformas, armadilhas, portas, checkpoints
 │   ├── ui/              menus, HUD, pausa, vitória, derrota
 │   └── fases/
+│       ├── teste/       áreas de teste, com formas simples no lugar da arte
 │       ├── fase_1_afrodite/
 │       ├── fase_2_ares/
 │       ├── fase_3_hades/
@@ -89,7 +93,8 @@ ascensao-ao-olimpo/
     ├── chefes/
     ├── objetos/
     ├── ui/
-    └── sistemas/        vidas, checkpoints, progressão, salvamento, áudio
+    ├── fases/           scripts das áreas, como os limites da câmera
+    └── sistemas/        dano e vida, transição entre telas, progressão, salvamento, áudio
 ```
 
 Regras de organização:
@@ -258,12 +263,32 @@ Na dúvida, pare e chame quem mexeu no mesmo arquivo. Nunca use `git push --forc
 - O cartão só vai para **Concluído** depois que o Pull Request dele entrar na `main`.
   Cartões de definição vão para Concluído quando o grupo aprovar o que foi escrito.
 
-## 10. Configurações do projeto
+## 10. Lista de controle (CHECK.md)
+
+O arquivo [CHECK.md](CHECK.md), na raiz do repositório, reúne as 87 tarefas do trabalho em um lugar só. Ele tem três partes:
+
+- **Tarefas de cada um.** As 29 tarefas de cada pessoa, com uma caixa de marcação e um código: **P** para o Pedro, **A** para o Aurélio, **J** para a Julia.
+- **Ordem total de implementação.** As 87 tarefas em uma sequência única, divididas em dez etapas. Cada tarefa lista de quais outras ela depende, e nenhuma aparece antes de uma dependência dela.
+- **O que pode começar agora.** As tarefas pendentes que não esperam nenhuma outra, e as que mais destravam o trabalho dos colegas.
+
+Como usar:
+
+- **Antes de começar uma tarefa**, procure o código dela na ordem total e confira se tudo em "Depende de" está marcado. Se não estiver, a tarefa ainda não pode ser concluída.
+- **Ao escolher o que fazer**, prefira as tarefas de que mais gente depende. Elas estão na tabela do fim do arquivo.
+- **Ao concluir uma tarefa**, troque `[ ]` por `[x]` nas duas partes do arquivo, no mesmo Pull Request que conclui a tarefa. Assim a marcação chega à `main` junto com o trabalho. Nas tarefas de definição, marque depois que o grupo aprovar.
+- **Trello e CHECK.md têm papéis diferentes.** O Trello mostra o andamento e quem é o responsável. O CHECK.md mostra a ordem e as dependências. Os dois devem dizer a mesma coisa sobre o que está concluído.
+
+A tabela de resumo, a contagem de cada etapa e a seção "O que pode começar agora" são um retrato da data escrita no topo do arquivo. Quem marcar tarefas atualiza também esses trechos.
+
+## 11. Configurações do projeto
 
 Valores provisórios, que mudam conforme as definições do grupo:
 
 - **Resolução base:** 1280×720, até a definição da escala dos sprites.
 - **Renderizador:** Compatibilidade, o mais leve e adequado para jogo 2D.
+- **Cena principal:** `cenas/ui/menu_principal.tscn`. O F5 abre o menu; o F6 roda a cena que estiver aberta no editor, o que serve para testar uma área direto.
+- **Autoload:** `Transicao` (`scripts/sistemas/transicao.gd`), que escurece a tela nas trocas de cena. Fica cadastrado em Projeto > Configurações do Projeto > Globais.
+- **Grupo `jogador`:** o personagem pertence a esse grupo. É por ele que o HUD e as telas encontram o personagem.
 - **Camadas de física:** 1 mundo, 2 jogador, 3 inimigos, 4 perigos, 5 interativos.
 - **Ações de entrada** (Projeto > Configurações do Projeto > Mapa de Entrada):
 
@@ -277,4 +302,4 @@ Valores provisórios, que mudam conforme as definições do grupo:
 | `interagir`      | E                           | Y          |
 | `pausar`         | Esc                         | Start      |
 
-O projeto ainda não tem cenas nem scripts: o jogo será desenvolvido do zero.
+O jogo está sendo desenvolvido do zero. O que já existe e o que falta estão no [CHECK.md](CHECK.md).
