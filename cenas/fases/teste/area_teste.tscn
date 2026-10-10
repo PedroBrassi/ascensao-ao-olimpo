@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://dqstreepw4ry4" path="res://scripts/objetos/zona_de_queda.gd" id="4_y4u2d"]
 [ext_resource type="PackedScene" uid="uid://bj7na3ehi027a" path="res://cenas/objetos/checkpoint.tscn" id="5_cn5tp"]
 [ext_resource type="PackedScene" uid="uid://drr1bwuq40ng6" path="res://cenas/ui/hud.tscn" id="6_cn5tp"]
+[ext_resource type="PackedScene" uid="uid://bursfnq7bb2ou" path="res://cenas/objetos/portal.tscn" id="7_5utae"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ph7jy"]
 size = Vector2(1700, 80)
@@ -151,3 +152,7 @@ shape = SubResource("RectangleShape2D_4w4ih")
 position = Vector2(1500, 640)
 
 [node name="Hud" parent="." unique_id=1952125550 instance=ExtResource("6_cn5tp")]
+
+[node name="Portal" parent="." unique_id=1616764863 instance=ExtResource("7_5utae")]
+position = Vector2(2460, 640)
+proxima_cena = "res://cenas/fases/teste/area_teste_2.tscn"
