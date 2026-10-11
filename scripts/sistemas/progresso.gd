@@ -12,7 +12,10 @@ signal mudou
 signal fase_foi_liberada(fase: int)
 
 const TOTAL_DE_FASES := 5
-const AREAS_POR_FASE := 2
+## Quantidade de áreas de cada fase, na ordem das fases: Afrodite, Ares,
+## Hades, Poseidon e Zeus. Para mudar a quantidade de uma fase, troque o
+## número aqui. Os valores de Ares em diante são provisórios.
+const AREAS_POR_FASE: Array[int] = [5, 2, 2, 2, 2]
 ## "user://" é a pasta de dados do jogo no computador de quem joga.
 const CAMINHO_DO_ARQUIVO := "user://progresso.json"
 
@@ -35,22 +38,41 @@ func area_esta_concluida(fase: int, area: int) -> bool:
 	return _chave(fase, area) in areas_concluidas
 
 
+## Quantas áreas a fase tem. Devolve 0 para uma fase que não existe.
+func areas_da_fase(fase: int) -> int:
+	if fase < 1 or fase > TOTAL_DE_FASES or fase > AREAS_POR_FASE.size():
+		return 0
+	return AREAS_POR_FASE[fase - 1]
+
+
+## Diz se a fase existe e tem uma área com esse número.
+func area_existe(fase: int, area: int) -> bool:
+	return area >= 1 and area <= areas_da_fase(fase)
+
+
+## Uma fase está concluída quando todas as áreas dela foram concluídas.
 func fase_esta_concluida(fase: int) -> bool:
-	for area in range(1, AREAS_POR_FASE + 1):
+	if areas_da_fase(fase) == 0:
+		return false
+	for area in range(1, areas_da_fase(fase) + 1):
 		if not area_esta_concluida(fase, area):
 			return false
 	return true
 
 
+## O jogo está concluído quando todas as fases estão concluídas.
 func jogo_esta_concluido() -> bool:
-	return fase_esta_concluida(TOTAL_DE_FASES)
+	for fase in range(1, TOTAL_DE_FASES + 1):
+		if not fase_esta_concluida(fase):
+			return false
+	return true
 
 
 ## Marca uma área como concluída. Se com ela a fase inteira ficou concluída,
 ## libera a fase seguinte. Áreas fora das fases (fase 0) e áreas de fases
 ## ainda bloqueadas são ignoradas.
 func concluir_area(fase: int, area: int) -> void:
-	if not _area_existe(fase, area) or not fase_esta_liberada(fase):
+	if not area_existe(fase, area) or not fase_esta_liberada(fase):
 		return
 	if area_esta_concluida(fase, area):
 		return
@@ -107,10 +129,6 @@ func carregar() -> void:
 				areas_concluidas.append(chave)
 
 
-func _area_existe(fase: int, area: int) -> bool:
-	return fase >= 1 and fase <= TOTAL_DE_FASES and area >= 1 and area <= AREAS_POR_FASE
-
-
 func _chave(fase: int, area: int) -> String:
 	return "%d-%d" % [fase, area]
 
@@ -119,4 +137,4 @@ func _chave_e_valida(chave: String) -> bool:
 	var partes := chave.split("-")
 	if partes.size() != 2 or not partes[0].is_valid_int() or not partes[1].is_valid_int():
 		return false
-	return _area_existe(int(partes[0]), int(partes[1]))
+	return area_existe(int(partes[0]), int(partes[1]))

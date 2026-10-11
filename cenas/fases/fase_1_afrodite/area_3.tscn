@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://c6axc1p8n8io1"]
+
+[ext_resource type="Script" uid="uid://duc02wmwkk3ha" path="res://scripts/fases/area_de_jogo.gd" id="1_2aiy7"]
+[ext_resource type="PackedScene" uid="uid://dvkyqfj5qsk48" path="res://cenas/jogador/jogador.tscn" id="2_rmpkr"]
+[ext_resource type="PackedScene" uid="uid://bursfnq7bb2ou" path="res://cenas/objetos/portal.tscn" id="3_cyw3n"]
+[ext_resource type="PackedScene" uid="uid://drr1bwuq40ng6" path="res://cenas/ui/hud.tscn" id="4_duvkf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v14c5"]
+size = Vector2(1280, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_au2dq"]
+size = Vector2(40, 720)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o2eeg"]
+size = Vector2(40, 720)
+
+[node name="AfroditeArea3" type="Node2D" unique_id=1525553031]
+script = ExtResource("1_2aiy7")
+fase = 1
+area = 3
+limites_da_camera = Rect2i(0, 0, 1280, 720)
+
+[node name="Chao" type="StaticBody2D" parent="." unique_id=2123605554]
+position = Vector2(640, 680)
+
+[node name="Colisao" type="CollisionShape2D" parent="Chao" unique_id=1797508956]
+shape = SubResource("RectangleShape2D_v14c5")
+
+[node name="Visual" type="ColorRect" parent="Chao" unique_id=889631764]
+offset_left = -640.0
+offset_top = -40.0
+offset_right = 640.0
+offset_bottom = 40.0
+mouse_filter = 2
+color = Color(0.3, 0.32, 0.42, 1)
+
+[node name="ParedeEsquerda" type="StaticBody2D" parent="." unique_id=1802111690]
+position = Vector2(-20, 360)
+
+[node name="Colisao" type="CollisionShape2D" parent="ParedeEsquerda" unique_id=1460598790]
+shape = SubResource("RectangleShape2D_au2dq")
+
+[node name="Visual" type="ColorRect" parent="ParedeEsquerda" unique_id=351473605]
+offset_left = -20.0
+offset_top = -360.0
+offset_right = 20.0
+offset_bottom = 360.0
+mouse_filter = 2
+color = Color(0.3, 0.32, 0.42, 1)
+
+[node name="ParedeDireita" type="StaticBody2D" parent="." unique_id=255217076]
+position = Vector2(1300, 360)
+
+[node name="Colisao" type="CollisionShape2D" parent="ParedeDireita" unique_id=1071032113]
+shape = SubResource("RectangleShape2D_o2eeg")
+
+[node name="Visual" type="ColorRect" parent="ParedeDireita" unique_id=1331291008]
+offset_left = -20.0
+offset_top = -360.0
+offset_right = 20.0
+offset_bottom = 360.0
+mouse_filter = 2
+color = Color(0.3, 0.32, 0.42, 1)
+
+[node name="Aviso" type="Label" parent="." unique_id=1947207549]
+offset_top = 220.0
+offset_right = 1280.0
+offset_bottom = 310.0
+theme_override_colors/font_color = Color(0.75, 0.78, 0.9, 1)
+theme_override_font_sizes/font_size = 28
+text = "ESQUELETO — Afrodite, área 3 de 5
+Falta montar esta área."
+horizontal_alignment = 1
+
+[node name="Jogador" parent="." unique_id=1220948030 instance=ExtResource("2_rmpkr")]
+position = Vector2(120, 640)
+
+[node name="Portal" parent="." unique_id=1616764863 instance=ExtResource("3_cyw3n")]
+position = Vector2(1160, 640)
+proxima_cena = "res://cenas/fases/fase_1_afrodite/area_4.tscn"
+
+[node name="Hud" parent="." unique_id=1952125550 instance=ExtResource("4_duvkf")]

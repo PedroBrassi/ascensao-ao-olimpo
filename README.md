@@ -1,8 +1,9 @@
 # Ascensão ao Olimpo
 
 Jogo 2D de plataforma e combate feito na Godot para o trabalho de Computação Gráfica.
-O jogador supera os desafios de Afrodite, Ares, Hades, Poseidon e Zeus, em cinco fases
-e dez áreas, até alcançar o topo do Olimpo.
+O jogador supera os desafios de Afrodite, Ares, Hades, Poseidon e Zeus, em cinco fases,
+até alcançar o topo do Olimpo. Cada fase é dividida em áreas, e a quantidade varia de
+fase para fase: Afrodite tem cinco, e as demais ainda serão definidas.
 
 O mundo é 2D. Personagens e inimigos são modelados e animados em 3D e entram no jogo
 como sprite sheets.
@@ -85,8 +86,8 @@ ascensao-ao-olimpo/
 │   └── fases/
 │       ├── teste/       áreas de teste, com formas simples no lugar da arte
 │       ├── fase_1_afrodite/
-│       │   ├── area_1.tscn   primeira área da fase (ainda não criada)
-│       │   ├── area_2.tscn   segunda área da fase (ainda não criada)
+│       │   ├── area_1.tscn   primeira das cinco áreas (por enquanto, só esqueleto)
+│       │   ├── ...           area_2.tscn a area_5.tscn
 │       │   └── elementos/    cenas usadas só nesta fase
 │       ├── fase_2_ares/      as outras fases seguem a mesma organização
 │       ├── fase_3_hades/
@@ -112,7 +113,7 @@ Regras de organização:
 - **Cada coisa na sua pasta.** Uma cena de inimigo vai em `cenas/inimigos/` e o script
   dela em `scripts/inimigos/`, com o mesmo nome base (`esqueleto.tscn` e `esqueleto.gd`).
 - **Cada fase tem a sua pasta** em `cenas/fases/`, com uma cena por área
-  (`area_1.tscn` e `area_2.tscn`) e uma subpasta `elementos/` para as cenas que só
+  (`area_1.tscn`, `area_2.tscn` e assim por diante) e uma subpasta `elementos/` para as cenas que só
   aquela fase usa, como um puzzle ou um mecanismo próprio dela. Os scripts desses
   elementos ficam em `scripts/fases/`, na pasta com o mesmo nome da fase.
 - **O que mais de uma fase usa fica nas pastas comuns:** `cenas/objetos/`,
@@ -308,7 +309,8 @@ Valores provisórios, que mudam conforme as definições do grupo:
 
 - **Resolução base:** 1280×720, até a definição da escala dos sprites.
 - **Renderizador:** Compatibilidade, o mais leve e adequado para jogo 2D.
-- **Cena principal:** `cenas/ui/menu_principal.tscn`. O F5 abre o menu; o F6 roda a cena que estiver aberta no editor, o que serve para testar uma área direto.
+- **Cena principal:** `cenas/ui/menu_principal.tscn`. O F5 abre o menu; o F6 roda a cena que estiver aberta no editor, o que serve para testar uma área direto. As áreas de teste não aparecem no menu: só se chega a elas pelo F6.
+- **Áreas por fase:** Afrodite tem 5; Ares, Hades, Poseidon e Zeus têm 2 cada, como valor provisório. A tabela fica em `Progresso.AREAS_POR_FASE`, no começo de `scripts/sistemas/progresso.gd`.
 - **Autoloads:** `Transicao` (`scripts/sistemas/transicao.gd`), que escurece a tela nas trocas de cena, e `Progresso` (`scripts/sistemas/progresso.gd`), que guarda as fases liberadas e as áreas concluídas e grava tudo em `user://progresso.json`. Os dois ficam cadastrados em Projeto > Configurações do Projeto > Globais.
 - **Grupo `jogador`:** o personagem pertence a esse grupo. É por ele que o HUD e as telas encontram o personagem.
 - **Camadas de física:** 1 mundo, 2 jogador, 3 inimigos, 4 perigos, 5 interativos.

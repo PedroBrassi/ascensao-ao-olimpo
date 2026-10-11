@@ -9,7 +9,7 @@ extends Control
 ## Primeira cena de cada fase, na ordem das fases. Deixe vazio enquanto a
 ## fase não existir: o botão dela fica apagado, com o aviso "em construção".
 @export_file("*.tscn") var cenas_das_fases: Array[String] = [
-	"res://cenas/fases/teste/area_teste.tscn",  # provisório: as áreas de teste fazem o papel da fase 1
+	"res://cenas/fases/fase_1_afrodite/area_1.tscn",
 	"",
 	"",
 	"",

@@ -45,14 +45,16 @@ O jogo já tem um ciclo completo, do menu até a liberação de fases:
 - Tela de derrota e menu de pausa, com saída para o menu principal.
 - Portal que conclui a área e leva à próxima cena, com escurecimento da tela.
 - Progresso com liberação de fases, gravado em arquivo.
-- Duas áreas de teste, que por enquanto fazem o papel da fase 1.
+- Quantidade de áreas própria de cada fase: cinco em Afrodite e duas, por enquanto, nas outras.
+- As cinco áreas de Afrodite como esqueleto, só com chão e portal, para a progressão poder ser testada.
+- Duas áreas de teste, fora das fases, para experimentar os sistemas.
 
 Ainda não há arte nem som. Tudo o que aparece na tela é feito de retângulos coloridos (`ColorRect`), que serão trocados pelos sprites quando a arte chegar. As colisões já estão nos tamanhos que o código usa.
 
 ## 2. Como rodar e testar
 
 - **F5** roda o jogo a partir do menu principal.
-- **F6** roda a cena aberta no editor. Serve para testar uma área direto, sem passar pelo menu.
+- **F6** roda a cena aberta no editor. Serve para testar uma área direto, sem passar pelo menu. É assim que se chega às áreas de teste, que não pertencem a nenhuma fase.
 
 Controles que já funcionam:
 
@@ -73,9 +75,9 @@ flowchart TD
     Menu[Menu principal] -->|Jogar| Selecao[Seleção de fase]
     Menu -->|Sair| Fim[Fecha o jogo]
     Selecao -->|Voltar| Menu
-    Selecao -->|Fase liberada| A1[Área 1 da fase]
-    A1 -->|Portal| A2[Área 2 da fase]
-    A2 -->|Portal| Selecao
+    Selecao -->|Fase liberada| A1[Primeira área da fase]
+    A1 -->|Portal| A2[Áreas seguintes, uma a uma]
+    A2 -->|Portal da última área| Selecao
     A1 -.->|Três vidas perdidas| Derrota[Tela de derrota]
     Derrota -->|Tentar de novo| A1
     A1 -.->|Esc| Pausa[Menu de pausa]
@@ -84,9 +86,9 @@ flowchart TD
 ```
 
 - Toda troca ou recarga de cena passa pela `Transicao`, que escurece e clareia a tela.
-- Atravessar o portal registra a área como concluída. Com as duas áreas de uma fase concluídas, a fase seguinte é liberada.
-- O portal da segunda área leva de volta à seleção de fase. É lá que a fase recém-liberada aparece.
-- Em qualquer área, Esc abre o menu de pausa. A derrota e a pausa valem para as duas áreas, não só para a primeira, como o diagrama mostra por simplicidade.
+- Atravessar o portal registra a área como concluída. Com todas as áreas de uma fase concluídas, a fase seguinte é liberada.
+- Cada portal leva à área seguinte da mesma fase, e o da última área leva de volta à seleção de fase. É lá que a fase recém-liberada aparece.
+- Em qualquer área, Esc abre o menu de pausa. A derrota e a pausa valem para todas as áreas, não só para a primeira, como o diagrama mostra por simplicidade.
 
 ## 4. Configuração do projeto
 
@@ -473,12 +475,14 @@ Toda área jogável tem na raiz um `Node2D` com o script `AreaDeJogo`. Ele guard
 | Propriedade | Valores | Para que serve |
 |---|---|---|
 | `fase` | 0 a 5 | Fase a que a área pertence. 0 significa fora das fases |
-| `area` | 0 a 2 | Número da área dentro da fase. 0 significa fora das fases |
+| `area` | 0 a 9 | Número da área dentro da fase, a partir de 1. 0 significa fora das fases |
 | `limites_da_camera` | retângulo em pixels | Canto superior esquerdo e tamanho da área |
 
 Ao carregar, a área passa os limites para a câmera do personagem, que deixa de mostrar o que está fora do cenário, e enquadra a câmera na hora, sem deslizar. O padrão é `(0, 0, 2560, 720)`: uma área de duas telas de largura.
 
 `fase` e `area` são o que o portal usa para registrar a conclusão. Uma área com `fase = 0` nunca conta para o progresso, o que serve para cenas de experimento.
+
+Quantas áreas cada fase tem está na tabela `Progresso.AREAS_POR_FASE` (seção 14). Se uma cena disser que é uma área que a fase não tem, como a área 7 de uma fase com cinco, o jogo avisa no console e essa cena não conta para o progresso.
 
 ## 13. Portal e conclusão de área
 
@@ -502,11 +506,23 @@ O portal pode depender de um puzzle: com acionadores na lista, ele só funciona 
 
 **Regras:**
 
-- O jogo tem 5 fases, cada uma com 2 áreas.
+- O jogo tem 5 fases. Cada fase tem a sua quantidade de áreas, guardada na tabela `AREAS_POR_FASE`.
 - A fase 1 começa liberada.
-- Concluir as duas áreas de uma fase libera a fase seguinte.
+- Concluir todas as áreas de uma fase libera a fase seguinte.
 - Concluir de novo uma área já concluída não muda nada.
 - Áreas de fases ainda bloqueadas e áreas com fase 0 são ignoradas.
+
+**Áreas por fase:**
+
+| Fase | Áreas | Situação do número |
+|---|---|---|
+| 1. Afrodite | 5 | Definido |
+| 2. Ares | 2 | Provisório |
+| 3. Hades | 2 | Provisório |
+| 4. Poseidon | 2 | Provisório |
+| 5. Zeus | 2 | Provisório |
+
+Para mudar a quantidade de uma fase, troque o número correspondente em `AREAS_POR_FASE`, no começo de `progresso.gd`. A lista segue a ordem das fases. Configurar a quantidade não cria as áreas: cada uma precisa da sua cena.
 
 **Funções e sinais:**
 
@@ -514,8 +530,10 @@ O portal pode depender de um puzzle: com acionadores na lista, ele só funciona 
 |---|---|---|
 | `fase_esta_liberada(fase)` | função | Diz se dá para entrar na fase |
 | `area_esta_concluida(fase, area)` | função | Diz se a área já foi concluída |
-| `fase_esta_concluida(fase)` | função | Diz se as duas áreas da fase foram concluídas |
-| `jogo_esta_concluido()` | função | Diz se a fase 5 foi concluída |
+| `areas_da_fase(fase)` | função | Diz quantas áreas a fase tem |
+| `area_existe(fase, area)` | função | Diz se a fase tem uma área com esse número |
+| `fase_esta_concluida(fase)` | função | Diz se todas as áreas da fase foram concluídas |
+| `jogo_esta_concluido()` | função | Diz se todas as fases foram concluídas |
 | `concluir_area(fase, area)` | função | Registra a conclusão. É o que o portal chama |
 | `reiniciar()` | função | Apaga todo o progresso |
 | `salvar()`, `carregar()` | funções | Gravam e leem o arquivo. Rodam sozinhas |
@@ -531,6 +549,8 @@ O portal pode depender de um puzzle: com acionadores na lista, ele só funciona 
 	"areas_concluidas": ["1-1", "1-2"]
 }
 ```
+
+**Saves antigos.** O formato do arquivo não mudou com a tabela de áreas. Um save feito quando a fase 1 tinha duas áreas continua valendo: as fases já liberadas continuam liberadas, e as áreas novas de Afrodite não são marcadas como concluídas. Quem está nessa situação tem a fase 2 liberada com a fase 1 ainda incompleta, e terminar a fase 1 depois não muda as fases liberadas.
 
 Cada área concluída aparece como `"fase-area"`. Na leitura, nada do arquivo é usado sem conferência: números fora da faixa são corrigidos, áreas inexistentes são descartadas, e um arquivo ilegível faz o jogo começar do zero com um aviso no console, em vez de dar erro.
 
@@ -580,11 +600,11 @@ A derrota e a pausa funcionam com o jogo pausado porque as duas cenas estão no 
 | Em construção | Apagado, com "(em construção)" | Fase liberada, mas ainda sem cena |
 | Bloqueada | Apagado, com "(bloqueada)" | Fase ainda não liberada |
 
-Os nomes das fases são o texto dos botões `Fase1` a `Fase5` na cena, e podem ser trocados pelo editor. A cena de entrada de cada fase fica na propriedade `cenas_das_fases`, uma lista com cinco caminhos. Hoje só o primeiro está preenchido, com a primeira área de teste.
+Os nomes das fases são o texto dos botões `Fase1` a `Fase5` na cena, e podem ser trocados pelo editor. A cena de entrada de cada fase fica na propriedade `cenas_das_fases`, uma lista com cinco caminhos. Hoje só o primeiro está preenchido, com `res://cenas/fases/fase_1_afrodite/area_1.tscn`.
 
 ## 17. Áreas de teste
 
-Ficam em `cenas/fases/teste/` e servem para experimentar os sistemas. Por enquanto estão marcadas como fase 1, áreas 1 e 2, para o progresso poder ser testado.
+Ficam em `cenas/fases/teste/` e servem para experimentar os sistemas. Estão marcadas como fase 0, área 0: não pertencem a nenhuma fase e atravessar os portais delas não muda o progresso. Não aparecem no menu; para jogar, abra a cena no editor e use F6.
 
 **`area_teste.tscn`**, com 2560 pixels de largura (duas telas):
 
@@ -599,11 +619,13 @@ Ficam em `cenas/fases/teste/` e servem para experimentar os sistemas. Por enquan
 | Espinhos | Em x = 1000, no chão |
 | Checkpoint | Em x = 1500 |
 | Buraco | Entre x = 1700 e 1860, com a zona de queda embaixo |
-| Portal | Em x = 2460, leva à área 2 |
+| Portal | Em x = 2460, leva à segunda área de teste |
 
 Os espelhos, a fonte e o receptor formam um puzzle: a luz desce até o primeiro espelho, e a solução é virar os dois, deixando o primeiro em `\` e o segundo em `/`. Assim a luz segue para a direita e sobe até o receptor, e a porta abre.
 
 **`area_teste_2.tscn`**, com 1280 pixels de largura (uma tela): chão, uma plataforma e um portal em x = 1160 que leva à seleção de fase. O portal começa bloqueado e depende de um puzzle de um espelho só: a fonte fica em x = 880, o espelho em x = 1000 e o receptor acima dele. Virar o espelho para `/` manda a luz para cima e libera a saída.
+
+**Áreas de Afrodite (esqueleto).** As cinco cenas `area_1.tscn` a `area_5.tscn`, em `cenas/fases/fase_1_afrodite/`, existem só para a progressão poder ser jogada do começo ao fim. Cada uma tem uma tela de largura, chão, duas paredes, o personagem, o HUD e um portal, além de um aviso escrito "ESQUELETO". O portal de cada uma leva à seguinte, e o da quinta leva à seleção de fase. Nenhuma delas está montada: faltam o desenho da área, os desafios e a arte. Quem for montar uma área abre a cena correspondente, constrói em cima e apaga o nó `Aviso`.
 
 ## 18. Como fazer
 
@@ -614,9 +636,11 @@ Os espelhos, a fonte e o receptor formam um puzzle: a luz desce até o primeiro 
 3. Monte o chão e as plataformas com `StaticBody2D` na camada 1.
 4. Instancie `cenas/jogador/jogador.tscn` e ponha o personagem com os pés no chão.
 5. Instancie `cenas/ui/hud.tscn`. Com ele vêm a tela de derrota e o menu de pausa.
-6. Instancie `cenas/objetos/portal.tscn` no fim da área e preencha `Proxima Cena`: na área 1, com a área 2 da mesma fase; na área 2, com `res://cenas/ui/selecao_de_fase.tscn`.
+6. Instancie `cenas/objetos/portal.tscn` no fim da área e preencha `Proxima Cena`: com a área seguinte da mesma fase ou, na última área, com `res://cenas/ui/selecao_de_fase.tscn`.
 7. Se a área tiver buracos, ponha embaixo dela uma `Area2D` com o script `zona_de_queda.gd`, na camada 4 e com máscara 2.
-8. Salve na pasta da fase, em `cenas/fases/`, como `area_1.tscn` ou `area_2.tscn`.
+8. Salve na pasta da fase, em `cenas/fases/`, como `area_1.tscn`, `area_2.tscn` e assim por diante.
+
+**Mudar a quantidade de áreas de uma fase.** Troque o número da fase em `AREAS_POR_FASE`, no começo de `scripts/sistemas/progresso.gd`. Depois crie as cenas que faltarem, ajuste o portal da área que era a última para apontar para a nova, e ponha o portal da nova última área apontando para a seleção de fase.
 
 **Criar um elemento que só uma fase usa.** Salve a cena em `cenas/fases/fase_N_nome/elementos/` e o script em `scripts/fases/fase_N_nome/`. Se outra fase passar a usar o mesmo elemento, mova os dois para as pastas comuns (`cenas/objetos/` e `scripts/objetos/`), sempre por dentro da Godot.
 
@@ -651,7 +675,8 @@ Escolhas feitas para o código andar, que o grupo ainda precisa confirmar:
 - **A queda tira vida mesmo durante a invencibilidade.**
 - **O checkpoint não devolve vida.**
 - **As vidas voltam ao máximo a cada área**, porque o personagem é criado de novo com a cena.
-- **As fases liberam em sequência**, depois das duas áreas da anterior.
+- **As fases liberam em sequência**, depois de todas as áreas da anterior.
+- **Afrodite tem cinco áreas.** As outras fases terão a quantidade que seus desafios pedirem; até serem definidas, cada uma fica com duas.
 - **A ordem das fases** é Afrodite, Ares, Hades, Poseidon e Zeus.
 - **A seleção sempre entra pela área 1 da fase.**
 - **O fim da fase leva de volta à seleção de fase.**
@@ -674,7 +699,7 @@ Escolhas feitas para o código andar, que o grupo ainda precisa confirmar:
 - Tela de vitória, pontuação e contadores.
 - Configurações e áudio.
 - Arte, animações e sons.
-- As dez áreas definitivas.
+- As áreas definitivas. As cinco de Afrodite são só esqueleto, e as das outras fases nem cena têm.
 - Exportação e executável.
 
 Limitações conhecidas do que já existe:
@@ -683,6 +708,7 @@ Limitações conhecidas do que já existe:
 - Não há botão para apagar o progresso; só apagando o arquivo.
 - A seleção não mostra quais fases já foram concluídas.
 - As pastas das fases de Ares, Hades, Poseidon e Zeus existem, mas ainda estão vazias.
+- Quem joga pelo menu, na Fase 1, percorre cinco telas vazias. Os sistemas prontos (espinhos, checkpoint, puzzle de luz, porta) só aparecem nas áreas de teste, pelo F6.
 - As peças do puzzle de luz precisam ser alinhadas pelos centros, à mão. Não há grade nem encaixe automático.
 - A porta abre e fecha de uma vez, sem animação.
 - O portal bloqueado só mostra as barras. Não há mensagem nem som para quem tenta entrar.
@@ -697,18 +723,18 @@ As mecânicas do herói estão sendo feitas em oito etapas, uma por vez. Esta ta
 | Etapa | O que entrega | Situação |
 |---|---|---|
 | 1 | Interação com objetos, com o espelho como objeto de teste, e correção da queda | Implementada e no repositório. Testes automáticos feitos; teste manual feito pelo Pedro em 11/10 |
-| 2 | Puzzle mínimo: fonte de luz, feixe, espelho e receptor | Implementada e no repositório. Testes automáticos feitos; teste manual ainda não registrado |
-| 3 | Puzzle ligado a um mecanismo e à liberação da saída | Implementada. Testes automáticos feitos; falta o teste manual no editor |
-| 4 | Quantidade de áreas configurável por fase, com cinco áreas em Afrodite | Planejada |
+| 2 | Puzzle mínimo: fonte de luz, feixe, espelho e receptor | Implementada e no repositório. Testes automáticos feitos; teste manual feito pelo Pedro em 11/10 |
+| 3 | Puzzle ligado a um mecanismo e à liberação da saída | Implementada e no repositório. Testes automáticos feitos; teste manual ainda não registrado |
+| 4 | Quantidade de áreas configurável por fase, com cinco áreas em Afrodite | Implementada. Testes automáticos feitos; falta o teste manual no editor. As cinco áreas existem só como esqueleto |
 | 5 | Ataque, validado com um alvo de teste | Planejada |
 | 6 | Esquiva, com invulnerabilidade e regras de queda | Planejada |
 | 7 | Integração da arte de Afrodite e revisão de escala, câmera e legibilidade | Planejada |
 | 8 | Teste do conjunto e documentação final | Planejada |
 
+**Mudança de planejamento (11/10/2026).** O plano original era de cinco fases com duas áreas cada, dez no total. O jogo mantém as cinco fases, mas a quantidade de áreas passou a ser de cada fase: Afrodite tem cinco, e as demais terão o que seus desafios pedirem. Os cartões do Trello que ainda falam em duas ou dez áreas estão listados no CHECK.md.
+
 Decisões já tomadas para as etapas seguintes, ainda não implementadas:
 
-- **Áreas por fase.** O jogo mantém cinco fases. Afrodite terá cinco áreas, e as outras fases terão a quantidade que seus desafios pedirem, sem número fixo. Isso muda o planejamento anterior de dez áreas. Hoje o código ainda considera duas áreas por fase; a mudança é a etapa 4.
-- **Saves antigos.** Na etapa 4, as fases já liberadas continuam liberadas, e as áreas novas não são marcadas como concluídas.
 - **Ataque.** Golpe corpo a corpo de 0,15 s, dano 1, intervalo de 0,35 s, uma vez por inimigo a cada golpe.
 - **Esquiva.** Cerca de 160 pixels em 0,2 s, intervalo de 0,6 s, uma vez no ar até tocar o chão, com imunidade a golpes e perigos, mas não à queda.
 
@@ -725,7 +751,7 @@ Relação entre o que está documentado aqui e os códigos do [CHECK.md](CHECK.m
 | P4 Movimentação, salto, queda e aterrissagem | Concluída | Seção 6 |
 | P7 Colisões, hitboxes e hurtboxes | Concluída | Seção 7 |
 | P10 Três vidas, checkpoints e reaparecimento | Concluída | Seções 7 e 8 |
-| P12 Conclusão de áreas, liberação de fases e reinício | Concluída | Seções 13 e 14 |
+| P12 Conclusão de áreas, liberação de fases e reinício | Concluída | Seções 13 e 14, agora com quantidade de áreas por fase |
 | P15 Câmera 2D e limites das áreas | Concluída | Seção 12 |
 | P21 Repositório e controle de versões | Concluída | Repositório e fluxo de branches |
 | P6 Interação com objetos e animações | Parcial | Sistema de interação e espelho (seção 9); faltam os demais objetos e as animações |
