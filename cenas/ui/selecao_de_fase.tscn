@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://ddlqcv3tjlffu"]
+
+[ext_resource type="Script" uid="uid://duomshhfvuflj" path="res://scripts/ui/selecao_de_fase.gd" id="1_oqew5"]
+
+[node name="SelecaoDeFase" type="Control" unique_id=1321967162]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_oqew5")
+
+[node name="Fundo" type="ColorRect" parent="." unique_id=1288049980]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.09, 0.1, 0.16, 1)
+
+[node name="Centro" type="CenterContainer" parent="." unique_id=1613101049]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Caixa" type="VBoxContainer" parent="Centro" unique_id=2125129489]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Titulo" type="Label" parent="Centro/Caixa" unique_id=1424362196]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93, 0.78, 0.35, 1)
+theme_override_font_sizes/font_size = 48
+text = "Escolha a fase"
+horizontal_alignment = 1
+
+[node name="Espaco" type="Control" parent="Centro/Caixa" unique_id=1398714798]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="Fase1" type="Button" parent="Centro/Caixa" unique_id=422548848]
+custom_minimum_size = Vector2(380, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 22
+text = "Fase 1 — Afrodite"
+
+[node name="Fase2" type="Button" parent="Centro/Caixa" unique_id=485980336]
+custom_minimum_size = Vector2(380, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 22
+text = "Fase 2 — Ares"
+
+[node name="Fase3" type="Button" parent="Centro/Caixa" unique_id=1614263146]
+custom_minimum_size = Vector2(380, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 22
+text = "Fase 3 — Hades"
+
+[node name="Fase4" type="Button" parent="Centro/Caixa" unique_id=403712109]
+custom_minimum_size = Vector2(380, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 22
+text = "Fase 4 — Poseidon"
+
+[node name="Fase5" type="Button" parent="Centro/Caixa" unique_id=1470048449]
+custom_minimum_size = Vector2(380, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 22
+text = "Fase 5 — Zeus"
+
+[node name="Espaco2" type="Control" parent="Centro/Caixa" unique_id=1633356351]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="Voltar" type="Button" parent="Centro/Caixa" unique_id=698702897]
+custom_minimum_size = Vector2(380, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 22
+text = "Voltar"

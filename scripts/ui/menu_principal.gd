@@ -2,8 +2,8 @@ class_name MenuPrincipal
 extends Control
 ## Tela inicial do jogo, com os botões Jogar e Sair.
 
-## Cena carregada ao apertar Jogar.
-@export_file("*.tscn") var primeira_cena := "res://cenas/fases/teste/area_teste.tscn"
+## Cena aberta ao apertar Jogar: a tela de seleção de fase.
+@export_file("*.tscn") var cena_ao_jogar := "res://cenas/ui/selecao_de_fase.tscn"
 
 @onready var _jogar: Button = $Centro/Caixa/Jogar
 @onready var _sair: Button = $Centro/Caixa/Sair
@@ -16,7 +16,7 @@ func _ready() -> void:
 
 
 func _ao_jogar() -> void:
-	Transicao.trocar_cena(primeira_cena)
+	Transicao.trocar_cena(cena_ao_jogar)
 
 
 func _ao_sair() -> void:

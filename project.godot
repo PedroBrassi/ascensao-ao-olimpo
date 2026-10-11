@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Transicao="*uid://bb1bgxisaj5ox"
+Progresso="*uid://dio2f5efywabw"
 
 [display]
 

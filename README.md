@@ -287,7 +287,7 @@ Valores provisórios, que mudam conforme as definições do grupo:
 - **Resolução base:** 1280×720, até a definição da escala dos sprites.
 - **Renderizador:** Compatibilidade, o mais leve e adequado para jogo 2D.
 - **Cena principal:** `cenas/ui/menu_principal.tscn`. O F5 abre o menu; o F6 roda a cena que estiver aberta no editor, o que serve para testar uma área direto.
-- **Autoload:** `Transicao` (`scripts/sistemas/transicao.gd`), que escurece a tela nas trocas de cena. Fica cadastrado em Projeto > Configurações do Projeto > Globais.
+- **Autoloads:** `Transicao` (`scripts/sistemas/transicao.gd`), que escurece a tela nas trocas de cena, e `Progresso` (`scripts/sistemas/progresso.gd`), que guarda as fases liberadas e as áreas concluídas e grava tudo em `user://progresso.json`. Os dois ficam cadastrados em Projeto > Configurações do Projeto > Globais.
 - **Grupo `jogador`:** o personagem pertence a esse grupo. É por ele que o HUD e as telas encontram o personagem.
 - **Camadas de física:** 1 mundo, 2 jogador, 3 inimigos, 4 perigos, 5 interativos.
 - **Ações de entrada** (Projeto > Configurações do Projeto > Mapa de Entrada):

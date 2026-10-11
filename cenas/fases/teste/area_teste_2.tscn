@@ -19,6 +19,8 @@ size = Vector2(40, 720)
 
 [node name="AreaTeste2" type="Node2D" unique_id=1548026913]
 script = ExtResource("1_e7jix")
+fase = 2
+area = 2
 limites_da_camera = Rect2i(0, 0, 1280, 720)
 
 [node name="Chao" type="StaticBody2D" parent="." unique_id=848754975]
