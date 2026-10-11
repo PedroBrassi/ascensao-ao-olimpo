@@ -2,7 +2,7 @@
 
 Lista de controle do trabalho: as tarefas de cada pessoa e a ordem em que tudo deve ser feito, com o que cada tarefa depende.
 
-Situação em 09/10/2026, tirada do quadro do Trello. Para atualizar, troque `[ ]` por `[x]` na tarefa concluída, nas duas partes do arquivo.
+Situação em 10/10/2026, tirada do quadro do Trello. Para atualizar, troque `[ ]` por `[x]` na tarefa concluída, nas duas partes do arquivo.
 
 ## Como ler
 
@@ -15,10 +15,10 @@ Situação em 09/10/2026, tirada do quadro do Trello. Para atualizar, troque `[ 
 
 | Pessoa | Concluídas | Parciais | Pendentes | Total |
 |---|---|---|---|---|
-| Pedro | 7 | 6 | 16 | 29 |
+| Pedro | 8 | 6 | 15 | 29 |
 | Aurélio | 0 | 0 | 29 | 29 |
 | Julia | 0 | 1 | 28 | 29 |
-| **Total** | **7** | **7** | **73** | **87** |
+| **Total** | **8** | **7** | **72** | **87** |
 
 Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J21. Aqui cada uma conta uma vez.
 
@@ -41,12 +41,12 @@ Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J
 - [ ] **P9** Criar inimigo-base e comportamentos de patrulha, perseguição e ataque
 - [x] **P10** Programar três vidas, checkpoints e reaparecimento
 - [ ] **P11** Programar vitória, derrota, pontuação e contadores se aprovados *(parcial: feita a tela de derrota; faltam vitória, pontuação e contadores)*
-- [ ] **P12** Programar conclusão de áreas, liberação de fases e reinício *(parcial: feitos o portal de conclusão de área e o reinício; falta a liberação de fases)*
+- [x] **P12** Programar conclusão de áreas, liberação de fases e reinício
 - [ ] **P13** Programar plataformas, armadilhas, portas e mecanismos
 - [ ] **P14** Programar puzzles, água, raios e perigos ambientais
 - [x] **P15** Programar câmera 2D e limites das áreas
 - [ ] **P16** Programar menus, HUD, pausa, configurações, transições e áudio *(parcial: feitos menu principal, HUD das vidas, pausa e transição; faltam configurações e áudio)*
-- [ ] **P17** Criar salvamento, seleção de fase, exportação e versão executável
+- [ ] **P17** Criar salvamento, seleção de fase, exportação e versão executável *(parcial: feitos o salvamento do progresso e a tela de seleção de fase; faltam a exportação e o executável)*
 - [ ] **P18** Criar sistema de vida, dano e barra de chefe *(parcial: feitos vida, dano e invencibilidade; falta a barra de chefe)*
 
 **Parte 2 — Produção técnica**
@@ -362,18 +362,18 @@ Depende das definições de som e de formato de entrega. Pode andar em paralelo 
 
 ## Etapa 8 — Integração na engine
 
-É onde programação, arte e áudio se encontram. Só começa quando os arquivos finais existem. Concluídas: 0 de 9.
+É onde programação, arte e áudio se encontram. Só começa quando os arquivos finais existem. Concluídas: 1 de 9.
 
 74. [ ] **P23** Importar sprites, configurar animações e revisar escala — Pedro
    - Depende de: A12, J18
 75. [ ] **P24** Importar tilesets, fundos, objetos, músicas e efeitos sonoros — Pedro
    - Depende de: A5, A6, A7, A8, A29
-76. [ ] **P17** Criar salvamento, seleção de fase, exportação e versão executável — Pedro
+76. [x] **P12** Programar conclusão de áreas, liberação de fases e reinício — Pedro
    - Depende de: P10 ✓
+77. [ ] **P17** Criar salvamento, seleção de fase, exportação e versão executável — Pedro
+   - Depende de: P12 ✓
+   - Parcial: feitos o salvamento do progresso e a tela de seleção de fase; faltam a exportação e o executável
    - Nota: a parte de exportação e executável é a mesma de P20
-77. [ ] **P12** Programar conclusão de áreas, liberação de fases e reinício — Pedro
-   - Depende de: P17
-   - Parcial: feitos o portal de conclusão de área e o reinício; falta a liberação de fases
 78. [ ] **P25** Montar e integrar as dez áreas na engine — Pedro
    - Depende de: A22, P24, P8, P14
 79. [ ] **P26** Conectar interface, programação, arte e áudio — Pedro
@@ -385,7 +385,7 @@ Depende das definições de som e de formato de entrega. Pode andar em paralelo 
    - Depende de: J19, P8, P25
    - Parcial: feita a tela de derrota; faltam vitória, pontuação e contadores
 82. [ ] **P19** Sistemas — controles, combate, inimigos, puzzles, vidas, checkpoints, progressão e salvamento — Pedro
-   - Depende de: P5, P9, P14, P12, P17
+   - Depende de: P5, P9, P14, P12 ✓, P17
    - Nota: cartão-resumo: fecha quando todos os sistemas listados estiverem prontos
 
 ## Etapa 9 — Testes e entrega
