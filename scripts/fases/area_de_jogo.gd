@@ -1,8 +1,12 @@
 class_name AreaDeJogo
 extends Node2D
-## Raiz de uma área jogável. Passa para a câmera os limites desta área, para
-## ela não mostrar o que está fora do cenário.
+## Raiz de uma área jogável. Diz a que fase a área pertence e passa para a
+## câmera os limites dela, para a câmera não mostrar o que está fora do cenário.
 
+## Fase a que esta área pertence, de 1 a 5. Use 0 para áreas fora das fases.
+@export_range(0, 5) var fase := 0
+## Número da área dentro da fase, 1 ou 2. Use 0 para áreas fora das fases.
+@export_range(0, 2) var area := 0
 ## Retângulo da área, em pixels: canto superior esquerdo (x, y) e tamanho (largura, altura).
 @export var limites_da_camera := Rect2i(0, 0, 2560, 720)
 

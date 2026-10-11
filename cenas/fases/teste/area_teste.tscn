@@ -34,6 +34,8 @@ size = Vector2(2960, 40)
 
 [node name="AreaTeste" type="Node2D" unique_id=2017880410]
 script = ExtResource("1_rqe2n")
+fase = 1
+area = 1
 
 [node name="Chao" type="StaticBody2D" parent="." unique_id=1205021038]
 position = Vector2(850, 680)

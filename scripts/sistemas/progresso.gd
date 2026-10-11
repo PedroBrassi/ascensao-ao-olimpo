@@ -1,6 +1,7 @@
 extends Node
 ## Guarda o progresso do jogador: quais fases estão liberadas e quais áreas
-## já foram concluídas.
+## já foram concluídas. Grava tudo em arquivo a cada mudança e lê de volta
+## quando o jogo abre.
 ##
 ## Este script é um autoload: fica carregado o jogo inteiro, fora das cenas,
 ## e pode ser chamado de qualquer lugar como Progresso.concluir_area(...).
@@ -12,11 +13,18 @@ signal fase_foi_liberada(fase: int)
 
 const TOTAL_DE_FASES := 5
 const AREAS_POR_FASE := 2
+## "user://" é a pasta de dados do jogo no computador de quem joga.
+const CAMINHO_DO_ARQUIVO := "user://progresso.json"
 
 ## Número da última fase liberada. A fase 1 começa liberada.
 var fases_liberadas := 1
 ## Áreas concluídas, cada uma no formato "fase-area" (por exemplo "1-2").
 var areas_concluidas: Array[String] = []
+
+
+func _ready() -> void:
+	carregar()
+	mudou.connect(salvar)  # toda mudança vai direto para o arquivo
 
 
 func fase_esta_liberada(fase: int) -> bool:
@@ -39,8 +47,8 @@ func jogo_esta_concluido() -> bool:
 
 
 ## Marca uma área como concluída. Se com ela a fase inteira ficou concluída,
-## libera a fase seguinte. Áreas fora das fases (como as de teste, que usam
-## fase 0) e áreas de fases ainda bloqueadas são ignoradas.
+## libera a fase seguinte. Áreas fora das fases (fase 0) e áreas de fases
+## ainda bloqueadas são ignoradas.
 func concluir_area(fase: int, area: int) -> void:
 	if not _area_existe(fase, area) or not fase_esta_liberada(fase):
 		return
@@ -60,9 +68,55 @@ func reiniciar() -> void:
 	mudou.emit()
 
 
+## Grava o progresso no arquivo, em JSON.
+func salvar() -> void:
+	var arquivo := FileAccess.open(CAMINHO_DO_ARQUIVO, FileAccess.WRITE)
+	if arquivo == null:
+		push_warning("Progresso: não foi possível gravar o arquivo (erro %d)." % FileAccess.get_open_error())
+		return
+	var dados := {
+		"versao": 1,
+		"fases_liberadas": fases_liberadas,
+		"areas_concluidas": areas_concluidas,
+	}
+	arquivo.store_string(JSON.stringify(dados, "\t"))
+
+
+## Lê o progresso do arquivo. Se o arquivo não existir ou estiver
+## estragado, o jogo começa do zero em vez de dar erro.
+func carregar() -> void:
+	fases_liberadas = 1
+	areas_concluidas.clear()
+	if not FileAccess.file_exists(CAMINHO_DO_ARQUIVO):
+		return
+	var json := JSON.new()
+	var erro := json.parse(FileAccess.get_file_as_string(CAMINHO_DO_ARQUIVO))
+	if erro != OK or not json.data is Dictionary:
+		push_warning("Progresso: arquivo ilegível, começando do zero.")
+		return
+	var dados: Dictionary = json.data
+
+	# Nada do arquivo é usado sem conferir: ele pode ter sido editado à mão.
+	var liberadas = dados.get("fases_liberadas", 1)
+	if liberadas is float or liberadas is int:
+		fases_liberadas = clampi(int(liberadas), 1, TOTAL_DE_FASES)
+	var areas = dados.get("areas_concluidas", [])
+	if areas is Array:
+		for chave in areas:
+			if chave is String and _chave_e_valida(chave) and not chave in areas_concluidas:
+				areas_concluidas.append(chave)
+
+
 func _area_existe(fase: int, area: int) -> bool:
 	return fase >= 1 and fase <= TOTAL_DE_FASES and area >= 1 and area <= AREAS_POR_FASE
 
 
 func _chave(fase: int, area: int) -> String:
 	return "%d-%d" % [fase, area]
+
+
+func _chave_e_valida(chave: String) -> bool:
+	var partes := chave.split("-")
+	if partes.size() != 2 or not partes[0].is_valid_int() or not partes[1].is_valid_int():
+		return false
+	return _area_existe(int(partes[0]), int(partes[1]))
