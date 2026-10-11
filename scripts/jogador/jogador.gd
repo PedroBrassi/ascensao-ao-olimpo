@@ -46,6 +46,7 @@ var ponto_de_retorno := Vector2.ZERO
 var _coyote := 0.0
 var _buffer_do_salto := 0.0
 var _estava_no_chao := false
+var _quadro_da_ultima_queda := -1
 
 @onready var _visual: Node2D = $Visual
 @onready var _vida: Vida = $Vida
@@ -73,9 +74,17 @@ func definir_ponto_de_retorno(posicao: Vector2) -> void:
 
 
 ## Chamado pela ZonaDeQueda: perde uma vida e, se ainda restar alguma,
-## volta ao ponto de retorno.
+## volta ao ponto de retorno. A queda tira vida mesmo durante a
+## invencibilidade. Se era a última vida, o personagem não reaparece e a
+## tela de derrota assume.
 func cair() -> void:
-	_vida.receber_dano(1)
+	# Duas zonas de queda encostadas avisariam no mesmo quadro: conta uma só.
+	var quadro := Engine.get_physics_frames()
+	if quadro == _quadro_da_ultima_queda:
+		return
+	_quadro_da_ultima_queda = quadro
+
+	_vida.receber_dano(1, true)
 	if not _vida.esta_morto():
 		reaparecer()
 

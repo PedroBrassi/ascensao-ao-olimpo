@@ -45,8 +45,12 @@ func esta_morto() -> bool:
 	return vida_atual <= 0
 
 
-func receber_dano(quantidade: int) -> void:
-	if quantidade <= 0 or esta_morto() or esta_invencivel():
+## Tira vida. Durante a invencibilidade o dano é ignorado, a não ser que
+## `ignorar_invencibilidade` venha verdadeiro (é o caso da queda no buraco).
+func receber_dano(quantidade: int, ignorar_invencibilidade := false) -> void:
+	if quantidade <= 0 or esta_morto():
+		return
+	if esta_invencivel() and not ignorar_invencibilidade:
 		return
 	vida_atual = maxi(vida_atual - quantidade, 0)
 	vida_mudou.emit(vida_atual, vida_maxima)

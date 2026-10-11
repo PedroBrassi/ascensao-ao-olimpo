@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dvkyqfj5qsk48" path="res://cenas/jogador/jogador.tscn" id="1_ejfvi"]
 [ext_resource type="Script" uid="uid://duc02wmwkk3ha" path="res://scripts/fases/area_de_jogo.gd" id="1_rqe2n"]
+[ext_resource type="PackedScene" uid="uid://c4regr3l7qkmn" path="res://cenas/fases/fase_1_afrodite/elementos/espelho.tscn" id="2_4w4ih"]
 [ext_resource type="PackedScene" uid="uid://flqij84s5vsb" path="res://cenas/objetos/espinhos.tscn" id="3_4hbwe"]
 [ext_resource type="Script" uid="uid://dqstreepw4ry4" path="res://scripts/objetos/zona_de_queda.gd" id="4_y4u2d"]
 [ext_resource type="PackedScene" uid="uid://bj7na3ehi027a" path="res://cenas/objetos/checkpoint.tscn" id="5_cn5tp"]
@@ -120,6 +121,13 @@ offset_right = 20.0
 offset_bottom = 360.0
 mouse_filter = 2
 color = Color(0.3, 0.32, 0.42, 1)
+
+[node name="Espelho" parent="." unique_id=700286824 instance=ExtResource("2_4w4ih")]
+position = Vector2(260, 552)
+
+[node name="Espelho2" parent="." unique_id=1702575940 instance=ExtResource("2_4w4ih")]
+position = Vector2(340, 552)
+orientacao_inicial = 1
 
 [node name="Jogador" parent="." unique_id=1220948030 instance=ExtResource("1_ejfvi")]
 position = Vector2(200, 640)

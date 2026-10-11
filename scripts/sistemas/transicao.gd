@@ -32,6 +32,11 @@ func recarregar_cena() -> void:
 	await _transicionar(func() -> Error: return get_tree().reload_current_scene())
 
 
+## Verdadeiro do começo do escurecimento até a tela terminar de clarear.
+func em_andamento() -> bool:
+	return _ocupada
+
+
 func _transicionar(troca: Callable) -> void:
 	if _ocupada:
 		return

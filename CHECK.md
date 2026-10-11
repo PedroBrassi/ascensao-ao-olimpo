@@ -2,7 +2,7 @@
 
 Lista de controle do trabalho: as tarefas de cada pessoa e a ordem em que tudo deve ser feito, com o que cada tarefa depende.
 
-Situação em 10/10/2026, tirada do quadro do Trello. Para atualizar, troque `[ ]` por `[x]` na tarefa concluída, nas duas partes do arquivo.
+Situação em 11/10/2026, tirada do quadro do Trello. Para atualizar, troque `[ ]` por `[x]` na tarefa concluída, nas duas partes do arquivo.
 
 ## Como ler
 
@@ -15,10 +15,10 @@ Situação em 10/10/2026, tirada do quadro do Trello. Para atualizar, troque `[ 
 
 | Pessoa | Concluídas | Parciais | Pendentes | Total |
 |---|---|---|---|---|
-| Pedro | 8 | 6 | 15 | 29 |
+| Pedro | 8 | 7 | 14 | 29 |
 | Aurélio | 0 | 0 | 29 | 29 |
 | Julia | 0 | 1 | 28 | 29 |
-| **Total** | **8** | **7** | **72** | **87** |
+| **Total** | **8** | **8** | **71** | **87** |
 
 Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J21. Aqui cada uma conta uma vez.
 
@@ -35,7 +35,7 @@ Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J
 - [x] **P3** Organizar cenas, scripts, recursos e pastas
 - [x] **P4** Programar movimentação, corrida, salto, queda e aterrissagem
 - [ ] **P5** Programar esquiva, ataque e recebimento de dano
-- [ ] **P6** Programar interação com objetos e integrar animações
+- [ ] **P6** Programar interação com objetos e integrar animações *(parcial: feitos o sistema de interação e o espelho de Afrodite; faltam os demais objetos e as animações)*
 - [x] **P7** Criar colisões, hitboxes e hurtboxes
 - [ ] **P8** Programar inimigos principais, chefes e padrões de Zeus
 - [ ] **P9** Criar inimigo-base e comportamentos de patrulha, perseguição e ataque
@@ -277,6 +277,7 @@ Depende do funcionamento dos puzzles. Pode andar em paralelo com a Etapa 3. Conc
 
 41. [ ] **P6** Programar interação com objetos e integrar animações — Pedro
    - Depende de: A14
+   - Parcial: feitos o sistema de interação e o espelho de Afrodite; faltam os demais objetos e as animações
    - Nota: a integração das animações só fecha depois de P23
 42. [ ] **P13** Programar plataformas, armadilhas, portas e mecanismos — Pedro
    - Depende de: A16, P6

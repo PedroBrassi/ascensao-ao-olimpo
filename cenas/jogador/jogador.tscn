@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dp2sdcqpe73md" path="res://scripts/jogador/jogador.gd" id="1_tm1li"]
 [ext_resource type="Script" uid="uid://bglpivvu8frab" path="res://scripts/sistemas/hurtbox.gd" id="2_gaiqy"]
 [ext_resource type="Script" uid="uid://dti7cud0ewnyg" path="res://scripts/sistemas/vida.gd" id="3_nkbb3"]
+[ext_resource type="Script" uid="uid://djfcowt2kcgc" path="res://scripts/jogador/interacao_do_jogador.gd" id="4_nkbb3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ismvl"]
 size = Vector2(32, 64)
@@ -53,3 +54,7 @@ shape = SubResource("RectangleShape2D_f84yp")
 script = ExtResource("3_nkbb3")
 hurtbox = NodePath("../Hurtbox")
 visual = NodePath("../Visual")
+
+[node name="Interacao" type="Node2D" parent="." unique_id=1834619175]
+position = Vector2(0, -32)
+script = ExtResource("4_nkbb3")

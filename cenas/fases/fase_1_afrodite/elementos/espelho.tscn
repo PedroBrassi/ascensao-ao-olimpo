@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://c4regr3l7qkmn"]
+
+[ext_resource type="Script" uid="uid://m68i2d7msdgw" path="res://scripts/fases/fase_1_afrodite/espelho.gd" id="1_85fuv"]
+[ext_resource type="Script" uid="uid://5cr561w6hlpq" path="res://scripts/sistemas/interativo.gd" id="2_8c5cb"]
+
+[node name="Espelho" type="Node2D" unique_id=700286824]
+script = ExtResource("1_85fuv")
+
+[node name="Destaque" type="ColorRect" parent="." unique_id=2077117084]
+visible = false
+offset_left = -30.0
+offset_top = -30.0
+offset_right = 30.0
+offset_bottom = 30.0
+mouse_filter = 2
+
+[node name="Moldura" type="ColorRect" parent="." unique_id=812106795]
+offset_left = -24.0
+offset_top = -24.0
+offset_right = 24.0
+offset_bottom = 24.0
+mouse_filter = 2
+color = Color(0.2, 0.22, 0.3, 1)
+
+[node name="Face" type="Line2D" parent="." unique_id=313473289]
+points = PackedVector2Array(-18, 18, 18, -18)
+width = 6.0
+default_color = Color(0.75, 0.9, 1, 1)
+
+[node name="Dica" type="Label" parent="." unique_id=1192706078]
+visible = false
+offset_left = -20.0
+offset_top = -66.0
+offset_right = 20.0
+offset_bottom = -38.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "E"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Interativo" type="Node2D" parent="." unique_id=1965180105 node_paths=PackedStringArray("destaque", "dica")]
+script = ExtResource("2_8c5cb")
+alcance = 80.0
+destaque = NodePath("../Destaque")
+dica = NodePath("../Dica")
