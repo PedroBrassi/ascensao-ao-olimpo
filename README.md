@@ -69,11 +69,12 @@ ascensao-ao-olimpo/
 │   │   └── objetos/     portas, alavancas, checkpoints, itens dos puzzles
 │   ├── tilesets/        blocos de cenário de cada fase
 │   ├── fundos/          fundos e camadas de paralaxe
+│   ├── efeitos/         efeitos visuais: partículas, brilhos, impactos
 │   ├── ui/              ícones, HUD, botões e telas
 │   ├── fontes/          arquivos de fonte
 │   └── audio/
 │       ├── musicas/     menu, fases, confronto final, vitória
-│       └── efeitos/     movimento, combate, interface, ambiente
+│       └── efeitos/     efeitos sonoros: movimento, combate, interface, ambiente
 ├── cenas/               arquivos .tscn
 │   ├── jogador/
 │   ├── inimigos/
@@ -83,7 +84,10 @@ ascensao-ao-olimpo/
 │   └── fases/
 │       ├── teste/       áreas de teste, com formas simples no lugar da arte
 │       ├── fase_1_afrodite/
-│       ├── fase_2_ares/
+│       │   ├── area_1.tscn   primeira área da fase (ainda não criada)
+│       │   ├── area_2.tscn   segunda área da fase (ainda não criada)
+│       │   └── elementos/    cenas usadas só nesta fase
+│       ├── fase_2_ares/      as outras fases seguem a mesma organização
 │       ├── fase_3_hades/
 │       ├── fase_4_poseidon/
 │       └── fase_5_zeus/
@@ -93,7 +97,12 @@ ascensao-ao-olimpo/
     ├── chefes/
     ├── objetos/
     ├── ui/
-    ├── fases/           scripts das áreas, como os limites da câmera
+    ├── fases/           area_de_jogo.gd, usado por todas as áreas
+    │   ├── fase_1_afrodite/  scripts usados só nesta fase
+    │   ├── fase_2_ares/
+    │   ├── fase_3_hades/
+    │   ├── fase_4_poseidon/
+    │   └── fase_5_zeus/
     └── sistemas/        dano e vida, transição entre telas, progressão, salvamento, áudio
 ```
 
@@ -102,7 +111,19 @@ Regras de organização:
 - **Cada coisa na sua pasta.** Uma cena de inimigo vai em `cenas/inimigos/` e o script
   dela em `scripts/inimigos/`, com o mesmo nome base (`esqueleto.tscn` e `esqueleto.gd`).
 - **Cada fase tem a sua pasta** em `cenas/fases/`, com uma cena por área
-  (`area_1.tscn` e `area_2.tscn`).
+  (`area_1.tscn` e `area_2.tscn`) e uma subpasta `elementos/` para as cenas que só
+  aquela fase usa, como um puzzle ou um mecanismo próprio dela. Os scripts desses
+  elementos ficam em `scripts/fases/`, na pasta com o mesmo nome da fase.
+- **O que mais de uma fase usa fica nas pastas comuns:** `cenas/objetos/`,
+  `cenas/inimigos/`, `cenas/chefes/` e `cenas/ui/`, com os scripts nas pastas de mesmo
+  nome em `scripts/`. Checkpoint, espinhos e portal são exemplos. Se um elemento de uma
+  fase passar a ser usado em outra, ele muda para a pasta comum.
+- **O script `scripts/fases/area_de_jogo.gd` é de todas as fases** e fica solto em
+  `scripts/fases/`, fora das pastas de fase.
+- **As áreas de teste ficam em `cenas/fases/teste/`,** separadas das fases definitivas.
+  Elas servem para experimentar os sistemas e não entram no jogo final.
+- **Arte e áudio ficam sempre em `assets/`,** mesmo quando pertencem a uma fase só.
+  O que identifica a fase é o nome do arquivo, como em `musica_fase_2.ogg`.
 - **Em `assets/` só entram arquivos finais**, já no formato que o jogo usa: PNG para
   imagens, OGG para música, WAV para efeitos curtos.
 - **Arquivos-fonte ficam fora do repositório** (arquivos do Blender, projetos de áudio,
