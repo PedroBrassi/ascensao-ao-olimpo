@@ -4,12 +4,17 @@
 [ext_resource type="Script" uid="uid://bglpivvu8frab" path="res://scripts/sistemas/hurtbox.gd" id="2_gaiqy"]
 [ext_resource type="Script" uid="uid://dti7cud0ewnyg" path="res://scripts/sistemas/vida.gd" id="3_nkbb3"]
 [ext_resource type="Script" uid="uid://djfcowt2kcgc" path="res://scripts/jogador/interacao_do_jogador.gd" id="4_nkbb3"]
+[ext_resource type="Script" uid="uid://dqv2v621wqggm" path="res://scripts/jogador/ataque_do_jogador.gd" id="5_xtf2f"]
+[ext_resource type="Script" uid="uid://dcr05ahctq7m8" path="res://scripts/sistemas/hitbox.gd" id="6_fn8mc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ismvl"]
 size = Vector2(32, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f84yp"]
 size = Vector2(28, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ms2un"]
+size = Vector2(44, 48)
 
 [node name="Jogador" type="CharacterBody2D" unique_id=1220948030 groups=["jogador"]]
 collision_layer = 2
@@ -58,3 +63,26 @@ visual = NodePath("../Visual")
 [node name="Interacao" type="Node2D" parent="." unique_id=1834619175]
 position = Vector2(0, -32)
 script = ExtResource("4_nkbb3")
+
+[node name="Ataque" type="Node2D" parent="." unique_id=696535282]
+script = ExtResource("5_xtf2f")
+
+[node name="Hitbox" type="Area2D" parent="Ataque" unique_id=188366663]
+position = Vector2(38, -32)
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("6_fn8mc")
+ativa = false
+golpe_unico = true
+
+[node name="Colisao" type="CollisionShape2D" parent="Ataque/Hitbox" unique_id=1695417755]
+shape = SubResource("RectangleShape2D_ms2un")
+
+[node name="Efeito" type="ColorRect" parent="Ataque/Hitbox" unique_id=1206484166]
+visible = false
+offset_left = -22.0
+offset_top = -24.0
+offset_right = 22.0
+offset_bottom = 24.0
+mouse_filter = 2
+color = Color(1, 1, 1, 0.6)

@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://bvgdqv6tch2dp"]
+
+[ext_resource type="Script" uid="uid://dj8vpeeay7wob" path="res://scripts/fases/teste/alvo_de_treino.gd" id="1_cjl17"]
+[ext_resource type="Script" uid="uid://bglpivvu8frab" path="res://scripts/sistemas/hurtbox.gd" id="2_6nywc"]
+[ext_resource type="Script" uid="uid://dti7cud0ewnyg" path="res://scripts/sistemas/vida.gd" id="3_rl5gw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ovh28"]
+size = Vector2(40, 64)
+
+[node name="AlvoDeTreino" type="Node2D" unique_id=206197315]
+script = ExtResource("1_cjl17")
+
+[node name="Visual" type="ColorRect" parent="." unique_id=1595837851]
+offset_left = -20.0
+offset_top = -64.0
+offset_right = 20.0
+mouse_filter = 2
+color = Color(0.45, 0.7, 0.55, 1)
+
+[node name="Contador" type="Label" parent="." unique_id=1162912026]
+offset_left = -20.0
+offset_top = -64.0
+offset_right = 20.0
+theme_override_colors/font_color = Color(0.1, 0.12, 0.16, 1)
+theme_override_font_sizes/font_size = 22
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1415055897]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("2_6nywc")
+
+[node name="Colisao" type="CollisionShape2D" parent="Hurtbox" unique_id=261093521]
+position = Vector2(0, -32)
+shape = SubResource("RectangleShape2D_ovh28")
+
+[node name="Vida" type="Node" parent="." unique_id=1023055934 node_paths=PackedStringArray("hurtbox")]
+script = ExtResource("3_rl5gw")
+tempo_de_invencibilidade = 0.0
+hurtbox = NodePath("../Hurtbox")

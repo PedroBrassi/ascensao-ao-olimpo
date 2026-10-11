@@ -21,10 +21,10 @@ Dez cartões do Trello falavam em duas ou dez áreas e foram renomeados em 11/10
 
 | Pessoa | Concluídas | Parciais | Pendentes | Total |
 |---|---|---|---|---|
-| Pedro | 8 | 9 | 12 | 29 |
+| Pedro | 8 | 10 | 11 | 29 |
 | Aurélio | 0 | 0 | 29 | 29 |
 | Julia | 0 | 1 | 28 | 29 |
-| **Total** | **8** | **10** | **69** | **87** |
+| **Total** | **8** | **11** | **68** | **87** |
 
 Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J21. Aqui cada uma conta uma vez.
 
@@ -40,7 +40,7 @@ Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J
 - [ ] **P2** Configurar resolução, tela e entradas do jogador *(parcial: resolução e teclas provisórias já estão no projeto; falta fechar com as definições)*
 - [x] **P3** Organizar cenas, scripts, recursos e pastas
 - [x] **P4** Programar movimentação, corrida, salto, queda e aterrissagem
-- [ ] **P5** Programar esquiva, ataque e recebimento de dano
+- [ ] **P5** Programar esquiva, ataque e recebimento de dano *(parcial: feitos o ataque e o recebimento de dano; falta a esquiva)*
 - [ ] **P6** Programar interação com objetos e integrar animações *(parcial: feitos o sistema de interação e o espelho de Afrodite; faltam os demais objetos e as animações)*
 - [x] **P7** Criar colisões, hitboxes e hurtboxes
 - [ ] **P8** Programar inimigos principais, chefes e padrões de Zeus
@@ -269,6 +269,7 @@ Depende das regras, dos controles e do comportamento dos inimigos, definidos na 
 
 37. [ ] **P5** Programar esquiva, ataque e recebimento de dano — Pedro
    - Depende de: A14, P7 ✓
+   - Parcial: feitos o ataque e o recebimento de dano; falta a esquiva
 38. [ ] **P9** Criar inimigo-base e comportamentos de patrulha, perseguição e ataque — Pedro
    - Depende de: A15, P5
 39. [ ] **P8** Programar inimigos principais, chefes e padrões de Zeus — Pedro

@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://dqstreepw4ry4" path="res://scripts/objetos/zona_de_queda.gd" id="4_y4u2d"]
 [ext_resource type="PackedScene" uid="uid://bj7na3ehi027a" path="res://cenas/objetos/checkpoint.tscn" id="5_cn5tp"]
 [ext_resource type="PackedScene" uid="uid://cq2f3fc8hh0tx" path="res://cenas/objetos/porta.tscn" id="5_sk5sx"]
+[ext_resource type="PackedScene" uid="uid://bvgdqv6tch2dp" path="res://cenas/fases/teste/alvo_de_treino.tscn" id="6_6uoyd"]
 [ext_resource type="PackedScene" uid="uid://drr1bwuq40ng6" path="res://cenas/ui/hud.tscn" id="6_cn5tp"]
 [ext_resource type="PackedScene" uid="uid://bursfnq7bb2ou" path="res://cenas/objetos/portal.tscn" id="7_5utae"]
 
@@ -157,6 +158,12 @@ color = Color(0.3, 0.32, 0.42, 1)
 [node name="Porta" parent="." unique_id=1584353317 node_paths=PackedStringArray("acionadores") instance=ExtResource("5_sk5sx")]
 position = Vector2(660, 640)
 acionadores = [NodePath("../ReceptorDeLuz")]
+
+[node name="AlvoDeTreino" parent="." unique_id=206197315 instance=ExtResource("6_6uoyd")]
+position = Vector2(450, 640)
+
+[node name="AlvoDeTreino2" parent="." unique_id=1441758776 instance=ExtResource("6_6uoyd")]
+position = Vector2(500, 640)
 
 [node name="Jogador" parent="." unique_id=1220948030 instance=ExtResource("1_ejfvi")]
 position = Vector2(200, 640)
