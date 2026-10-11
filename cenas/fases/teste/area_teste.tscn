@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bgb48fl0s1seq" path="res://cenas/fases/fase_1_afrodite/elementos/fonte_de_luz.tscn" id="4_sk5sx"]
 [ext_resource type="Script" uid="uid://dqstreepw4ry4" path="res://scripts/objetos/zona_de_queda.gd" id="4_y4u2d"]
 [ext_resource type="PackedScene" uid="uid://bj7na3ehi027a" path="res://cenas/objetos/checkpoint.tscn" id="5_cn5tp"]
+[ext_resource type="PackedScene" uid="uid://cq2f3fc8hh0tx" path="res://cenas/objetos/porta.tscn" id="5_sk5sx"]
 [ext_resource type="PackedScene" uid="uid://drr1bwuq40ng6" path="res://cenas/ui/hud.tscn" id="6_cn5tp"]
 [ext_resource type="PackedScene" uid="uid://bursfnq7bb2ou" path="res://cenas/objetos/portal.tscn" id="7_5utae"]
 
@@ -28,6 +29,9 @@ size = Vector2(40, 720)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y4u2d"]
 size = Vector2(40, 720)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6uoyd"]
+size = Vector2(40, 544)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5utae"]
 size = Vector2(700, 80)
@@ -137,6 +141,24 @@ position = Vector2(340, 380)
 [node name="FonteDeLuz" parent="." unique_id=1836875354 instance=ExtResource("4_sk5sx")]
 position = Vector2(260, 380)
 direcao = 1
+
+[node name="ParedeDaPorta" type="StaticBody2D" parent="." unique_id=1287024759]
+position = Vector2(660, 272)
+
+[node name="Colisao" type="CollisionShape2D" parent="ParedeDaPorta" unique_id=2036749521]
+shape = SubResource("RectangleShape2D_6uoyd")
+
+[node name="Visual" type="ColorRect" parent="ParedeDaPorta" unique_id=337899182]
+offset_left = -20.0
+offset_top = -272.0
+offset_right = 20.0
+offset_bottom = 272.0
+mouse_filter = 2
+color = Color(0.3, 0.32, 0.42, 1)
+
+[node name="Porta" parent="." unique_id=1584353317 node_paths=PackedStringArray("acionadores") instance=ExtResource("5_sk5sx")]
+position = Vector2(660, 640)
+acionadores = [NodePath("../ReceptorDeLuz")]
 
 [node name="Jogador" parent="." unique_id=1220948030 instance=ExtResource("1_ejfvi")]
 position = Vector2(200, 640)

@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://cq2f3fc8hh0tx"]
+
+[ext_resource type="Script" uid="uid://sfeycqoi8dlv" path="res://scripts/objetos/porta.gd" id="1_m2aqe"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fa2tl"]
+size = Vector2(40, 96)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rbcxk"]
+size = Vector2(40, 96)
+
+[node name="Porta" type="StaticBody2D" unique_id=1584353317]
+collision_mask = 0
+script = ExtResource("1_m2aqe")
+
+[node name="Colisao" type="CollisionShape2D" parent="." unique_id=1883426043]
+position = Vector2(0, -48)
+shape = SubResource("RectangleShape2D_fa2tl")
+
+[node name="Folha" type="ColorRect" parent="." unique_id=1982211620]
+offset_left = -20.0
+offset_top = -96.0
+offset_right = 20.0
+mouse_filter = 2
+color = Color(0.55, 0.4, 0.3, 1)
+
+[node name="Batente" type="ColorRect" parent="." unique_id=2096604792]
+offset_left = -28.0
+offset_top = -104.0
+offset_right = 28.0
+offset_bottom = -96.0
+mouse_filter = 2
+color = Color(0.35, 0.25, 0.2, 1)
+
+[node name="Vao" type="Area2D" parent="." unique_id=875618059]
+collision_layer = 0
+collision_mask = 2
+
+[node name="Colisao" type="CollisionShape2D" parent="Vao" unique_id=1521622737]
+position = Vector2(0, -48)
+shape = SubResource("RectangleShape2D_rbcxk")

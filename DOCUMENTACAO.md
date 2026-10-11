@@ -16,17 +16,18 @@ Situação em 11/10/2026. O [README.md](README.md) explica a organização do re
 8. [Checkpoint, queda e reaparecimento](#8-checkpoint-queda-e-reaparecimento)
 9. [Interação com objetos](#9-interação-com-objetos)
 10. [Puzzle de luz de Afrodite](#10-puzzle-de-luz-de-afrodite)
-11. [Áreas e câmera](#11-áreas-e-câmera)
-12. [Portal e conclusão de área](#12-portal-e-conclusão-de-área)
-13. [Progresso e salvamento](#13-progresso-e-salvamento)
-14. [Transição entre cenas](#14-transição-entre-cenas)
-15. [Interface](#15-interface)
-16. [Áreas de teste](#16-áreas-de-teste)
-17. [Como fazer](#17-como-fazer)
-18. [Decisões provisórias](#18-decisões-provisórias)
-19. [O que ainda não existe](#19-o-que-ainda-não-existe)
-20. [Plano das mecânicas principais](#20-plano-das-mecânicas-principais)
-21. [Tarefas cobertas](#21-tarefas-cobertas)
+11. [Acionadores, porta e saída condicionada](#11-acionadores-porta-e-saída-condicionada)
+12. [Áreas e câmera](#12-áreas-e-câmera)
+13. [Portal e conclusão de área](#13-portal-e-conclusão-de-área)
+14. [Progresso e salvamento](#14-progresso-e-salvamento)
+15. [Transição entre cenas](#15-transição-entre-cenas)
+16. [Interface](#16-interface)
+17. [Áreas de teste](#17-áreas-de-teste)
+18. [Como fazer](#18-como-fazer)
+19. [Decisões provisórias](#19-decisões-provisórias)
+20. [O que ainda não existe](#20-o-que-ainda-não-existe)
+21. [Plano das mecânicas principais](#21-plano-das-mecânicas-principais)
+22. [Tarefas cobertas](#22-tarefas-cobertas)
 
 ---
 
@@ -40,6 +41,7 @@ O jogo já tem um ciclo completo, do menu até a liberação de fases:
 - Checkpoint, queda no buraco e reaparecimento.
 - Interação com objetos.
 - Puzzle de luz de Afrodite em versão mínima: fonte, feixe, espelhos que o personagem vira e receptor.
+- Porta que abre com o puzzle resolvido, e saída que só funciona com ele resolvido.
 - Tela de derrota e menu de pausa, com saída para o menu principal.
 - Portal que conclui a área e leva à próxima cena, com escurecimento da tela.
 - Progresso com liberação de fases, gravado em arquivo.
@@ -120,6 +122,7 @@ Perigos e interativos têm máscara 2: só enxergam o personagem. O personagem t
 | `scripts/sistemas/hurtbox.gd` | usada dentro do jogador | Região que recebe dano |
 | `scripts/sistemas/vida.gd` | usada dentro do jogador | Pontos de vida e invencibilidade |
 | `scripts/sistemas/interativo.gd` | usada dentro do espelho | Marca um objeto como acionável |
+| `scripts/sistemas/acionadores.gd` | sem cena | Funções de apoio para objetos que dependem de acionadores |
 | `scripts/jogador/interacao_do_jogador.gd` | nó `Interacao` do jogador | Escolhe e aciona o objeto mais próximo |
 | `scripts/fases/fase_1_afrodite/espelho.gd` | `cenas/fases/fase_1_afrodite/elementos/espelho.tscn` | Espelho do puzzle de luz |
 | `scripts/fases/fase_1_afrodite/fonte_de_luz.gd` | `cenas/fases/fase_1_afrodite/elementos/fonte_de_luz.tscn` | Fonte de luz: emite e calcula o feixe |
@@ -129,7 +132,8 @@ Perigos e interativos têm máscara 2: só enxergam o personagem. O personagem t
 | `scripts/fases/area_de_jogo.gd` | raiz de cada área | Fase, área e limites da câmera |
 | `scripts/objetos/checkpoint.gd` | `cenas/objetos/checkpoint.tscn` | Ponto de retorno |
 | `scripts/objetos/zona_de_queda.gd` | nó dentro da área | Buraco abaixo do cenário |
-| `scripts/objetos/portal.gd` | `cenas/objetos/portal.tscn` | Saída da área |
+| `scripts/objetos/portal.gd` | `cenas/objetos/portal.tscn` | Saída da área, que pode depender de acionadores |
+| `scripts/objetos/porta.gd` | `cenas/objetos/porta.tscn` | Porta que abre e fecha conforme os acionadores |
 | `scripts/ui/hud.gd` | `cenas/ui/hud.tscn` | Vidas na tela |
 | `scripts/ui/tela_de_derrota.gd` | `cenas/ui/tela_de_derrota.tscn` | Tela de derrota |
 | `scripts/ui/menu_de_pausa.gd` | `cenas/ui/menu_de_pausa.tscn` | Menu de pausa |
@@ -340,7 +344,7 @@ O script do espelho roda também dentro do editor (`@tool`), só para o desenho 
 
 **Arquivos:** `scripts/fases/fase_1_afrodite/fonte_de_luz.gd`, `receptor_de_luz.gd` e `espelho.gd`, com as cenas de mesmo nome em `cenas/fases/fase_1_afrodite/elementos/`.
 
-**Situação:** versão mínima implementada e coberta por testes automáticos. Falta o teste manual no editor. O receptor ainda não controla nada: ligar o puzzle a um mecanismo e à saída é a etapa 3.
+**Situação:** versão mínima implementada e coberta por testes automáticos. O receptor já pode controlar uma porta e a saída da área: veja a seção 11.
 
 O puzzle tem três peças:
 
@@ -355,7 +359,7 @@ O puzzle tem três peças:
 - O feixe anda só na horizontal e na vertical.
 - O espelho `/` troca direita por cima e esquerda por baixo. O espelho `\` troca direita por baixo e esquerda por cima. Os dois lados do espelho refletem.
 - O feixe termina no receptor: a luz não passa dele.
-- Paredes, chão e plataformas param o feixe. Vale para todo corpo na camada 1 (mundo).
+- Paredes, chão e plataformas param o feixe. Vale para todo corpo na camada 1 (mundo), incluindo uma porta fechada.
 - O personagem não bloqueia a luz.
 - O feixe sofre no máximo 16 reflexões (`max_reflexoes`). Isso encerra o caminho quando os espelhos formam um circuito fechado.
 - O caminho é recalculado a cada quadro de física, então a luz reage na hora a um espelho virado ou a um obstáculo que apareça.
@@ -400,7 +404,67 @@ O receptor aceita luz vinda de qualquer direção. Com mais de uma fonte, ele fi
 
 A seta da fonte e o desenho do espelho aparecem também no editor, conforme o que estiver no Inspetor. O feixe só existe com o jogo rodando.
 
-## 11. Áreas e câmera
+## 11. Acionadores, porta e saída condicionada
+
+**Arquivos:** `scripts/sistemas/acionadores.gd`, `scripts/objetos/porta.gd` com `cenas/objetos/porta.tscn`, e `scripts/objetos/portal.gd`.
+
+**Situação:** implementado e coberto por testes automáticos. Falta o teste manual no editor.
+
+É o que liga um puzzle ao resto da área. Um **acionador** é qualquer nó que tenha:
+
+- uma variável `ativo`, verdadeira ou falsa;
+- um sinal `estado_mudou(ativo)`, emitido quando ela muda.
+
+O `ReceptorDeLuz` é o primeiro acionador do jogo. Uma alavanca ou uma placa de pressão que siga o mesmo contrato funciona com a porta e com o portal sem mudar nada neles.
+
+A porta e o portal têm uma lista `acionadores`, preenchida no Inspetor. As regras são as mesmas para os dois:
+
+- Com vários acionadores na lista, todos precisam estar ativos.
+- A condição é contínua: se um acionador desliga, a porta fecha e o portal volta a ficar bloqueado. Desfazer a solução do puzzle fecha a saída.
+- Uma entrada da lista que não seja um acionador é ignorada, com um aviso no console. Assim um erro de configuração não prende o jogador.
+
+**Porta** (`cenas/objetos/porta.tscn`)
+
+```
+Porta (StaticBody2D, camada 1)   origem na base, no meio
+├── Colisao (CollisionShape2D)   retângulo de 40×96, desligado com a porta aberta
+├── Folha (ColorRect)            a porta em si; some quando ela abre
+├── Batente (ColorRect)          barra em cima, sempre visível
+└── Vao (Area2D)                 detecta o personagem embaixo da porta
+```
+
+| Nome | Tipo | Para que serve |
+|---|---|---|
+| `acionadores` | propriedade | Acionadores que controlam a porta |
+| `aberta_no_inicio` | propriedade | Estado inicial, usado só quando a lista está vazia |
+| `aberta` | variável | Verdadeiro enquanto a passagem está livre |
+| `abrir()`, `fechar()`, `definir_aberta(valor)` | funções | Controle direto, para portas sem acionadores |
+| `abriu`, `fechou` | sinais | Emitidos quando a porta termina de abrir ou de fechar |
+
+- Fechada, a porta é parede: segura o personagem e também a luz do puzzle.
+- A porta nunca fecha em cima do personagem. Se ele estiver no vão quando ela deveria fechar, ela espera ele sair.
+- A porta tem 96 pixels de altura. Para ela ser a única passagem, é preciso uma parede em cima dela, como na área de teste.
+- Abrir e fechar são instantâneos. Aberta, a folha some e fica só o batente: a mudança é de forma, e não só de cor.
+
+**Portal com condição.** O portal ganhou a lista `acionadores`:
+
+| Nome | Tipo | Para que serve |
+|---|---|---|
+| `acionadores` | propriedade | Acionadores de que a saída depende. Lista vazia = sempre liberado |
+| `liberado` | variável | Verdadeiro enquanto o portal pode ser atravessado |
+| `liberacao_mudou(liberado)` | sinal | Emitido quando o portal é liberado ou bloqueado |
+
+- Bloqueado, o portal fica apagado e com três barras claras na frente (o nó `Tranca`). Entrar nele não faz nada.
+- Se o portal é liberado com o personagem já dentro dele, o personagem atravessa na hora.
+- O registro da área concluída e o escurecimento da tela continuam iguais: só acontecem quando o portal é de fato atravessado.
+
+**Para não prender o jogador.** O reinício pela pausa sempre devolve a área ao estado inicial. Mesmo assim, ao montar uma área:
+
+- deixe os espelhos de um puzzle do mesmo lado da porta que ele abre, antes dela;
+- não ponha a porta no caminho da luz que a mantém aberta;
+- não faça a saída depender de um puzzle que fica do outro lado de uma porta que pode fechar.
+
+## 12. Áreas e câmera
 
 **Arquivo:** `scripts/fases/area_de_jogo.gd`.
 
@@ -416,7 +480,7 @@ Ao carregar, a área passa os limites para a câmera do personagem, que deixa de
 
 `fase` e `area` são o que o portal usa para registrar a conclusão. Uma área com `fase = 0` nunca conta para o progresso, o que serve para cenas de experimento.
 
-## 12. Portal e conclusão de área
+## 13. Portal e conclusão de área
 
 **Arquivos:** `scripts/objetos/portal.gd` e `cenas/objetos/portal.tscn`.
 
@@ -430,7 +494,9 @@ O portal da última área de uma fase deve apontar para `res://cenas/ui/selecao_
 
 Cada portal funciona uma vez só. Com `proxima_cena` vazio, ele registra a conclusão e avisa no console que não há próxima cena.
 
-## 13. Progresso e salvamento
+O portal pode depender de um puzzle: com acionadores na lista, ele só funciona enquanto todos estiverem ativos. Os detalhes estão na seção 11.
+
+## 14. Progresso e salvamento
 
 **Arquivo:** `scripts/sistemas/progresso.gd`, autoload `Progresso`.
 
@@ -468,7 +534,7 @@ Cada portal funciona uma vez só. Com `proxima_cena` vazio, ele registra a concl
 
 Cada área concluída aparece como `"fase-area"`. Na leitura, nada do arquivo é usado sem conferência: números fora da faixa são corrigidos, áreas inexistentes são descartadas, e um arquivo ilegível faz o jogo começar do zero com um aviso no console, em vez de dar erro.
 
-## 14. Transição entre cenas
+## 15. Transição entre cenas
 
 **Arquivo:** `scripts/sistemas/transicao.gd`, autoload `Transicao`.
 
@@ -484,7 +550,7 @@ Quem usa hoje: os botões do menu principal e da seleção de fase, o portal, o 
 
 Toda troca de cena nova deve usar a `Transicao`, e não `change_scene_to_file` direto.
 
-## 15. Interface
+## 16. Interface
 
 Todas as telas seguem a mesma montagem: um `Control` do tamanho da tela, um `Fundo` (`ColorRect`), um `Centro` (`CenterContainer`) e dentro dele uma `Caixa` (`VBoxContainer`) com o título e os botões. Os botões recebem foco ao abrir, então dá para usar setas e Enter ou o controle.
 
@@ -516,7 +582,7 @@ A derrota e a pausa funcionam com o jogo pausado porque as duas cenas estão no 
 
 Os nomes das fases são o texto dos botões `Fase1` a `Fase5` na cena, e podem ser trocados pelo editor. A cena de entrada de cada fase fica na propriedade `cenas_das_fases`, uma lista com cinco caminhos. Hoje só o primeiro está preenchido, com a primeira área de teste.
 
-## 16. Áreas de teste
+## 17. Áreas de teste
 
 Ficam em `cenas/fases/teste/` e servem para experimentar os sistemas. Por enquanto estão marcadas como fase 1, áreas 1 e 2, para o progresso poder ser testado.
 
@@ -528,17 +594,18 @@ Ficam em `cenas/fases/teste/` e servem para experimentar os sistemas. Por enquan
 | Dois espelhos | Em x = 260 e 340, acima da cabeça do personagem. O primeiro começa em `/` e o segundo em `\` |
 | Fonte de luz | Em x = 260, no alto, apontando para baixo |
 | Receptor de luz | Em x = 340, no alto |
+| Parede com porta | Em x = 660. A parede vai do teto até a porta, e a porta abre com o receptor |
 | Três plataformas | Em x = 500, 820 e 1200 |
 | Espinhos | Em x = 1000, no chão |
 | Checkpoint | Em x = 1500 |
 | Buraco | Entre x = 1700 e 1860, com a zona de queda embaixo |
 | Portal | Em x = 2460, leva à área 2 |
 
-Os espelhos, a fonte e o receptor formam um puzzle: a luz desce até o primeiro espelho, e a solução é virar os dois, deixando o primeiro em `\` e o segundo em `/`. Assim a luz segue para a direita e sobe até o receptor.
+Os espelhos, a fonte e o receptor formam um puzzle: a luz desce até o primeiro espelho, e a solução é virar os dois, deixando o primeiro em `\` e o segundo em `/`. Assim a luz segue para a direita e sobe até o receptor, e a porta abre.
 
-**`area_teste_2.tscn`**, com 1280 pixels de largura (uma tela): chão, uma plataforma e um portal em x = 1160 que leva à seleção de fase.
+**`area_teste_2.tscn`**, com 1280 pixels de largura (uma tela): chão, uma plataforma e um portal em x = 1160 que leva à seleção de fase. O portal começa bloqueado e depende de um puzzle de um espelho só: a fonte fica em x = 880, o espelho em x = 1000 e o receptor acima dele. Virar o espelho para `/` manda a luz para cima e libera a saída.
 
-## 17. Como fazer
+## 18. Como fazer
 
 **Criar uma área nova**
 
@@ -567,9 +634,13 @@ Os espelhos, a fonte e o receptor formam um puzzle: a luz desce até o primeiro 
 
 **Montar um puzzle de luz.** Instancie `fonte_de_luz.tscn`, `espelho.tscn` e `receptor_de_luz.tscn`, da pasta `cenas/fases/fase_1_afrodite/elementos/`. Escolha a `Direcao` da fonte e a `Orientacao Inicial` de cada espelho. Alinhe as peças pelos centros: mesmo `y` nos trechos horizontais e mesmo `x` nos verticais. Deixe os espelhos ao alcance do personagem, e confira rodando a área com F6.
 
+**Fazer uma porta abrir com um puzzle.** Instancie `cenas/objetos/porta.tscn`, com a base no chão, e ponha uma parede em cima dela. No Inspetor da porta, em `Acionadores`, acrescente um elemento e aponte para o receptor do puzzle.
+
+**Fazer a saída depender de um puzzle.** Clique no portal da área e, em `Acionadores`, acrescente um elemento apontando para o receptor. O portal passa a começar bloqueado.
+
 **Zerar o progresso para testar.** Apague o arquivo `progresso.json` em Projeto > Abrir Pasta de Dados do Usuário.
 
-## 18. Decisões provisórias
+## 19. Decisões provisórias
 
 Escolhas feitas para o código andar, que o grupo ainda precisa confirmar:
 
@@ -590,11 +661,14 @@ Escolhas feitas para o código andar, que o grupo ainda precisa confirmar:
 - **A luz do puzzle de Afrodite anda só na horizontal e na vertical**, e os espelhos têm duas orientações diagonais.
 - **O personagem não bloqueia a luz.**
 - **O receptor aceita luz de qualquer direção**, e o espelho reflete dos dois lados.
+- **A saída e a porta fecham de novo se a solução do puzzle for desfeita.**
+- **Com vários acionadores, todos precisam estar ativos.**
+- **A porta não fecha em cima do personagem**, e fechada ela bloqueia a luz.
 
-## 19. O que ainda não existe
+## 20. O que ainda não existe
 
 - Ataque e esquiva.
-- Mecanismo acionado pelo receptor e saída que depende do puzzle.
+- Alavancas, placas de pressão e outros acionadores. Só o receptor de luz existe.
 - Inimigos, chefes e barra de vida de chefe.
 - Plataformas móveis, armadilhas, portas, mecanismos e puzzles.
 - Tela de vitória, pontuação e contadores.
@@ -610,20 +684,21 @@ Limitações conhecidas do que já existe:
 - A seleção não mostra quais fases já foram concluídas.
 - As pastas das fases de Ares, Hades, Poseidon e Zeus existem, mas ainda estão vazias.
 - As peças do puzzle de luz precisam ser alinhadas pelos centros, à mão. Não há grade nem encaixe automático.
-- O receptor acende, mas ainda não controla nada.
+- A porta abre e fecha de uma vez, sem animação.
+- O portal bloqueado só mostra as barras. Não há mensagem nem som para quem tenta entrar.
 - A indicação do comando mostra sempre a tecla "E", mesmo para quem joga no controle.
 - A interação não confere se há parede entre o personagem e o objeto: basta a distância.
 - O espelho não tem colisão: o personagem passa na frente dele.
 
-## 20. Plano das mecânicas principais
+## 21. Plano das mecânicas principais
 
 As mecânicas do herói estão sendo feitas em oito etapas, uma por vez. Esta tabela separa o que já está no jogo do que ainda é plano.
 
 | Etapa | O que entrega | Situação |
 |---|---|---|
-| 1 | Interação com objetos, com o espelho como objeto de teste, e correção da queda | Implementada e no repositório. Testes automáticos feitos; teste manual ainda não registrado |
-| 2 | Puzzle mínimo: fonte de luz, feixe, espelho e receptor | Implementada. Testes automáticos feitos; falta o teste manual no editor |
-| 3 | Puzzle ligado a um mecanismo e à liberação da saída | Planejada |
+| 1 | Interação com objetos, com o espelho como objeto de teste, e correção da queda | Implementada e no repositório. Testes automáticos feitos; teste manual feito pelo Pedro em 11/10 |
+| 2 | Puzzle mínimo: fonte de luz, feixe, espelho e receptor | Implementada e no repositório. Testes automáticos feitos; teste manual ainda não registrado |
+| 3 | Puzzle ligado a um mecanismo e à liberação da saída | Implementada. Testes automáticos feitos; falta o teste manual no editor |
 | 4 | Quantidade de áreas configurável por fase, com cinco áreas em Afrodite | Planejada |
 | 5 | Ataque, validado com um alvo de teste | Planejada |
 | 6 | Esquiva, com invulnerabilidade e regras de queda | Planejada |
@@ -639,7 +714,7 @@ Decisões já tomadas para as etapas seguintes, ainda não implementadas:
 
 Os números são valores iniciais, sujeitos a ajuste durante os testes.
 
-## 21. Tarefas cobertas
+## 22. Tarefas cobertas
 
 Relação entre o que está documentado aqui e os códigos do [CHECK.md](CHECK.md):
 
@@ -650,11 +725,12 @@ Relação entre o que está documentado aqui e os códigos do [CHECK.md](CHECK.m
 | P4 Movimentação, salto, queda e aterrissagem | Concluída | Seção 6 |
 | P7 Colisões, hitboxes e hurtboxes | Concluída | Seção 7 |
 | P10 Três vidas, checkpoints e reaparecimento | Concluída | Seções 7 e 8 |
-| P12 Conclusão de áreas, liberação de fases e reinício | Concluída | Seções 12 e 13 |
-| P15 Câmera 2D e limites das áreas | Concluída | Seção 11 |
+| P12 Conclusão de áreas, liberação de fases e reinício | Concluída | Seções 13 e 14 |
+| P15 Câmera 2D e limites das áreas | Concluída | Seção 12 |
 | P21 Repositório e controle de versões | Concluída | Repositório e fluxo de branches |
 | P6 Interação com objetos e animações | Parcial | Sistema de interação e espelho (seção 9); faltam os demais objetos e as animações |
-| P14 Puzzles, água, raios e perigos ambientais | Parcial | Puzzle de luz mínimo de Afrodite (seção 10); faltam o mecanismo, a saída e os puzzles das outras fases |
+| P13 Plataformas, armadilhas, portas e mecanismos | Parcial | Porta acionada por puzzle (seção 11); faltam plataformas, armadilhas e os outros mecanismos |
+| P14 Puzzles, água, raios e perigos ambientais | Parcial | Puzzle de luz de Afrodite, com porta e saída (seções 10 e 11); faltam os puzzles e perigos das outras fases |
 | P2 Resolução, tela e entradas | Parcial | Valores provisórios; falta fechar com as definições |
 | P11 Vitória, derrota, pontuação e contadores | Parcial | Tela de derrota |
 | P16 Menus, HUD, pausa, configurações, transições e áudio | Parcial | Menu principal, HUD, pausa com saída para o menu e transição |

@@ -15,10 +15,10 @@ Situação em 11/10/2026, tirada do quadro do Trello. Para atualizar, troque `[ 
 
 | Pessoa | Concluídas | Parciais | Pendentes | Total |
 |---|---|---|---|---|
-| Pedro | 8 | 8 | 13 | 29 |
+| Pedro | 8 | 9 | 12 | 29 |
 | Aurélio | 0 | 0 | 29 | 29 |
 | Julia | 0 | 1 | 28 | 29 |
-| **Total** | **8** | **9** | **70** | **87** |
+| **Total** | **8** | **10** | **69** | **87** |
 
 Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J21. Aqui cada uma conta uma vez.
 
@@ -42,8 +42,8 @@ Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J
 - [x] **P10** Programar três vidas, checkpoints e reaparecimento
 - [ ] **P11** Programar vitória, derrota, pontuação e contadores se aprovados *(parcial: feita a tela de derrota; faltam vitória, pontuação e contadores)*
 - [x] **P12** Programar conclusão de áreas, liberação de fases e reinício
-- [ ] **P13** Programar plataformas, armadilhas, portas e mecanismos
-- [ ] **P14** Programar puzzles, água, raios e perigos ambientais *(parcial: feito o puzzle de luz mínimo de Afrodite (fonte, feixe, espelhos e receptor); faltam o mecanismo, a saída e os puzzles das outras fases)*
+- [ ] **P13** Programar plataformas, armadilhas, portas e mecanismos *(parcial: feita a porta acionada por puzzle; faltam plataformas, armadilhas e os outros mecanismos)*
+- [ ] **P14** Programar puzzles, água, raios e perigos ambientais *(parcial: feito o puzzle de luz de Afrodite, com porta e saída; faltam os puzzles e perigos das outras fases)*
 - [x] **P15** Programar câmera 2D e limites das áreas
 - [ ] **P16** Programar menus, HUD, pausa, configurações, transições e áudio *(parcial: feitos menu principal, HUD das vidas, pausa e transição; faltam configurações e áudio)*
 - [ ] **P17** Criar salvamento, seleção de fase, exportação e versão executável *(parcial: feitos o salvamento do progresso e a tela de seleção de fase; faltam a exportação e o executável)*
@@ -281,9 +281,10 @@ Depende do funcionamento dos puzzles. Pode andar em paralelo com a Etapa 3. Conc
    - Nota: a integração das animações só fecha depois de P23
 42. [ ] **P13** Programar plataformas, armadilhas, portas e mecanismos — Pedro
    - Depende de: A16, P6
+   - Parcial: feita a porta acionada por puzzle; faltam plataformas, armadilhas e os outros mecanismos
 43. [ ] **P14** Programar puzzles, água, raios e perigos ambientais — Pedro
    - Depende de: A16, P13
-   - Parcial: feito o puzzle de luz mínimo de Afrodite (fonte, feixe, espelhos e receptor); faltam o mecanismo, a saída e os puzzles das outras fases
+   - Parcial: feito o puzzle de luz de Afrodite, com porta e saída; faltam os puzzles e perigos das outras fases
 
 ## Etapa 5 — Planejamento das áreas
 

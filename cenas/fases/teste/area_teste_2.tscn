@@ -2,8 +2,11 @@
 
 [ext_resource type="Script" uid="uid://duc02wmwkk3ha" path="res://scripts/fases/area_de_jogo.gd" id="1_e7jix"]
 [ext_resource type="PackedScene" uid="uid://dvkyqfj5qsk48" path="res://cenas/jogador/jogador.tscn" id="2_ldmcs"]
+[ext_resource type="PackedScene" uid="uid://bgb48fl0s1seq" path="res://cenas/fases/fase_1_afrodite/elementos/fonte_de_luz.tscn" id="2_llh56"]
+[ext_resource type="PackedScene" uid="uid://c4regr3l7qkmn" path="res://cenas/fases/fase_1_afrodite/elementos/espelho.tscn" id="3_p2m8k"]
 [ext_resource type="PackedScene" uid="uid://bursfnq7bb2ou" path="res://cenas/objetos/portal.tscn" id="3_r63q1"]
 [ext_resource type="PackedScene" uid="uid://drr1bwuq40ng6" path="res://cenas/ui/hud.tscn" id="4_llh56"]
+[ext_resource type="PackedScene" uid="uid://w5tm0qg4p0kj" path="res://cenas/fases/fase_1_afrodite/elementos/receptor_de_luz.tscn" id="4_yje8u"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p2m8k"]
 size = Vector2(1280, 80)
@@ -79,11 +82,22 @@ offset_bottom = 360.0
 mouse_filter = 2
 color = Color(0.3, 0.32, 0.42, 1)
 
+[node name="FonteDeLuz" parent="." unique_id=1836875354 instance=ExtResource("2_llh56")]
+position = Vector2(880, 552)
+
+[node name="Espelho" parent="." unique_id=700286824 instance=ExtResource("3_p2m8k")]
+position = Vector2(1000, 552)
+orientacao_inicial = 1
+
+[node name="ReceptorDeLuz" parent="." unique_id=1190296466 instance=ExtResource("4_yje8u")]
+position = Vector2(1000, 380)
+
 [node name="Jogador" parent="." unique_id=1220948030 instance=ExtResource("2_ldmcs")]
 position = Vector2(120, 640)
 
-[node name="Portal" parent="." unique_id=1616764863 instance=ExtResource("3_r63q1")]
+[node name="Portal" parent="." unique_id=1616764863 node_paths=PackedStringArray("acionadores") instance=ExtResource("3_r63q1")]
 position = Vector2(1160, 640)
 proxima_cena = "res://cenas/ui/selecao_de_fase.tscn"
+acionadores = [NodePath("../ReceptorDeLuz")]
 
 [node name="Hud" parent="." unique_id=1952125550 instance=ExtResource("4_llh56")]
