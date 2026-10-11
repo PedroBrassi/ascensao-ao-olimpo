@@ -2,7 +2,7 @@
 
 Tudo o que já está implementado no projeto, sistema por sistema: o que cada script faz, como as cenas são montadas e como usar cada peça para construir as fases.
 
-Situação em 10/10/2026. O [README.md](README.md) explica a organização do repositório e o fluxo de trabalho; o [CHECK.md](CHECK.md) lista as tarefas e a ordem delas. Este arquivo explica o código.
+Situação em 11/10/2026. O [README.md](README.md) explica a organização do repositório e o fluxo de trabalho; o [CHECK.md](CHECK.md) lista as tarefas e a ordem delas. Este arquivo explica o código. A pasta do grupo no Google Drive, onde ficam os arquivos de trabalho, está descrita na seção 12 do README.
 
 ## Sumário
 
@@ -35,7 +35,7 @@ O jogo já tem um ciclo completo, do menu até a liberação de fases:
 - Personagem que anda, pula e cai, com câmera que o acompanha.
 - Três vidas, dano por contato, invencibilidade temporária e HUD das vidas.
 - Checkpoint, queda no buraco e reaparecimento.
-- Tela de derrota e menu de pausa.
+- Tela de derrota e menu de pausa, com saída para o menu principal.
 - Portal que conclui a área e leva à próxima cena, com escurecimento da tela.
 - Progresso com liberação de fases, gravado em arquivo.
 - Duas áreas de teste, que por enquanto fazem o papel da fase 1.
@@ -67,15 +67,18 @@ flowchart TD
     Selecao -->|Voltar| Menu
     Selecao -->|Fase liberada| A1[Área 1 da fase]
     A1 -->|Portal| A2[Área 2 da fase]
-    A2 -->|Portal| Prox[Cena definida no portal]
+    A2 -->|Portal| Selecao
     A1 -.->|Três vidas perdidas| Derrota[Tela de derrota]
     Derrota -->|Tentar de novo| A1
+    A1 -.->|Esc| Pausa[Menu de pausa]
+    Pausa -->|Continuar ou Reiniciar área| A1
+    Pausa -->|Voltar ao menu| Menu
 ```
 
-- Toda troca de cena feita por menu ou portal passa pela `Transicao`, que escurece e clareia a tela.
+- Toda troca ou recarga de cena passa pela `Transicao`, que escurece e clareia a tela.
 - Atravessar o portal registra a área como concluída. Com as duas áreas de uma fase concluídas, a fase seguinte é liberada.
-- Em qualquer área, Esc abre o menu de pausa.
-- Hoje o portal da segunda área de teste leva de volta à primeira. Não há caminho de volta ao menu de dentro de uma área.
+- O portal da segunda área leva de volta à seleção de fase. É lá que a fase recém-liberada aparece.
+- Em qualquer área, Esc abre o menu de pausa. A derrota e a pausa valem para as duas áreas, não só para a primeira, como o diagrama mostra por simplicidade.
 
 ## 4. Configuração do projeto
 
@@ -122,7 +125,9 @@ Perigos e interativos têm máscara 2: só enxergam o personagem. O personagem t
 | `scripts/ui/menu_principal.gd` | `cenas/ui/menu_principal.tscn` | Menu principal |
 | `scripts/ui/selecao_de_fase.gd` | `cenas/ui/selecao_de_fase.tscn` | Seleção de fase |
 
-As áreas de teste ficam em `cenas/fases/teste/`. Cada script tem um `class_name` igual ao nome do arquivo em maiúsculas iniciais (`Jogador`, `Vida`, `Portal` e assim por diante), que é o que permite escrever `if corpo is Jogador`.
+As áreas de teste ficam em `cenas/fases/teste/`. Cada fase definitiva tem a sua pasta em `cenas/fases/`, com uma subpasta `elementos/` para as cenas que só ela usa, e uma pasta de mesmo nome em `scripts/fases/` para os scripts desses elementos. Essas pastas ainda estão vazias. As regras completas estão na seção 4 do README.
+
+Cada script tem um `class_name` igual ao nome do arquivo em maiúsculas iniciais (`Jogador`, `Vida`, `Portal` e assim por diante), que é o que permite escrever `if corpo is Jogador`.
 
 ## 6. Personagem
 
@@ -271,6 +276,8 @@ O portal é a saída da área: um retângulo roxo de 48×96. Quando o personagem
 2. Lê `fase` e `area` na raiz da cena e chama `Progresso.concluir_area`.
 3. Chama `Transicao.trocar_cena` com o caminho posto em `proxima_cena`.
 
+O portal da última área de uma fase deve apontar para `res://cenas/ui/selecao_de_fase.tscn`, como já faz o da segunda área de teste.
+
 Cada portal funciona uma vez só. Com `proxima_cena` vazio, ele registra a conclusão e avisa no console que não há próxima cena.
 
 ## 11. Progresso e salvamento
@@ -322,6 +329,8 @@ Cada área concluída aparece como `"fase-area"`. Na leitura, nada do arquivo é
 
 Cada metade, escurecer e clarear, dura 0,25 s. Durante o escurecimento o jogo fica pausado e os cliques ficam bloqueados. Uma segunda chamada feita no meio de uma transição é ignorada. Se o caminho não existir, o erro aparece no console e o jogo continua na cena em que estava.
 
+Quem usa hoje: os botões do menu principal e da seleção de fase, o portal, o "Tentar de novo" da derrota e o "Reiniciar área" e o "Voltar ao menu" da pausa.
+
 Toda troca de cena nova deve usar a `Transicao`, e não `change_scene_to_file` direto.
 
 ## 13. Interface
@@ -330,9 +339,17 @@ Todas as telas seguem a mesma montagem: um `Control` do tamanho da tela, um `Fun
 
 **HUD** (`cenas/ui/hud.tscn`). É um `CanvasLayer`, que fica fixo na tela enquanto a câmera se move. Mostra um quadrado por vida no canto superior esquerdo: vermelho para vida cheia, cinza para vida perdida. Ele encontra o personagem pelo grupo `jogador` e escuta o sinal `vida_mudou`. A tela de derrota e o menu de pausa são filhos do HUD, então uma área que tem o HUD já tem os dois.
 
-**Tela de derrota** (`cenas/ui/tela_de_derrota.tscn`). Aparece quando a `Vida` do personagem emite `morreu`. Pausa o jogo e mostra "Você perdeu" com o botão **Tentar de novo**, que recarrega a área: vidas cheias e checkpoints desativados.
+**Tela de derrota** (`cenas/ui/tela_de_derrota.tscn`). Aparece quando a `Vida` do personagem emite `morreu`. Pausa o jogo e mostra "Você perdeu" com o botão **Tentar de novo**, que escurece a tela e recarrega a área: vidas cheias e checkpoints desativados.
 
-**Menu de pausa** (`cenas/ui/menu_de_pausa.tscn`). Abre e fecha com a ação `pausar`. Tem **Continuar** e **Reiniciar área**. A tecla não faz nada enquanto a tela de derrota está aberta nem durante uma transição.
+**Menu de pausa** (`cenas/ui/menu_de_pausa.tscn`). Abre e fecha com a ação `pausar`. Tem três botões:
+
+| Botão | O que faz |
+|---|---|
+| **Continuar** | Fecha o menu e volta ao jogo |
+| **Reiniciar área** | Escurece a tela e recarrega a área |
+| **Voltar ao menu** | Escurece a tela e abre o menu principal |
+
+A cena aberta pelo Voltar ao menu é a propriedade `cena_do_menu`. Sair pela pausa não pede confirmação e perde o que foi feito na área, mas não mexe no progresso salvo. Depois que Reiniciar ou Voltar ao menu é escolhido, o menu deixa de responder até a cena ser trocada. A tecla de pausa não faz nada enquanto a tela de derrota está aberta nem durante uma transição.
 
 A derrota e a pausa funcionam com o jogo pausado porque as duas cenas estão no modo de processamento "Sempre" (`process_mode = 3`).
 
@@ -363,7 +380,7 @@ Ficam em `cenas/fases/teste/` e servem para experimentar os sistemas. Por enquan
 | Buraco | Entre x = 1700 e 1860, com a zona de queda embaixo |
 | Portal | Em x = 2460, leva à área 2 |
 
-**`area_teste_2.tscn`**, com 1280 pixels de largura (uma tela): chão, uma plataforma e um portal em x = 1160 que leva de volta à área 1.
+**`area_teste_2.tscn`**, com 1280 pixels de largura (uma tela): chão, uma plataforma e um portal em x = 1160 que leva à seleção de fase.
 
 ## 15. Como fazer
 
@@ -374,9 +391,11 @@ Ficam em `cenas/fases/teste/` e servem para experimentar os sistemas. Por enquan
 3. Monte o chão e as plataformas com `StaticBody2D` na camada 1.
 4. Instancie `cenas/jogador/jogador.tscn` e ponha o personagem com os pés no chão.
 5. Instancie `cenas/ui/hud.tscn`. Com ele vêm a tela de derrota e o menu de pausa.
-6. Instancie `cenas/objetos/portal.tscn` no fim da área e preencha `Proxima Cena`.
+6. Instancie `cenas/objetos/portal.tscn` no fim da área e preencha `Proxima Cena`: na área 1, com a área 2 da mesma fase; na área 2, com `res://cenas/ui/selecao_de_fase.tscn`.
 7. Se a área tiver buracos, ponha embaixo dela uma `Area2D` com o script `zona_de_queda.gd`, na camada 4 e com máscara 2.
-8. Salve na pasta da fase, em `cenas/fases/`.
+8. Salve na pasta da fase, em `cenas/fases/`, como `area_1.tscn` ou `area_2.tscn`.
+
+**Criar um elemento que só uma fase usa.** Salve a cena em `cenas/fases/fase_N_nome/elementos/` e o script em `scripts/fases/fase_N_nome/`. Se outra fase passar a usar o mesmo elemento, mova os dois para as pastas comuns (`cenas/objetos/` e `scripts/objetos/`), sempre por dentro da Godot.
 
 **Pôr espinhos ou um checkpoint.** Instancie `cenas/objetos/espinhos.tscn` ou `cenas/objetos/checkpoint.tscn` e posicione com a base no chão. Nenhum dos dois precisa de configuração.
 
@@ -401,6 +420,8 @@ Escolhas feitas para o código andar, que o grupo ainda precisa confirmar:
 - **As fases liberam em sequência**, depois das duas áreas da anterior.
 - **A ordem das fases** é Afrodite, Ares, Hades, Poseidon e Zeus.
 - **A seleção sempre entra pela área 1 da fase.**
+- **O fim da fase leva de volta à seleção de fase.**
+- **"Voltar ao menu", na pausa, leva ao menu principal** e não pede confirmação.
 - **Valores de movimento e de salto**, que foram ajustados no olho.
 
 ## 17. O que ainda não existe
@@ -416,11 +437,10 @@ Escolhas feitas para o código andar, que o grupo ainda precisa confirmar:
 
 Limitações conhecidas do que já existe:
 
-- Não há como voltar ao menu ou à seleção de dentro de uma área.
-- O fim de uma fase não leva de volta à seleção: depende do que for posto no último portal.
+- A tela de derrota só oferece "Tentar de novo". Quem perde não tem como sair para o menu por ali.
 - Não há botão para apagar o progresso; só apagando o arquivo.
-- "Tentar de novo" e "Reiniciar área" recarregam a cena sem o escurecimento.
 - A seleção não mostra quais fases já foram concluídas.
+- As pastas das cinco fases existem, mas ainda estão vazias.
 
 ## 18. Tarefas cobertas
 
@@ -429,7 +449,7 @@ Relação entre o que está documentado aqui e os códigos do [CHECK.md](CHECK.m
 | Tarefa | Situação | O que foi feito |
 |---|---|---|
 | P1 Criar e configurar o projeto na Godot | Concluída | Projeto, resolução e renderizador |
-| P3 Organizar cenas, scripts, recursos e pastas | Concluída | Estrutura de pastas do README |
+| P3 Organizar cenas, scripts, recursos e pastas | Concluída | Estrutura de pastas do README, com as pastas próprias de cada fase |
 | P4 Movimentação, salto, queda e aterrissagem | Concluída | Seção 6 |
 | P7 Colisões, hitboxes e hurtboxes | Concluída | Seção 7 |
 | P10 Três vidas, checkpoints e reaparecimento | Concluída | Seções 7 e 8 |
@@ -438,6 +458,6 @@ Relação entre o que está documentado aqui e os códigos do [CHECK.md](CHECK.m
 | P21 Repositório e controle de versões | Concluída | Repositório e fluxo de branches |
 | P2 Resolução, tela e entradas | Parcial | Valores provisórios; falta fechar com as definições |
 | P11 Vitória, derrota, pontuação e contadores | Parcial | Tela de derrota |
-| P16 Menus, HUD, pausa, configurações, transições e áudio | Parcial | Menu principal, HUD, pausa e transição |
+| P16 Menus, HUD, pausa, configurações, transições e áudio | Parcial | Menu principal, HUD, pausa com saída para o menu e transição |
 | P17 Salvamento, seleção de fase, exportação e executável | Parcial | Salvamento e seleção de fase |
 | P18 Vida, dano e barra de chefe | Parcial | Vida, dano e invencibilidade |
