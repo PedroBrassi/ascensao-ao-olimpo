@@ -84,6 +84,6 @@ position = Vector2(120, 640)
 
 [node name="Portal" parent="." unique_id=1616764863 instance=ExtResource("3_r63q1")]
 position = Vector2(1160, 640)
-proxima_cena = "res://cenas/fases/teste/area_teste.tscn"
+proxima_cena = "res://cenas/ui/selecao_de_fase.tscn"
 
 [node name="Hud" parent="." unique_id=1952125550 instance=ExtResource("4_llh56")]

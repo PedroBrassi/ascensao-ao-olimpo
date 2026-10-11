@@ -23,5 +23,4 @@ func _mostrar() -> void:
 
 
 func _ao_tentar_de_novo() -> void:
-	get_tree().paused = false
-	get_tree().reload_current_scene()
+	Transicao.recarregar_cena()  # escurece, recarrega a área e tira a pausa
