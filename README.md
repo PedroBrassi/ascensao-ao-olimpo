@@ -20,6 +20,7 @@ como sprite sheets.
 9. [Trello](#9-trello)
 10. [Lista de controle (CHECK.md)](#10-lista-de-controle-checkmd)
 11. [Configurações do projeto](#11-configurações-do-projeto)
+12. [Pasta do grupo no Google Drive](#12-pasta-do-grupo-no-google-drive)
 
 ---
 
@@ -127,8 +128,8 @@ Regras de organização:
 - **Em `assets/` só entram arquivos finais**, já no formato que o jogo usa: PNG para
   imagens, OGG para música, WAV para efeitos curtos.
 - **Arquivos-fonte ficam fora do repositório** (arquivos do Blender, projetos de áudio,
-  rascunhos). Guardem em uma pasta compartilhada do grupo. Eles são pesados e o Git não
-  consegue mesclar esse tipo de arquivo.
+  rascunhos). Guardem na pasta do grupo no Google Drive, descrita na seção 12. Eles são
+  pesados e o Git não consegue mesclar esse tipo de arquivo.
 - **Nada solto na raiz.** Se um arquivo não se encaixa em nenhuma pasta, combinem no
   grupo antes de criar uma pasta nova.
 - **Mover ou renomear arquivos só por dentro da Godot** (painel Arquivos). Pelo
@@ -322,5 +323,37 @@ Valores provisórios, que mudam conforme as definições do grupo:
 | `esquivar`       | K ou Shift                  | B          |
 | `interagir`      | E                           | Y          |
 | `pausar`         | Esc                         | Start      |
+
+## 12. Pasta do grupo no Google Drive
+
+Link: https://drive.google.com/drive/folders/1Zwj_2O8b3Z5rsV_f0vfJgXMvC7WUNLlH
+
+A pasta **Projeto - Ascensão ao Olimpo** guarda o material de trabalho que não entra no repositório. O acesso é só dos integrantes do grupo.
+
+| Onde | O que fica |
+|---|---|
+| Google Drive | Referências, rascunhos, arquivos-fonte (Blender, projetos de áudio), versões antigas e documentos |
+| Repositório, em `assets/` | Só o arquivo final, exportado no formato do jogo e com o nome no padrão da seção 5 |
+
+A versão que vale para o jogo é sempre a do repositório. O Drive guarda de onde ela veio.
+
+| Pasta | O que vai nela |
+|---|---|
+| `01_referencias` | Imagens de inspiração, paletas e estilo visual |
+| `02_personagens` | Modelos, animações e renders do personagem, dos inimigos e dos chefes |
+| `03_cenarios` | Tilesets, fundos e objetos de cenário, separados por fase |
+| `04_interface` | HUD, menus, ícones, telas e fontes |
+| `05_audio` | Músicas e efeitos sonoros, com os projetos de edição |
+| `06_prontos_para_o_jogo` | Arquivos finais que ainda não entraram no repositório |
+| `07_documentos` | Definições, textos, créditos e licenças |
+
+Caminho de um arquivo até o jogo:
+
+1. O trabalho em andamento fica na pasta do tipo dele, de `01` a `05`.
+2. Quando o arquivo fica pronto, ele é exportado no formato e com o nome da seção 5 e copiado para `06_prontos_para_o_jogo`.
+3. O arquivo entra em `assets/` por um Pull Request, feito pelo autor no próprio branch ou pelo Pedro, quando combinado.
+4. Depois que o Pull Request entra na `main`, o arquivo sai de `06_prontos_para_o_jogo`. O arquivo-fonte continua na pasta de origem.
+
+Todo recurso que não foi feito pelo grupo (imagem, som, fonte ou modelo baixado) é registrado em `07_documentos` no momento em que é baixado: nome do arquivo, de onde veio, autor e licença.
 
 O jogo está sendo desenvolvido do zero. O que já existe e o que falta estão no [CHECK.md](CHECK.md).
