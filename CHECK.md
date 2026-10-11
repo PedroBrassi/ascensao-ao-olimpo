@@ -21,10 +21,10 @@ Dez cartões do Trello falavam em duas ou dez áreas e foram renomeados em 11/10
 
 | Pessoa | Concluídas | Parciais | Pendentes | Total |
 |---|---|---|---|---|
-| Pedro | 8 | 10 | 11 | 29 |
+| Pedro | 8 | 11 | 10 | 29 |
 | Aurélio | 0 | 0 | 29 | 29 |
 | Julia | 0 | 1 | 28 | 29 |
-| **Total** | **8** | **11** | **68** | **87** |
+| **Total** | **8** | **12** | **67** | **87** |
 
 Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J21. Aqui cada uma conta uma vez.
 
@@ -40,7 +40,7 @@ Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J
 - [ ] **P2** Configurar resolução, tela e entradas do jogador *(parcial: resolução e teclas provisórias já estão no projeto; falta fechar com as definições)*
 - [x] **P3** Organizar cenas, scripts, recursos e pastas
 - [x] **P4** Programar movimentação, corrida, salto, queda e aterrissagem
-- [ ] **P5** Programar esquiva, ataque e recebimento de dano *(parcial: ataque, esquiva e recebimento de dano prontos; falta o teste manual da esquiva)*
+- [ ] **P5** Programar esquiva, ataque e recebimento de dano *(parcial: ataque, esquiva e recebimento de dano prontos e testados à mão em 11/10; fecha quando entrar na `main`)*
 - [ ] **P6** Programar interação com objetos e integrar animações *(parcial: feitos o sistema de interação e o espelho de Afrodite; faltam os demais objetos e as animações)*
 - [x] **P7** Criar colisões, hitboxes e hurtboxes
 - [ ] **P8** Programar inimigos principais, chefes e padrões de Zeus
@@ -65,7 +65,7 @@ Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J
 - [x] **P21** Criar repositório e configurar controle de versões
 - [ ] **P22** Definir responsáveis, prioridades, prazos e status das tarefas *(parcial: responsáveis já definidos nos cartões; faltam prioridades e prazos)*
 - [ ] **P23** Importar sprites, configurar animações e revisar escala
-- [ ] **P24** Importar tilesets, fundos, objetos, músicas e efeitos sonoros
+- [ ] **P24** Importar tilesets, fundos, objetos, músicas e efeitos sonoros *(parcial: importados fundo, piso, plataformas, objetos de cenário, espelho e receptor de Afrodite; faltam as outras fases, as músicas e os efeitos)*
 - [ ] **P25** Montar e integrar as áreas na engine
 - [ ] **P26** Conectar interface, programação, arte e áudio
 - [ ] **P27** Testar movimentação, combate, vidas, checkpoints, inimigos e puzzles
@@ -269,7 +269,7 @@ Depende das regras, dos controles e do comportamento dos inimigos, definidos na 
 
 37. [ ] **P5** Programar esquiva, ataque e recebimento de dano — Pedro
    - Depende de: A14, P7 ✓
-   - Parcial: ataque, esquiva e recebimento de dano prontos; falta o teste manual da esquiva
+   - Parcial: ataque, esquiva e recebimento de dano prontos e testados à mão em 11/10; fecha quando entrar na `main`
 38. [ ] **P9** Criar inimigo-base e comportamentos de patrulha, perseguição e ataque — Pedro
    - Depende de: A15, P5
 39. [ ] **P8** Programar inimigos principais, chefes e padrões de Zeus — Pedro
@@ -378,6 +378,7 @@ Depende das definições de som e de formato de entrega. Pode andar em paralelo 
    - Depende de: A12, J18
 75. [ ] **P24** Importar tilesets, fundos, objetos, músicas e efeitos sonoros — Pedro
    - Depende de: A5, A6, A7, A8, A29
+   - Parcial: importados fundo, piso, plataformas, objetos de cenário, espelho e receptor de Afrodite; faltam as outras fases, as músicas e os efeitos
 76. [x] **P12** Programar conclusão de áreas, liberação de fases e reinício — Pedro
    - Depende de: P10 ✓
 77. [ ] **P17** Criar salvamento, seleção de fase, exportação e versão executável — Pedro
@@ -386,7 +387,7 @@ Depende das definições de som e de formato de entrega. Pode andar em paralelo 
    - Nota: a parte de exportação e executável é a mesma de P20
 78. [ ] **P25** Montar e integrar as áreas na engine — Pedro
    - Depende de: A22, P24, P8, P14
-   - Nota: existem os esqueletos das cinco áreas de Afrodite, só com chão e portal, e nenhuma área está montada
+   - Nota: existem os esqueletos das cinco áreas de Afrodite, só com chão e portal, e nenhuma área está montada; a área 1 já tem fundo, piso e objetos de cenário, sem desafios
 79. [ ] **P26** Conectar interface, programação, arte e áudio — Pedro
    - Depende de: P23, P24, A13, A4, J22
 80. [ ] **P16** Programar menus, HUD, pausa, configurações, transições e áudio — Pedro

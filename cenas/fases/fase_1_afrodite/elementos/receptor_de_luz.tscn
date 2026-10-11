@@ -1,36 +1,33 @@
 [gd_scene format=3 uid="uid://w5tm0qg4p0kj"]
 
 [ext_resource type="Script" uid="uid://b55b2fjr1cg1k" path="res://scripts/fases/fase_1_afrodite/receptor_de_luz.gd" id="1_l2dme"]
+[ext_resource type="Texture2D" uid="uid://bh1jdqsfjfmt" path="res://assets/sprites/objetos/fase_1_afrodite/receptor/inativo.png" id="2_8wp26"]
+[ext_resource type="Texture2D" uid="uid://dv771hh086xdl" path="res://assets/sprites/objetos/fase_1_afrodite/receptor/ativo.png" id="3_4wgvp"]
+
+[sub_resource type="Gradient" id="Gradient_rudm0"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(1, 0.96, 0.7, 0.95, 1, 0.92, 0.55, 0.75, 1, 0.9, 0.5, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bk20d"]
+gradient = SubResource("Gradient_rudm0")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
 
 [node name="ReceptorDeLuz" type="Node2D" unique_id=1190296466]
 script = ExtResource("1_l2dme")
 
-[node name="Brilho" type="ColorRect" parent="." unique_id=1364291354]
+[node name="Brilho" type="Sprite2D" parent="." unique_id=38193635]
 visible = false
-offset_left = -32.0
-offset_top = -32.0
-offset_right = 32.0
-offset_bottom = 32.0
-mouse_filter = 2
-color = Color(1, 0.95, 0.6, 0.25)
+texture = SubResource("GradientTexture2D_bk20d")
 
-[node name="Moldura" type="ColorRect" parent="." unique_id=1032066622]
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-mouse_filter = 2
-color = Color(0.2, 0.22, 0.3, 1)
+[node name="Inativo" type="Sprite2D" parent="." unique_id=1129424643]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_8wp26")
 
-[node name="Vazio" type="ColorRect" parent="." unique_id=326437566]
-offset_left = -12.0
-offset_top = -12.0
-offset_right = 12.0
-offset_bottom = 12.0
-mouse_filter = 2
-color = Color(0.1, 0.11, 0.16, 1)
-
-[node name="Nucleo" type="Polygon2D" parent="." unique_id=633255850]
+[node name="Ativo" type="Sprite2D" parent="." unique_id=1164318530]
 visible = false
-color = Color(1, 0.95, 0.6, 1)
-polygon = PackedVector2Array(0, -14, 14, 0, 0, 14, -14, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_4wgvp")

@@ -6,8 +6,13 @@ extends Node2D
 ## Quem avisa que a luz chegou é a FonteDeLuz, chamando iluminar() a cada
 ## quadro de física. O receptor aceita luz vinda de qualquer direção.
 ##
-## PROVISÓRIO: desligado é um quadrado escuro vazio; ligado ganha um losango
-## claro no meio e um brilho em volta. A mudança é de forma, não só de cor.
+## O desenho são duas imagens, uma para cada estado: os nós Inativo e Ativo.
+## Ligado, o receptor ganha também um halo em volta (nó Brilho), para a
+## mudança ser de forma e não só de cor. O halo é PROVISÓRIO: não veio na
+## arte, é um degradê feito no próprio Godot.
+##
+## Se a cena ainda tiver o desenho provisório antigo (o nó Nucleo), o script
+## continua mostrando e escondendo esse nó.
 
 ## Emitido quando o receptor passa a receber luz.
 signal ativado
@@ -25,8 +30,10 @@ var ativo := false
 
 var _quadro_da_ultima_luz := -10
 
-@onready var _nucleo: CanvasItem = $Nucleo
-@onready var _brilho: CanvasItem = $Brilho
+@onready var _arte_inativa := get_node_or_null("Inativo") as CanvasItem
+@onready var _arte_ativa := get_node_or_null("Ativo") as CanvasItem
+@onready var _brilho := get_node_or_null("Brilho") as CanvasItem
+@onready var _nucleo := get_node_or_null("Nucleo") as CanvasItem  # desenho provisório
 
 
 func _ready() -> void:
@@ -55,5 +62,11 @@ func iluminar() -> void:
 
 
 func _atualizar_desenho() -> void:
-	_nucleo.visible = ativo
-	_brilho.visible = ativo
+	if _arte_inativa != null:
+		_arte_inativa.visible = not ativo
+	if _arte_ativa != null:
+		_arte_ativa.visible = ativo
+	if _brilho != null:
+		_brilho.visible = ativo
+	if _nucleo != null:
+		_nucleo.visible = ativo

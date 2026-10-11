@@ -18,6 +18,8 @@ extends Node2D
 ## direção escolhida no Inspetor. O feixe só existe com o jogo rodando.
 ##
 ## PROVISÓRIO: a fonte é um quadrado com uma seta, e o feixe é uma linha.
+## A linha tem um contorno mais escuro (nó Feixe/Contorno, opcional) para
+## aparecer também sobre fundos claros.
 
 ## Emitido quando o caminho do feixe muda.
 signal feixe_mudou
@@ -55,11 +57,12 @@ var reflexoes := 0
 
 @onready var _seta: Node2D = $Seta
 @onready var _feixe: Line2D = $Feixe
+@onready var _contorno := get_node_or_null("Feixe/Contorno") as Line2D
 
 
 func _ready() -> void:
 	_atualizar_seta()
-	_feixe.clear_points()
+	_desenhar_feixe(PackedVector2Array())
 	if Engine.is_editor_hint():
 		set_physics_process(false)  # no editor só a seta interessa
 
@@ -74,7 +77,7 @@ func _physics_process(_delta: float) -> void:
 		receptor_atingido.iluminar()
 	if novos != pontos_do_feixe:
 		pontos_do_feixe = novos
-		_feixe.points = pontos_do_feixe
+		_desenhar_feixe(pontos_do_feixe)
 		feixe_mudou.emit()
 
 
@@ -134,6 +137,12 @@ func _proxima_peca(origem: Vector2, sentido: Vector2, ignorar: Node2D) -> Node2D
 				menor_distancia = a_frente
 				mais_proxima = peca
 	return mais_proxima
+
+
+func _desenhar_feixe(pontos: PackedVector2Array) -> void:
+	_feixe.points = pontos
+	if _contorno != null:
+		_contorno.points = pontos
 
 
 func _atualizar_seta() -> void:

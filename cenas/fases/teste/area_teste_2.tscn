@@ -1,10 +1,13 @@
 [gd_scene format=3 uid="uid://ctud1sddt4d6s"]
 
 [ext_resource type="Script" uid="uid://duc02wmwkk3ha" path="res://scripts/fases/area_de_jogo.gd" id="1_e7jix"]
+[ext_resource type="PackedScene" uid="uid://cx0amg1iobfvy" path="res://cenas/fases/fase_1_afrodite/elementos/fundo_afrodite.tscn" id="2_24rgk"]
 [ext_resource type="PackedScene" uid="uid://dvkyqfj5qsk48" path="res://cenas/jogador/jogador.tscn" id="2_ldmcs"]
 [ext_resource type="PackedScene" uid="uid://bgb48fl0s1seq" path="res://cenas/fases/fase_1_afrodite/elementos/fonte_de_luz.tscn" id="2_llh56"]
+[ext_resource type="Texture2D" uid="uid://b5nghfcsff2nq" path="res://assets/tilesets/fase_1_afrodite/piso_centro.png" id="3_1mok7"]
 [ext_resource type="PackedScene" uid="uid://c4regr3l7qkmn" path="res://cenas/fases/fase_1_afrodite/elementos/espelho.tscn" id="3_p2m8k"]
 [ext_resource type="PackedScene" uid="uid://bursfnq7bb2ou" path="res://cenas/objetos/portal.tscn" id="3_r63q1"]
+[ext_resource type="Texture2D" uid="uid://cw1emd764iedr" path="res://assets/tilesets/fase_1_afrodite/plataforma_curta.png" id="4_6q6as"]
 [ext_resource type="PackedScene" uid="uid://drr1bwuq40ng6" path="res://cenas/ui/hud.tscn" id="4_llh56"]
 [ext_resource type="PackedScene" uid="uid://w5tm0qg4p0kj" path="res://cenas/fases/fase_1_afrodite/elementos/receptor_de_luz.tscn" id="4_yje8u"]
 
@@ -24,19 +27,33 @@ size = Vector2(40, 720)
 script = ExtResource("1_e7jix")
 limites_da_camera = Rect2i(0, 0, 1280, 720)
 
+[node name="Fundo" parent="." unique_id=1877279385 instance=ExtResource("2_24rgk")]
+
 [node name="Chao" type="StaticBody2D" parent="." unique_id=848754975]
 position = Vector2(640, 680)
 
 [node name="Colisao" type="CollisionShape2D" parent="Chao" unique_id=556093025]
 shape = SubResource("RectangleShape2D_p2m8k")
 
-[node name="Visual" type="ColorRect" parent="Chao" unique_id=240767452]
-offset_left = -640.0
-offset_top = -40.0
-offset_right = 640.0
-offset_bottom = 40.0
-mouse_filter = 2
-color = Color(0.3, 0.32, 0.42, 1)
+[node name="Arte" type="Node2D" parent="Chao" unique_id=505251425]
+
+[node name="Trecho1" type="Sprite2D" parent="Chao/Arte" unique_id=408933867]
+position = Vector2(-648, -41)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_1mok7")
+centered = false
+
+[node name="Trecho2" type="Sprite2D" parent="Chao/Arte" unique_id=1420609449]
+position = Vector2(-192, -41)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_1mok7")
+centered = false
+
+[node name="Trecho3" type="Sprite2D" parent="Chao/Arte" unique_id=617385438]
+position = Vector2(264, -41)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_1mok7")
+centered = false
 
 [node name="Plataforma1" type="StaticBody2D" parent="." unique_id=1318660344]
 position = Vector2(640, 540)
@@ -44,13 +61,11 @@ position = Vector2(640, 540)
 [node name="Colisao" type="CollisionShape2D" parent="Plataforma1" unique_id=1821224265]
 shape = SubResource("RectangleShape2D_yje8u")
 
-[node name="Visual" type="ColorRect" parent="Plataforma1" unique_id=1925066626]
-offset_left = -110.0
-offset_top = -12.0
-offset_right = 110.0
-offset_bottom = 12.0
-mouse_filter = 2
-color = Color(0.55, 0.6, 0.78, 1)
+[node name="Arte" type="Sprite2D" parent="Plataforma1" unique_id=919973484]
+position = Vector2(-111, -13.5)
+scale = Vector2(0.566, 0.566)
+texture = ExtResource("4_6q6as")
+centered = false
 
 [node name="ParedeEsquerda" type="StaticBody2D" parent="." unique_id=990429555]
 position = Vector2(-20, 360)

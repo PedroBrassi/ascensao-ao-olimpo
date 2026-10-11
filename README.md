@@ -125,7 +125,12 @@ Regras de organização:
 - **As áreas de teste ficam em `cenas/fases/teste/`,** separadas das fases definitivas.
   Elas servem para experimentar os sistemas e não entram no jogo final.
 - **Arte e áudio ficam sempre em `assets/`,** mesmo quando pertencem a uma fase só.
-  O que identifica a fase é o nome do arquivo, como em `musica_fase_2.ogg`.
+  O que identifica a fase é o nome do arquivo, como em `musica_fase_2.ogg`, ou uma
+  subpasta com o nome da fase, como `assets/fundos/fase_1_afrodite/`. A subpasta é o
+  caminho quando a fase tem muitos arquivos do mesmo tipo.
+- **Imagens entram com o dobro do tamanho em que aparecem na tela** de 1280×720, e o
+  sprite fica com escala 0,5 na cena. Os fatores usados em cada grupo de imagens estão
+  na seção 19 da DOCUMENTACAO.
 - **Em `assets/` só entram arquivos finais**, já no formato que o jogo usa: PNG para
   imagens, OGG para música, WAV para efeitos curtos.
 - **Arquivos-fonte ficam fora do repositório** (arquivos do Blender, projetos de áudio,

@@ -2,8 +2,17 @@
 
 [ext_resource type="Script" uid="uid://duc02wmwkk3ha" path="res://scripts/fases/area_de_jogo.gd" id="1_capti"]
 [ext_resource type="PackedScene" uid="uid://dvkyqfj5qsk48" path="res://cenas/jogador/jogador.tscn" id="2_ifgkq"]
+[ext_resource type="PackedScene" uid="uid://cx0amg1iobfvy" path="res://cenas/fases/fase_1_afrodite/elementos/fundo_afrodite.tscn" id="2_prio4"]
 [ext_resource type="PackedScene" uid="uid://bursfnq7bb2ou" path="res://cenas/objetos/portal.tscn" id="3_154ne"]
+[ext_resource type="Texture2D" uid="uid://plpqh7nin7o4" path="res://assets/sprites/objetos/fase_1_afrodite/ambiente/coluna.png" id="3_dinhk"]
 [ext_resource type="PackedScene" uid="uid://drr1bwuq40ng6" path="res://cenas/ui/hud.tscn" id="4_2403b"]
+[ext_resource type="Texture2D" uid="uid://beefy6oq0ckv" path="res://assets/sprites/objetos/fase_1_afrodite/ambiente/grama.png" id="4_uyskb"]
+[ext_resource type="Texture2D" uid="uid://yyeyf0y7jqhd" path="res://assets/sprites/objetos/fase_1_afrodite/ambiente/roseira_media.png" id="5_hlybc"]
+[ext_resource type="Texture2D" uid="uid://cs7ju81w86puw" path="res://assets/sprites/objetos/fase_1_afrodite/ambiente/coluna_quebrada.png" id="6_81fx5"]
+[ext_resource type="Texture2D" uid="uid://bsyj4u1g30yrh" path="res://assets/sprites/objetos/fase_1_afrodite/ambiente/anfora.png" id="7_2e8n6"]
+[ext_resource type="Texture2D" uid="uid://diw57xjiuhml6" path="res://assets/sprites/objetos/fase_1_afrodite/ambiente/roseira_pequena.png" id="8_x48nc"]
+[ext_resource type="Texture2D" uid="uid://c4jbeqcvuj2gc" path="res://assets/sprites/objetos/fase_1_afrodite/ambiente/arco_florido.png" id="9_c8hrr"]
+[ext_resource type="Texture2D" uid="uid://b5nghfcsff2nq" path="res://assets/tilesets/fase_1_afrodite/piso_centro.png" id="10_27mky"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ckxvh"]
 size = Vector2(1280, 80)
@@ -20,19 +29,85 @@ fase = 1
 area = 1
 limites_da_camera = Rect2i(0, 0, 1280, 720)
 
+[node name="Fundo" parent="." unique_id=1877279385 instance=ExtResource("2_prio4")]
+
+[node name="Cenario" type="Node2D" parent="." unique_id=1382329658]
+z_index = -5
+
+[node name="Coluna" type="Sprite2D" parent="Cenario" unique_id=71093529]
+position = Vector2(44, 644)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_dinhk")
+centered = false
+offset = Vector2(-63, -464)
+
+[node name="Grama" type="Sprite2D" parent="Cenario" unique_id=589366999]
+position = Vector2(250, 646)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_uyskb")
+centered = false
+offset = Vector2(-92, -106)
+
+[node name="RoseiraMedia" type="Sprite2D" parent="Cenario" unique_id=1664438411]
+position = Vector2(420, 646)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_hlybc")
+centered = false
+offset = Vector2(-80.5, -150)
+
+[node name="ColunaQuebrada" type="Sprite2D" parent="Cenario" unique_id=612737213]
+position = Vector2(640, 646)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_81fx5")
+centered = false
+offset = Vector2(-88.5, -302)
+
+[node name="Anfora" type="Sprite2D" parent="Cenario" unique_id=1465625134]
+position = Vector2(770, 644)
+scale = Vector2(0.375, 0.375)
+texture = ExtResource("7_2e8n6")
+centered = false
+offset = Vector2(-53, -161)
+
+[node name="RoseiraPequena" type="Sprite2D" parent="Cenario" unique_id=1974110035]
+position = Vector2(900, 646)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("8_x48nc")
+centered = false
+offset = Vector2(-55, -107)
+
+[node name="ArcoFlorido" type="Sprite2D" parent="Cenario" unique_id=920075167]
+position = Vector2(1160, 646)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("9_c8hrr")
+centered = false
+offset = Vector2(-189.5, -477)
+
 [node name="Chao" type="StaticBody2D" parent="." unique_id=1623646977]
 position = Vector2(640, 680)
 
 [node name="Colisao" type="CollisionShape2D" parent="Chao" unique_id=891358060]
 shape = SubResource("RectangleShape2D_ckxvh")
 
-[node name="Visual" type="ColorRect" parent="Chao" unique_id=137064028]
-offset_left = -640.0
-offset_top = -40.0
-offset_right = 640.0
-offset_bottom = 40.0
-mouse_filter = 2
-color = Color(0.3, 0.32, 0.42, 1)
+[node name="Arte" type="Node2D" parent="Chao" unique_id=1020806991]
+
+[node name="Trecho1" type="Sprite2D" parent="Chao/Arte" unique_id=899425159]
+position = Vector2(-648, -41)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("10_27mky")
+centered = false
+
+[node name="Trecho2" type="Sprite2D" parent="Chao/Arte" unique_id=484102694]
+position = Vector2(-192, -41)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("10_27mky")
+centered = false
+
+[node name="Trecho3" type="Sprite2D" parent="Chao/Arte" unique_id=1852460971]
+position = Vector2(264, -41)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("10_27mky")
+centered = false
 
 [node name="ParedeEsquerda" type="StaticBody2D" parent="." unique_id=375005332]
 position = Vector2(-20, 360)
@@ -66,7 +141,9 @@ color = Color(0.3, 0.32, 0.42, 1)
 offset_top = 220.0
 offset_right = 1280.0
 offset_bottom = 310.0
-theme_override_colors/font_color = Color(0.75, 0.78, 0.9, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.08, 0.07, 0.14, 1)
+theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 28
 text = "ESQUELETO — Afrodite, área 1 de 5
 Falta montar esta área."

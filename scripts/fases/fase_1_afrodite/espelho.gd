@@ -11,8 +11,12 @@ extends Node2D
 ## O script roda também dentro do editor (@tool), só para o desenho mostrar
 ## a orientação inicial escolhida no Inspetor.
 ##
-## PROVISÓRIO: o desenho é uma linha diagonal dentro de um quadrado. Quando
-## a arte chegar, cada orientação ganha a sua imagem.
+## O desenho é a imagem do espelho, no nó Arte, inclinada 45 graus para um
+## lado ou para o outro. Dentro de Arte, o nó Destaque é o contorno branco
+## que aparece quando o espelho está selecionado.
+##
+## Se a cena ainda tiver o desenho provisório (o nó Face, uma linha
+## diagonal), o script continua atualizando a linha.
 
 ## Emitido quando a orientação muda.
 signal orientacao_mudou(orientacao: Orientacao)
@@ -25,6 +29,13 @@ enum Orientacao {
 ## Grupo em que todo espelho se registra. É por ele que a luz encontra os
 ## espelhos da cena.
 const GRUPO := "espelhos_de_luz"
+## Inclinação da imagem em cada orientação, em graus. A imagem é um espelho
+## em pé; girado para a direita ele vira "/", e para a esquerda, "\".
+const INCLINACAO_BARRA := 45.0
+const INCLINACAO_CONTRABARRA := -45.0
+## Tempo que a imagem leva para girar de uma orientação para a outra, em
+## segundos. É só o desenho: a luz muda de caminho na hora.
+const TEMPO_DO_GIRO := 0.12
 ## Metade do tamanho da linha provisória, em pixels.
 const MEIA_FACE := 18.0
 
@@ -39,7 +50,10 @@ const MEIA_FACE := 18.0
 ## Orientação atual. Para mudar, use alternar() ou definir_orientacao().
 var orientacao := Orientacao.BARRA
 
-@onready var _face: Line2D = $Face
+var _giro: Tween
+
+@onready var _arte := get_node_or_null("Arte") as Node2D
+@onready var _face := get_node_or_null("Face") as Line2D  # desenho provisório
 
 
 func _ready() -> void:
@@ -64,7 +78,7 @@ func definir_orientacao(nova: Orientacao) -> void:
 	if nova == orientacao:
 		return
 	orientacao = nova
-	_atualizar_desenho()
+	_atualizar_desenho(true)
 	orientacao_mudou.emit(orientacao)
 
 
@@ -82,9 +96,21 @@ func _ao_ser_acionado(_jogador: Node2D) -> void:
 	alternar()
 
 
-func _atualizar_desenho() -> void:
-	# "/" vai de baixo-esquerda a cima-direita; "\" faz o contrário.
-	if orientacao == Orientacao.BARRA:
-		_face.points = PackedVector2Array([Vector2(-MEIA_FACE, MEIA_FACE), Vector2(MEIA_FACE, -MEIA_FACE)])
-	else:
-		_face.points = PackedVector2Array([Vector2(-MEIA_FACE, -MEIA_FACE), Vector2(MEIA_FACE, MEIA_FACE)])
+## Põe o desenho na orientação atual. Com `animar`, a imagem gira até lá em
+## vez de pular.
+func _atualizar_desenho(animar := false) -> void:
+	if _arte != null:
+		var inclinacao := INCLINACAO_BARRA if orientacao == Orientacao.BARRA else INCLINACAO_CONTRABARRA
+		if _giro != null:
+			_giro.kill()
+		if animar and not Engine.is_editor_hint() and is_inside_tree():
+			_giro = create_tween()
+			_giro.tween_property(_arte, "rotation_degrees", inclinacao, TEMPO_DO_GIRO)
+		else:
+			_arte.rotation_degrees = inclinacao
+	if _face != null:
+		# "/" vai de baixo-esquerda a cima-direita; "\" faz o contrário.
+		if orientacao == Orientacao.BARRA:
+			_face.points = PackedVector2Array([Vector2(-MEIA_FACE, MEIA_FACE), Vector2(MEIA_FACE, -MEIA_FACE)])
+		else:
+			_face.points = PackedVector2Array([Vector2(-MEIA_FACE, -MEIA_FACE), Vector2(MEIA_FACE, MEIA_FACE)])

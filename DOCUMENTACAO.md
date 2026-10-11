@@ -24,12 +24,13 @@ Situação em 11/10/2026. O [README.md](README.md) explica a organização do re
 16. [Progresso e salvamento](#16-progresso-e-salvamento)
 17. [Transição entre cenas](#17-transição-entre-cenas)
 18. [Interface](#18-interface)
-19. [Áreas de teste](#19-áreas-de-teste)
-20. [Como fazer](#20-como-fazer)
-21. [Decisões provisórias](#21-decisões-provisórias)
-22. [O que ainda não existe](#22-o-que-ainda-não-existe)
-23. [Plano das mecânicas principais](#23-plano-das-mecânicas-principais)
-24. [Tarefas cobertas](#24-tarefas-cobertas)
+19. [Arte de Afrodite](#19-arte-de-afrodite)
+20. [Áreas de teste](#20-áreas-de-teste)
+21. [Como fazer](#21-como-fazer)
+22. [Decisões provisórias](#22-decisões-provisórias)
+23. [O que ainda não existe](#23-o-que-ainda-não-existe)
+24. [Plano das mecânicas principais](#24-plano-das-mecânicas-principais)
+25. [Tarefas cobertas](#25-tarefas-cobertas)
 
 ---
 
@@ -52,8 +53,9 @@ O jogo já tem um ciclo completo, do menu até a liberação de fases:
 - Quantidade de áreas própria de cada fase: cinco em Afrodite e duas, por enquanto, nas outras.
 - As cinco áreas de Afrodite como esqueleto, só com chão e portal, para a progressão poder ser testada.
 - Duas áreas de teste, fora das fases, para experimentar os sistemas.
+- Primeira leva de arte de Afrodite: espelho, receptor, fundo, piso, plataforma e objetos de cenário. Está aplicada na segunda área de teste e na área 1 de Afrodite.
 
-Ainda não há arte nem som. Tudo o que aparece na tela é feito de retângulos coloridos (`ColorRect`), que serão trocados pelos sprites quando a arte chegar. As colisões já estão nos tamanhos que o código usa.
+Ainda não há som, e a arte cobre só uma parte da fase de Afrodite. O personagem, a interface, a fonte de luz, a porta, o portal, o checkpoint e os espinhos continuam feitos de retângulos coloridos (`ColorRect`), que serão trocados pelos sprites quando a arte chegar. As colisões já estão nos tamanhos que o código usa, e a arte não muda nenhuma delas. A seção 19 diz o que já tem imagem, o que continua provisório e o que falta.
 
 ## 2. Como rodar e testar
 
@@ -138,6 +140,7 @@ Perigos e interativos têm máscara 2: só enxergam o personagem. O personagem t
 | `scripts/fases/fase_1_afrodite/espelho.gd` | `cenas/fases/fase_1_afrodite/elementos/espelho.tscn` | Espelho do puzzle de luz |
 | `scripts/fases/fase_1_afrodite/fonte_de_luz.gd` | `cenas/fases/fase_1_afrodite/elementos/fonte_de_luz.tscn` | Fonte de luz: emite e calcula o feixe |
 | `scripts/fases/fase_1_afrodite/receptor_de_luz.gd` | `cenas/fases/fase_1_afrodite/elementos/receptor_de_luz.tscn` | Receptor: fica ativo enquanto recebe luz |
+| sem script | `cenas/fases/fase_1_afrodite/elementos/fundo_afrodite.tscn` | Fundo da fase de Afrodite, em três camadas |
 | `scripts/sistemas/transicao.gd` | autoload, sem cena | Escurecimento nas trocas de cena |
 | `scripts/sistemas/progresso.gd` | autoload, sem cena | Fases liberadas e salvamento |
 | `scripts/fases/area_de_jogo.gd` | raiz de cada área | Fase, área e limites da câmera |
@@ -151,7 +154,7 @@ Perigos e interativos têm máscara 2: só enxergam o personagem. O personagem t
 | `scripts/ui/menu_principal.gd` | `cenas/ui/menu_principal.tscn` | Menu principal |
 | `scripts/ui/selecao_de_fase.gd` | `cenas/ui/selecao_de_fase.tscn` | Seleção de fase |
 
-As áreas de teste ficam em `cenas/fases/teste/`. Cada fase definitiva tem a sua pasta em `cenas/fases/`, com uma subpasta `elementos/` para as cenas que só ela usa, e uma pasta de mesmo nome em `scripts/fases/` para os scripts desses elementos. Por enquanto só a de Afrodite tem conteúdo: as peças do puzzle de luz. As regras completas estão na seção 4 do README.
+As áreas de teste ficam em `cenas/fases/teste/`. Cada fase definitiva tem a sua pasta em `cenas/fases/`, com uma subpasta `elementos/` para as cenas que só ela usa, e uma pasta de mesmo nome em `scripts/fases/` para os scripts desses elementos. Por enquanto só a de Afrodite tem conteúdo: as peças do puzzle de luz e o fundo. As regras completas estão na seção 4 do README.
 
 Cada script tem um `class_name` igual ao nome do arquivo em maiúsculas iniciais (`Jogador`, `Vida`, `Portal` e assim por diante), que é o que permite escrever `if corpo is Jogador`.
 
@@ -522,9 +525,22 @@ O receptor aceita luz vinda de qualquer direção. Com mais de uma fonte, ele fi
 | Reiniciar a área ou tentar de novo depois da derrota | Tudo volta ao estado inicial |
 | Pausa | O puzzle fica congelado |
 
-**Desenho provisório.** A fonte é um quadrado laranja com uma seta, o feixe é uma linha clara e o receptor é um quadrado escuro vazio. Ligado, o receptor ganha um losango claro no meio e um brilho em volta: a mudança é de forma, e não só de cor. O feixe é desenhado uma camada atrás das outras peças (`z_index` -1), para não riscar os espelhos nem as indicações de tecla. Nada disso é arte final.
+**Desenho.** O espelho e o receptor usam as imagens da arte de Afrodite. A fonte e o feixe continuam provisórios.
 
-A seta da fonte e o desenho do espelho aparecem também no editor, conforme o que estiver no Inspetor. O feixe só existe com o jogo rodando.
+| Peça | Desenho | Situação |
+|---|---|---|
+| Espelho | Imagem de um espelho em pé, no nó `Arte`, inclinada 45° para a direita em `/` e 45° para a esquerda em `\`. Ao ser virada, a imagem gira até a outra posição em 0,12 s | Arte |
+| Destaque do espelho | Contorno branco em volta do espelho (`Arte/Destaque`), que aparece quando ele está selecionado | Provisório: gerado a partir da silhueta do espelho |
+| Receptor | Duas imagens, `Inativo` e `Ativo`, trocadas conforme o estado | Arte |
+| Halo do receptor | Degradê amarelo em volta do receptor ligado (`Brilho`), para a mudança ser de forma, e não só de cor | Provisório: feito no próprio Godot |
+| Fonte | Quadrado laranja com uma seta | Provisório |
+| Feixe | Linha clara com uma borda escura (`Feixe/Contorno`), para aparecer tanto no fundo claro quanto no escuro | Provisório |
+
+O giro da imagem é só desenho: a orientação lógica do espelho muda no instante da interação, e a luz muda de caminho no mesmo quadro. O feixe é desenhado uma camada atrás das outras peças (`z_index` -1), para não riscar os espelhos nem as indicações de tecla. A indicação "E" tem um contorno escuro, para ser lida sobre o fundo.
+
+Os três scripts aceitam também a cena sem a arte: se os nós `Arte`, `Inativo`, `Ativo` ou `Feixe/Contorno` não existirem, eles são ignorados.
+
+A seta da fonte e a inclinação do espelho aparecem também no editor, conforme o que estiver no Inspetor. O feixe só existe com o jogo rodando.
 
 ## 13. Acionadores, porta e saída condicionada
 
@@ -722,7 +738,151 @@ A derrota e a pausa funcionam com o jogo pausado porque as duas cenas estão no 
 
 Os nomes das fases são o texto dos botões `Fase1` a `Fase5` na cena, e podem ser trocados pelo editor. A cena de entrada de cada fase fica na propriedade `cenas_das_fases`, uma lista com cinco caminhos. Hoje só o primeiro está preenchido, com `res://cenas/fases/fase_1_afrodite/area_1.tscn`.
 
-## 19. Áreas de teste
+## 19. Arte de Afrodite
+
+**Situação:** primeira leva integrada em 11/10/2026 (etapa 7 do plano). Testes automáticos feitos e telas conferidas por captura de imagem; **falta o teste manual no editor**, que é o que decide se a escala e a leitura estão boas.
+
+**Pendente:** confirmar quem fez as imagens. Se alguma não for do grupo, a origem e a licença precisam ser registradas em `07_documentos`, no Drive, antes do merge na `main`.
+
+**De onde veio.** As imagens estavam no Drive, em `06_prontos_para_o_jogo/fase_1_afrodite/recursos/`: 40 arquivos PNG, só de cenário e de peças do puzzle. Os originais continuam no Drive. O repositório recebeu 32 deles, em cópias no tamanho que o jogo usa, e mais um arquivo gerado (o contorno do espelho).
+
+**Onde ficam no repositório**
+
+| Pasta | Conteúdo |
+|---|---|
+| `assets/fundos/fase_1_afrodite/` | `01_ceu_mar.png`, `02_montanhas.png` e `03_jardins.png`, com 1280×720 |
+| `assets/sprites/objetos/fase_1_afrodite/espelho/` | `corpo.png` e `contorno.png` |
+| `assets/sprites/objetos/fase_1_afrodite/receptor/` | `ativo.png` e `inativo.png` |
+| `assets/sprites/objetos/fase_1_afrodite/ambiente/` | 19 objetos de cenário: ânfora, arbusto, arcos, blocos, cálices, colunas, escada, escombros, grama, ornamentos, pedra e roseiras |
+| `assets/tilesets/fase_1_afrodite/` | `piso_centro.png`, `piso_esquerda.png`, `piso_direita.png` e quatro plataformas |
+
+As subpastas e os nomes dos arquivos são os mesmos do Drive. Para atualizar uma imagem, basta exportar por cima com o mesmo nome e o mesmo tamanho.
+
+**Escala.** A regra é uma só: o arquivo tem o **dobro** do tamanho em que aparece na tela de 1280×720, e o `Sprite2D` fica com escala 0,5. Assim a imagem não borra em tela cheia. O personagem, com 32×64 na tela, é a régua.
+
+| Grupo | Redução em relação ao original do Drive | Exemplo |
+|---|---|---|
+| Fundos | Nenhuma. São usados em escala 1 | 1280×720 |
+| Piso e plataformas | Nenhuma | `piso_centro`: 929×181 no arquivo, 464×90 na tela |
+| Objetos de cenário | 80% | `coluna`: de 157×580 para 126×464 no arquivo, 63×232 na tela |
+| Espelho | 11% | `corpo`: de 1026×1401 para 113×154 no arquivo, 56×77 na tela |
+| Receptor | 18% | de 685×689 para 123×124 no arquivo, 62×62 na tela |
+
+Um original novo do mesmo grupo deve ser reduzido pelo mesmo fator antes de entrar em `assets/`. Os originais foram desenhados em escalas diferentes entre si, por isso os fatores mudam de grupo para grupo.
+
+**Como cada parte usa a arte**
+
+- **Espelho e receptor.** Estão descritos na seção 12. Toda área que usa essas peças passa a mostrar a arte, inclusive a primeira área de teste.
+- **Fundo.** É a cena `fundo_afrodite.tscn`: um `CanvasLayer` na camada -10, atrás de tudo, com as três imagens. Ele fica **preso à tela** e não acompanha a câmera, então cobre a tela em áreas de qualquer largura, mas não tem paralaxe. A camada dos jardins é escurecida pela propriedade `modulate`, para o personagem e as peças aparecerem na frente dela.
+- **Piso.** O retângulo do chão dá lugar a trechos de `piso_centro` lado a lado, no nó `Chao/Arte`. Cada trecho cobre a ponta do vizinho em 8 pixels. A colisão do chão é a mesma de antes.
+- **Plataforma.** A imagem `plataforma_curta` é encolhida para a largura da colisão, com a face de cima na mesma altura.
+- **Objetos de cenário.** Ficam no nó `Cenario`, com `z_index` -5: atrás do personagem, das peças e do feixe. São enfeite, sem colisão. Cada um tem a origem no pé, como o resto do projeto.
+
+**Onde foi aplicada**
+
+| Cena | O que recebeu |
+|---|---|
+| `cenas/fases/teste/area_teste_2.tscn` | Fundo, piso e plataforma. É a cena para avaliar a leitura do puzzle sobre o fundo |
+| `cenas/fases/fase_1_afrodite/area_1.tscn` | Fundo, piso e sete objetos de cenário. Continua esqueleto: não tem desafio nenhum |
+| `cenas/fases/teste/area_teste.tscn` | Só as peças do puzzle, por usarem as mesmas cenas. O resto continua em retângulos |
+
+As áreas 2 a 5 de Afrodite não foram alteradas.
+
+**O que ficou de fora do pacote**
+
+| Arquivo | Motivo |
+|---|---|
+| `ambiente/trepadeira_direita.png` e `trepadeira_esquerda.png` | Vieram como silhuetas brancas, sem o desenho |
+| `fundos/04_colunata.png` e `05_primeiro_plano.png` | A balaustrada e as rosas cobrem a faixa onde o personagem anda |
+| `espelho/base.png` | Não combina com o espelho inclinado |
+| `espelho/espelho_de_mao.png` | Sem uso definido |
+| `plataformas/plataforma_receptor_ativa.png` e `_inativa.png` | Não correspondem a nenhuma mecânica do jogo. As duas têm tamanhos diferentes |
+
+**Limitações**
+
+- O fundo não tem paralaxe. As camadas têm 1280 pixels e as bordas não se encaixam, então não podem ser repetidas nem deslizar em áreas mais largas que uma tela.
+- Em telas maiores que 1280×720 o fundo é ampliado, porque não existe em tamanho maior.
+- O piso mostra uma junta a cada três blocos: `piso_centro` tem as duas pontas arredondadas.
+- O espelho foi desenhado em pé, de frente. A inclinação de 45° é uma adaptação para as orientações `/` e `\`.
+- O contorno do espelho, o halo do receptor e o feixe não são arte: são provisórios.
+- A leitura das peças sobre o fundo foi conferida só por captura de tela. Se o espelho ou o feixe sumirem no fundo, o ajuste é a cor `modulate` da camada `Jardins`, em `fundo_afrodite.tscn`.
+
+### O que falta de arte e som
+
+**Como ler os tamanhos.** "Na tela" é o tamanho em pixels com o jogo em 1280×720. O arquivo deve ter o **dobro** disso, em PNG com fundo transparente e recortado rente ao desenho. O personagem tem 32×64 na tela e serve de régua.
+
+**1. Corrigir no pacote que já veio**
+
+| Arquivo | Problema | O que fazer |
+|---|---|---|
+| `ambiente/trepadeira_direita.png` | Silhueta toda branca, sem o desenho | Exportar de novo, com as cores |
+| `ambiente/trepadeira_esquerda.png` | Silhueta toda branca, sem o desenho | Exportar de novo, com as cores |
+
+**2. Peças de Afrodite que já funcionam e continuam com desenho provisório**
+
+| Peça | Como está hoje | Na tela | Arquivo | O que precisa vir |
+|---|---|---|---|---|
+| Fonte de luz | Quadrado laranja com seta | 40×40 | 80×80 | Uma imagem apontando para a direita. O jogo gira para as outras direções |
+| Feixe de luz | Linha clara com borda escura | 5 de espessura | faixa de 64×20 | Trecho reto que possa ser repetido no comprimento |
+| Halo do receptor ligado | Degradê feito no Godot | cerca de 128×128 | 256×256 | Opcional. Só se quiserem um brilho desenhado |
+| Contorno do espelho selecionado | Silhueta branca gerada a partir do espelho | acompanha o espelho | acompanha o espelho | Opcional. Só se quiserem um destaque desenhado |
+| Porta | Retângulo marrom | 40×96 | 80×192 | Fechada e aberta, ou os quadros da abertura |
+| Portal de saída | Retângulo roxo, com barras quando trancado | 48×96 | 96×192 | Liberado e trancado |
+| Checkpoint | Barra cinza | 40×64 | 80×128 | Inativo e ativo |
+| Espinhos | Retângulo vermelho | 100×24 | 200×48 | Uma imagem, de preferência que possa ser repetida na largura |
+
+**3. Cenário de Afrodite**
+
+| O que falta | Por quê |
+|---|---|
+| Fundo que repita na horizontal | As camadas atuais têm bordas que não se encaixam. Hoje o fundo fica parado na tela, sem paralaxe |
+| Peça de piso sem pontas arredondadas | `piso_centro` repetido mostra uma junta a cada três blocos |
+| Decidir o uso de `04_colunata` e `05_primeiro_plano` | Cobrem a faixa onde o personagem anda. Ficaram fora do jogo |
+| Decidir o uso de `espelho/base`, `espelho/espelho_de_mao` e das duas `plataforma_receptor` | Não correspondem a nada que o jogo tenha hoje. Ficaram fora |
+
+**4. Personagem**
+
+Não veio nenhum arquivo. O personagem é um retângulo amarelo.
+
+| Animação | Observação |
+|---|---|
+| Parado | |
+| Corrida | |
+| Salto e queda | Podem ser duas animações |
+| Ataque | O golpe dura 0,15 s e pode repetir a cada 0,35 s |
+| Esquiva | Dura 0,2 s e percorre 160 pixels |
+| Dano | O personagem pisca por 1 s depois do golpe |
+| Derrota | |
+
+Todos os quadros do mesmo tamanho, com os pés na mesma linha e o personagem virado para a direita: o jogo espelha a imagem. O corpo ocupa 32×64 na tela, então cerca de 64×128 no arquivo, mais a folga da arma e do movimento. Nomes no padrão `jogador_corrida.png`, na pasta `assets/sprites/jogador/`.
+
+**5. Interface**
+
+Não veio nenhum arquivo. Tudo é retângulo e texto do próprio Godot.
+
+- Ícone de vida cheia e de vida perdida (hoje quadrados de 28×28 na tela).
+- Fundo, título e botões do menu principal, da seleção de fase, da pausa e da derrota. Os botões precisam dos estados normal, em foco e desabilitado.
+- Fonte tipográfica, com a licença registrada.
+- Ícone da tecla e do botão do controle para a indicação de interação (hoje a letra "E").
+- Tela de vitória. Ainda não foi programada.
+
+**6. Áudio**
+
+Não veio nenhum arquivo, e o jogo ainda não toca som: a programação do áudio faz parte da tarefa P16.
+
+- Músicas, em OGG: menu, uma por fase, confronto final e vitória.
+- Efeitos, em WAV: salto, aterrissagem, ataque, golpe acertado, dano, esquiva, queda, derrota, checkpoint, espelho girando, receptor ligando e desligando, porta, portal trancado, portal atravessado e botões dos menus.
+
+**7. Outras fases, inimigos e chefes**
+
+Não há arte nenhuma para Ares, Hades, Poseidon e Zeus, nem para inimigos e chefes. Essas partes também ainda não foram programadas.
+
+**8. Registros**
+
+- Confirmar quem fez as imagens de Afrodite. Se alguma não for do grupo, registrar origem, autor e licença em `07_documentos`, no Drive, antes do merge na `main`.
+- Tirar de `06_prontos_para_o_jogo` os arquivos que já entraram no repositório, depois do merge. Os originais em tamanho grande devem ficar guardados em `03_cenarios/fase_1_afrodite`, porque o repositório só tem as cópias reduzidas.
+
+## 20. Áreas de teste
 
 Ficam em `cenas/fases/teste/` e servem para experimentar os sistemas. Estão marcadas como fase 0, área 0: não pertencem a nenhuma fase e atravessar os portais delas não muda o progresso. Não aparecem no menu; para jogar, abra a cena no editor e use F6.
 
@@ -744,11 +904,11 @@ Ficam em `cenas/fases/teste/` e servem para experimentar os sistemas. Estão mar
 
 Os espelhos, a fonte e o receptor formam um puzzle: a luz desce até o primeiro espelho, e a solução é virar os dois, deixando o primeiro em `\` e o segundo em `/`. Assim a luz segue para a direita e sobe até o receptor, e a porta abre.
 
-**`area_teste_2.tscn`**, com 1280 pixels de largura (uma tela): chão, uma plataforma e um portal em x = 1160 que leva à seleção de fase. O portal começa bloqueado e depende de um puzzle de um espelho só: a fonte fica em x = 880, o espelho em x = 1000 e o receptor acima dele. Virar o espelho para `/` manda a luz para cima e libera a saída.
+**`area_teste_2.tscn`**, com 1280 pixels de largura (uma tela) e já com a arte de Afrodite no fundo, no piso e na plataforma: chão, uma plataforma e um portal em x = 1160 que leva à seleção de fase. O portal começa bloqueado e depende de um puzzle de um espelho só: a fonte fica em x = 880, o espelho em x = 1000 e o receptor acima dele. Virar o espelho para `/` manda a luz para cima e libera a saída.
 
-**Áreas de Afrodite (esqueleto).** As cinco cenas `area_1.tscn` a `area_5.tscn`, em `cenas/fases/fase_1_afrodite/`, existem só para a progressão poder ser jogada do começo ao fim. Cada uma tem uma tela de largura, chão, duas paredes, o personagem, o HUD e um portal, além de um aviso escrito "ESQUELETO". O portal de cada uma leva à seguinte, e o da quinta leva à seleção de fase. Nenhuma delas está montada: faltam o desenho da área, os desafios e a arte. Quem for montar uma área abre a cena correspondente, constrói em cima e apaga o nó `Aviso`.
+**Áreas de Afrodite (esqueleto).** As cinco cenas `area_1.tscn` a `area_5.tscn`, em `cenas/fases/fase_1_afrodite/`, existem só para a progressão poder ser jogada do começo ao fim. Cada uma tem uma tela de largura, chão, duas paredes, o personagem, o HUD e um portal, além de um aviso escrito "ESQUELETO". A área 1 tem também o fundo, o piso e alguns objetos de cenário, para mostrar a escala da arte. O portal de cada uma leva à seguinte, e o da quinta leva à seleção de fase. Nenhuma delas está montada: faltam o desenho da área, os desafios e a arte. Quem for montar uma área abre a cena correspondente, constrói em cima e apaga o nó `Aviso`.
 
-## 20. Como fazer
+## 21. Como fazer
 
 **Criar uma área nova**
 
@@ -783,9 +943,17 @@ Os espelhos, a fonte e o receptor formam um puzzle: a luz desce até o primeiro 
 
 **Fazer a saída depender de um puzzle.** Clique no portal da área e, em `Acionadores`, acrescente um elemento apontando para o receptor. O portal passa a começar bloqueado.
 
+**Pôr o fundo de Afrodite em uma área.** Instancie `cenas/fases/fase_1_afrodite/elementos/fundo_afrodite.tscn` e deixe o nó como primeiro filho da área. Ele se ajusta sozinho à tela.
+
+**Pôr um objeto de cenário.** Arraste a imagem de `assets/sprites/objetos/fase_1_afrodite/ambiente/` para a cena e ponha a escala em 0,5. Para o objeto ficar atrás do personagem, deixe-o dentro de um `Node2D` chamado `Cenario`, com `Z Index` -5. Objeto de cenário não tem colisão: o que segura o personagem é sempre um `StaticBody2D`.
+
+**Trocar o retângulo de um chão pela arte.** Apague o `ColorRect` do chão e ponha no lugar sprites de `piso_centro.png`, com escala 0,5, lado a lado, com a face de cima na altura do topo da colisão. Não mexa na `CollisionShape2D`.
+
+**Atualizar uma imagem que já está no jogo.** Reduza o original pelo fator do grupo (tabela da seção 19) e salve por cima do arquivo em `assets/`, com o mesmo nome. A Godot importa de novo sozinha, e as cenas continuam funcionando.
+
 **Zerar o progresso para testar.** Apague o arquivo `progresso.json` em Projeto > Abrir Pasta de Dados do Usuário.
 
-## 21. Decisões provisórias
+## 22. Decisões provisórias
 
 Escolhas feitas para o código andar, que o grupo ainda precisa confirmar:
 
@@ -814,15 +982,20 @@ Escolhas feitas para o código andar, que o grupo ainda precisa confirmar:
 - **A saída e a porta fecham de novo se a solução do puzzle for desfeita.**
 - **Com vários acionadores, todos precisam estar ativos.**
 - **A porta não fecha em cima do personagem**, e fechada ela bloqueia a luz.
+- **As imagens entram com o dobro do tamanho de tela** e são usadas com escala 0,5.
+- **O fundo de Afrodite fica preso à tela, sem paralaxe**, e só com as três camadas de trás.
+- **A camada dos jardins é escurecida** para as peças e o personagem aparecerem.
+- **O espelho é a imagem em pé inclinada 45°**, sem a base.
+- **A arte de uma fase fica em uma subpasta com o nome da fase**, dentro de cada pasta de `assets/`.
 
-## 22. O que ainda não existe
+## 23. O que ainda não existe
 
 - Alavancas, placas de pressão e outros acionadores. Só o receptor de luz existe.
 - Inimigos, chefes e barra de vida de chefe.
 - Plataformas móveis, armadilhas, portas, mecanismos e puzzles.
 - Tela de vitória, pontuação e contadores.
 - Configurações e áudio.
-- Arte, animações e sons.
+- Sons, animações e a maior parte da arte. A lista do que falta está no fim da seção 19.
 - As áreas definitivas. As cinco de Afrodite são só esqueleto, e as das outras fases nem cena têm.
 - Exportação e executável.
 
@@ -832,9 +1005,10 @@ Limitações conhecidas do que já existe:
 - Não há botão para apagar o progresso; só apagando o arquivo.
 - A seleção não mostra quais fases já foram concluídas.
 - As pastas das fases de Ares, Hades, Poseidon e Zeus existem, mas ainda estão vazias.
-- Quem joga pelo menu, na Fase 1, percorre cinco telas vazias. Os sistemas prontos (espinhos, checkpoint, puzzle de luz, porta) só aparecem nas áreas de teste, pelo F6.
+- Quem joga pelo menu, na Fase 1, percorre cinco telas sem desafio; só a primeira tem cenário. Os sistemas prontos (espinhos, checkpoint, puzzle de luz, porta) só aparecem nas áreas de teste, pelo F6.
 - As peças do puzzle de luz precisam ser alinhadas pelos centros, à mão. Não há grade nem encaixe automático.
 - A porta abre e fecha de uma vez, sem animação.
+- O fundo de Afrodite não tem paralaxe, e o piso mostra uma junta a cada três blocos. Os detalhes estão na seção 19.
 - O golpe não confere se há parede entre o personagem e o alvo: basta o alvo estar na região.
 - Não há inimigos para atacar. O golpe só pode ser testado nos alvos de treino.
 - Durante a esquiva o personagem não pula: o comando de pulo apertado nesse intervalo é perdido.
@@ -843,7 +1017,7 @@ Limitações conhecidas do que já existe:
 - A interação não confere se há parede entre o personagem e o objeto: basta a distância.
 - O espelho não tem colisão: o personagem passa na frente dele.
 
-## 23. Plano das mecânicas principais
+## 24. Plano das mecânicas principais
 
 As mecânicas do herói estão sendo feitas em oito etapas, uma por vez. Esta tabela separa o que já está no jogo do que ainda é plano.
 
@@ -853,16 +1027,16 @@ As mecânicas do herói estão sendo feitas em oito etapas, uma por vez. Esta ta
 | 2 | Puzzle mínimo: fonte de luz, feixe, espelho e receptor | Implementada e no repositório. Testes automáticos feitos; teste manual feito pelo Pedro em 11/10 |
 | 3 | Puzzle ligado a um mecanismo e à liberação da saída | Implementada e no repositório. Testes automáticos feitos; teste manual feito pelo Pedro em 11/10 |
 | 4 | Quantidade de áreas configurável por fase, com cinco áreas em Afrodite | Implementada e no repositório. Testes automáticos feitos; teste manual feito pelo Pedro em 11/10. As cinco áreas existem só como esqueleto |
-| 5 | Ataque, validado com um alvo de teste | Implementada e no repositório. Testes automáticos feitos; teste manual ainda não registrado |
-| 6 | Esquiva, com invulnerabilidade e regras de queda | Implementada. Testes automáticos feitos; falta o teste manual no editor |
-| 7 | Integração da arte de Afrodite e revisão de escala, câmera e legibilidade | Planejada |
+| 5 | Ataque, validado com um alvo de teste | Implementada e no repositório. Testes automáticos feitos; teste manual feito pelo Pedro em 11/10 |
+| 6 | Esquiva, com invulnerabilidade e regras de queda | Implementada e no repositório. Testes automáticos feitos; teste manual feito pelo Pedro em 11/10 |
+| 7 | Integração da arte de Afrodite e revisão de escala, câmera e legibilidade | Implementada: espelho, receptor, fundo, piso e cenário, em duas cenas. Testes automáticos feitos; falta o teste manual no editor. O que continua provisório está na seção 19 |
 | 8 | Teste do conjunto e documentação final | Planejada |
 
 **Mudança de planejamento (11/10/2026).** O plano original era de cinco fases com duas áreas cada, dez no total. O jogo mantém as cinco fases, mas a quantidade de áreas passou a ser de cada fase: Afrodite tem cinco, e as demais terão o que seus desafios pedirem. Os dez cartões do Trello que falavam em duas ou dez áreas foram renomeados em 11/10/2026.
 
 Os números de alcance, duração, distância e velocidade são valores iniciais, sujeitos a ajuste durante os testes.
 
-## 24. Tarefas cobertas
+## 25. Tarefas cobertas
 
 Relação entre o que está documentado aqui e os códigos do [CHECK.md](CHECK.md):
 
@@ -876,7 +1050,7 @@ Relação entre o que está documentado aqui e os códigos do [CHECK.md](CHECK.m
 | P12 Conclusão de áreas, liberação de fases e reinício | Concluída | Seções 15 e 16, agora com quantidade de áreas por fase |
 | P15 Câmera 2D e limites das áreas | Concluída | Seção 14 |
 | P21 Repositório e controle de versões | Concluída | Repositório e fluxo de branches |
-| P5 Esquiva, ataque e recebimento de dano | Parcial | Ataque (seção 8), esquiva (seção 9) e recebimento de dano (seção 7) prontos; falta o teste manual da esquiva |
+| P5 Esquiva, ataque e recebimento de dano | Parcial | Ataque (seção 8), esquiva (seção 9) e recebimento de dano (seção 7) prontos e testados à mão em 11/10; fecha quando entrar na `main` |
 | P6 Interação com objetos e animações | Parcial | Sistema de interação e espelho (seção 11); faltam os demais objetos e as animações |
 | P13 Plataformas, armadilhas, portas e mecanismos | Parcial | Porta acionada por puzzle (seção 13); faltam plataformas, armadilhas e os outros mecanismos |
 | P14 Puzzles, água, raios e perigos ambientais | Parcial | Puzzle de luz de Afrodite, com porta e saída (seções 12 e 13); faltam os puzzles e perigos das outras fases |
@@ -884,4 +1058,5 @@ Relação entre o que está documentado aqui e os códigos do [CHECK.md](CHECK.m
 | P11 Vitória, derrota, pontuação e contadores | Parcial | Tela de derrota |
 | P16 Menus, HUD, pausa, configurações, transições e áudio | Parcial | Menu principal, HUD, pausa com saída para o menu e transição |
 | P17 Salvamento, seleção de fase, exportação e executável | Parcial | Salvamento e seleção de fase |
+| P24 Importar tilesets, fundos, objetos, músicas e efeitos | Parcial | Fundo, piso, plataformas, objetos de cenário, espelho e receptor de Afrodite (seção 19); faltam as outras fases e todo o áudio |
 | P18 Vida, dano e barra de chefe | Parcial | Vida, dano e invencibilidade |
