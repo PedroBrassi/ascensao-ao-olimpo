@@ -410,7 +410,7 @@ A seta da fonte e o desenho do espelho aparecem também no editor, conforme o qu
 
 **Arquivos:** `scripts/sistemas/acionadores.gd`, `scripts/objetos/porta.gd` com `cenas/objetos/porta.tscn`, e `scripts/objetos/portal.gd`.
 
-**Situação:** implementado e coberto por testes automáticos. Falta o teste manual no editor.
+**Situação:** implementado, coberto por testes automáticos e testado no editor.
 
 É o que liga um puzzle ao resto da área. Um **acionador** é qualquer nó que tenha:
 
@@ -724,14 +724,14 @@ As mecânicas do herói estão sendo feitas em oito etapas, uma por vez. Esta ta
 |---|---|---|
 | 1 | Interação com objetos, com o espelho como objeto de teste, e correção da queda | Implementada e no repositório. Testes automáticos feitos; teste manual feito pelo Pedro em 11/10 |
 | 2 | Puzzle mínimo: fonte de luz, feixe, espelho e receptor | Implementada e no repositório. Testes automáticos feitos; teste manual feito pelo Pedro em 11/10 |
-| 3 | Puzzle ligado a um mecanismo e à liberação da saída | Implementada e no repositório. Testes automáticos feitos; teste manual ainda não registrado |
-| 4 | Quantidade de áreas configurável por fase, com cinco áreas em Afrodite | Implementada. Testes automáticos feitos; falta o teste manual no editor. As cinco áreas existem só como esqueleto |
+| 3 | Puzzle ligado a um mecanismo e à liberação da saída | Implementada e no repositório. Testes automáticos feitos; teste manual feito pelo Pedro em 11/10 |
+| 4 | Quantidade de áreas configurável por fase, com cinco áreas em Afrodite | Implementada e no repositório. Testes automáticos feitos; teste manual feito pelo Pedro em 11/10. As cinco áreas existem só como esqueleto |
 | 5 | Ataque, validado com um alvo de teste | Planejada |
 | 6 | Esquiva, com invulnerabilidade e regras de queda | Planejada |
 | 7 | Integração da arte de Afrodite e revisão de escala, câmera e legibilidade | Planejada |
 | 8 | Teste do conjunto e documentação final | Planejada |
 
-**Mudança de planejamento (11/10/2026).** O plano original era de cinco fases com duas áreas cada, dez no total. O jogo mantém as cinco fases, mas a quantidade de áreas passou a ser de cada fase: Afrodite tem cinco, e as demais terão o que seus desafios pedirem. Os cartões do Trello que ainda falam em duas ou dez áreas estão listados no CHECK.md.
+**Mudança de planejamento (11/10/2026).** O plano original era de cinco fases com duas áreas cada, dez no total. O jogo mantém as cinco fases, mas a quantidade de áreas passou a ser de cada fase: Afrodite tem cinco, e as demais terão o que seus desafios pedirem. Os dez cartões do Trello que falavam em duas ou dez áreas foram renomeados em 11/10/2026.
 
 Decisões já tomadas para as etapas seguintes, ainda não implementadas:
 

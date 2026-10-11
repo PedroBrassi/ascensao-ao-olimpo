@@ -8,20 +8,7 @@ Situação em 11/10/2026, tirada do quadro do Trello. Para atualizar, troque `[ 
 
 O plano original era de cinco fases com duas áreas cada, dez no total. O jogo mantém as cinco fases, mas a quantidade de áreas passou a ser de cada fase: **Afrodite tem cinco áreas**, e Ares, Hades, Poseidon e Zeus terão a quantidade que seus desafios pedirem. Até serem definidas, o jogo considera duas áreas para cada uma dessas quatro.
 
-Os nomes das tarefas abaixo são os títulos dos cartões do Trello, e dez deles ainda falam em duas ou dez áreas. Eles estão marcados com uma nota na Parte 2 e precisam ser atualizados no Trello:
-
-| Tarefa | Título atual do cartão | O que mudar |
-|---|---|---|
-| **J5** | Como será uma fase? — Duas áreas com desafios crescentes, checkpoint e encerramento próprio | Trocar "duas áreas" por quantidade de áreas própria de cada fase |
-| **J13** | Estrutura — cinco fases e dez áreas jogáveis | Tirar "dez áreas" |
-| **A17** | Planejar as duas áreas da fase de Afrodite | Cinco áreas |
-| **A18** | Planejar as duas áreas da fase de Ares | Quantidade a definir |
-| **A19** | Planejar as duas áreas da fase de Hades | Quantidade a definir |
-| **A20** | Planejar as duas áreas da fase de Poseidon | Quantidade a definir |
-| **A21** | Planejar as duas áreas da fase de Zeus | Quantidade a definir |
-| **A22** | Criar esboços e blockouts das dez áreas | Tirar "dez" |
-| **P25** | Montar e integrar as dez áreas na engine | Tirar "dez" |
-| **P28** | Testar as dez áreas, dificuldade, desempenho e carregamento | Tirar "dez" |
+Dez cartões do Trello falavam em duas ou dez áreas e foram renomeados em 11/10/2026: J5, J13, A17, A18, A19, A20, A21, A22, P25 e P28. Os nomes das tarefas abaixo já são os títulos novos.
 
 ## Como ler
 
@@ -79,10 +66,10 @@ Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J
 - [ ] **P22** Definir responsáveis, prioridades, prazos e status das tarefas *(parcial: responsáveis já definidos nos cartões; faltam prioridades e prazos)*
 - [ ] **P23** Importar sprites, configurar animações e revisar escala
 - [ ] **P24** Importar tilesets, fundos, objetos, músicas e efeitos sonoros
-- [ ] **P25** Montar e integrar as dez áreas na engine
+- [ ] **P25** Montar e integrar as áreas na engine
 - [ ] **P26** Conectar interface, programação, arte e áudio
 - [ ] **P27** Testar movimentação, combate, vidas, checkpoints, inimigos e puzzles
-- [ ] **P28** Testar as dez áreas, dificuldade, desempenho e carregamento
+- [ ] **P28** Testar as áreas, dificuldade, desempenho e carregamento
 - [ ] **P29** Corrigir erros, validar a build final e preparar o pacote de entrega
 
 ## Aurélio
@@ -108,12 +95,12 @@ Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J
 - [ ] **A14** Confirmar regras, mecânica principal e controles
 - [ ] **A15** Definir comportamento de inimigos e chefes
 - [ ] **A16** Definir o funcionamento dos puzzles
-- [ ] **A17** Planejar as duas áreas da fase de Afrodite
-- [ ] **A18** Planejar as duas áreas da fase de Ares
-- [ ] **A19** Planejar as duas áreas da fase de Hades
-- [ ] **A20** Planejar as duas áreas da fase de Poseidon
-- [ ] **A21** Planejar as duas áreas da fase de Zeus
-- [ ] **A22** Criar esboços e blockouts das dez áreas
+- [ ] **A17** Planejar as cinco áreas da fase de Afrodite
+- [ ] **A18** Planejar as áreas da fase de Ares (quantidade a definir)
+- [ ] **A19** Planejar as áreas da fase de Hades (quantidade a definir)
+- [ ] **A20** Planejar as áreas da fase de Poseidon (quantidade a definir)
+- [ ] **A21** Planejar as áreas da fase de Zeus (quantidade a definir)
+- [ ] **A22** Criar esboços e blockouts das áreas
 - [ ] **A23** Planejar tutorial, posicionamento de perigos, inimigos e checkpoints
 
 **Parte 2 — Produção técnica**
@@ -136,7 +123,7 @@ Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J
 - [ ] **J2** Qual é o objetivo? — Provar seu valor aos deuses e chegar ao topo do Olimpo
 - [ ] **J3** Como vence? — Concluindo as áreas, superando os desafios e derrotando Zeus
 - [ ] **J4** Mecânica principal — movimentação lateral, combate, esquiva, exploração e interação
-- [ ] **J5** Como será uma fase? — Duas áreas com desafios crescentes, checkpoint e encerramento próprio
+- [ ] **J5** Como será uma fase? — Áreas em quantidade própria de cada fase, com desafios crescentes, checkpoint e encerramento próprio
 - [ ] **J6** Fase 1 — Afrodite: introdução, exploração e puzzles com espelhos e símbolos
 - [ ] **J7** Fase 2 — Ares: arena, combate e campeão de Ares
 - [ ] **J8** Fase 3 — Hades: submundo, perigos e guardião
@@ -147,7 +134,7 @@ Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J
 
 - [ ] **J11** Engine — utilizar Godot
 - [ ] **J12** Formato visual — mundo 2D com personagens e inimigos produzidos em 3D
-- [ ] **J13** Estrutura — cinco fases e dez áreas jogáveis
+- [ ] **J13** Estrutura — cinco fases, com quantidade de áreas própria de cada fase
 - [ ] **J14** Sons — música, movimento, combate, interface, ambientes, chefes e vitória
 - [ ] **J15** Interface — menu principal, HUD, pausa, configurações, transições, vitória e derrota
 
@@ -219,14 +206,12 @@ São decisões, não produção. Não dependem de código nem de arte e destrava
    - Depende de: nada
 11. [ ] **J4** Mecânica principal — movimentação lateral, combate, esquiva, exploração e interação — Julia
    - Depende de: nada
-12. [ ] **J5** Como será uma fase? — Duas áreas com desafios crescentes, checkpoint e encerramento próprio — Julia
+12. [ ] **J5** Como será uma fase? — Áreas em quantidade própria de cada fase, com desafios crescentes, checkpoint e encerramento próprio — Julia
    - Depende de: nada
-   - Nota: o título do cartão ainda segue o plano antigo; a quantidade de áreas agora é de cada fase
 13. [ ] **J12** Formato visual — mundo 2D com personagens e inimigos produzidos em 3D — Julia
    - Depende de: nada
-14. [ ] **J13** Estrutura — cinco fases e dez áreas jogáveis — Julia
+14. [ ] **J13** Estrutura — cinco fases, com quantidade de áreas própria de cada fase — Julia
    - Depende de: nada
-   - Nota: o título do cartão ainda segue o plano antigo; o jogo mantém cinco fases, mas não são mais dez áreas
 15. [ ] **J14** Sons — música, movimento, combate, interface, ambientes, chefes e vitória — Julia
    - Depende de: nada
 16. [ ] **J15** Interface — menu principal, HUD, pausa, configurações, transições, vitória e derrota — Julia
@@ -311,26 +296,20 @@ Depende do funcionamento dos puzzles. Pode andar em paralelo com a Etapa 3. Conc
 
 Trabalho de design do Aurélio. Pode andar em paralelo com as Etapas 3 e 4. Concluídas: 0 de 7.
 
-44. [ ] **A17** Planejar as duas áreas da fase de Afrodite — Aurélio
+44. [ ] **A17** Planejar as cinco áreas da fase de Afrodite — Aurélio
    - Depende de: J6, A15, A16, J20
-   - Nota: o título do cartão ainda segue o plano antigo; Afrodite tem cinco áreas
-45. [ ] **A18** Planejar as duas áreas da fase de Ares — Aurélio
+45. [ ] **A18** Planejar as áreas da fase de Ares (quantidade a definir) — Aurélio
    - Depende de: J7, A15, A16, J20
-   - Nota: o título do cartão ainda segue o plano antigo; a quantidade de áreas de Ares ainda será definida
-46. [ ] **A19** Planejar as duas áreas da fase de Hades — Aurélio
+46. [ ] **A19** Planejar as áreas da fase de Hades (quantidade a definir) — Aurélio
    - Depende de: J8, A15, A16, J20
-   - Nota: o título do cartão ainda segue o plano antigo; a quantidade de áreas de Hades ainda será definida
-47. [ ] **A20** Planejar as duas áreas da fase de Poseidon — Aurélio
+47. [ ] **A20** Planejar as áreas da fase de Poseidon (quantidade a definir) — Aurélio
    - Depende de: J9, A15, A16, J20
-   - Nota: o título do cartão ainda segue o plano antigo; a quantidade de áreas de Poseidon ainda será definida
-48. [ ] **A21** Planejar as duas áreas da fase de Zeus — Aurélio
+48. [ ] **A21** Planejar as áreas da fase de Zeus (quantidade a definir) — Aurélio
    - Depende de: J10, A15, A16, J20
-   - Nota: o título do cartão ainda segue o plano antigo; a quantidade de áreas de Zeus ainda será definida
 49. [ ] **A23** Planejar tutorial, posicionamento de perigos, inimigos e checkpoints — Aurélio
    - Depende de: A17, A15
-50. [ ] **A22** Criar esboços e blockouts das dez áreas — Aurélio
+50. [ ] **A22** Criar esboços e blockouts das áreas — Aurélio
    - Depende de: A17, A18, A19, A20, A21, A23
-   - Nota: o título do cartão ainda segue o plano antigo; o total de áreas depende da quantidade de cada fase
 
 ## Etapa 6 — Produção de arte
 
@@ -404,9 +383,9 @@ Depende das definições de som e de formato de entrega. Pode andar em paralelo 
    - Depende de: P12 ✓
    - Parcial: feitos o salvamento do progresso e a tela de seleção de fase; faltam a exportação e o executável
    - Nota: a parte de exportação e executável é a mesma de P20
-78. [ ] **P25** Montar e integrar as dez áreas na engine — Pedro
+78. [ ] **P25** Montar e integrar as áreas na engine — Pedro
    - Depende de: A22, P24, P8, P14
-   - Nota: o título do cartão ainda segue o plano antigo; existem os esqueletos das cinco áreas de Afrodite, só com chão e portal, e nenhuma área está montada
+   - Nota: existem os esqueletos das cinco áreas de Afrodite, só com chão e portal, e nenhuma área está montada
 79. [ ] **P26** Conectar interface, programação, arte e áudio — Pedro
    - Depende de: P23, P24, A13, A4, J22
 80. [ ] **P16** Programar menus, HUD, pausa, configurações, transições e áudio — Pedro
@@ -427,9 +406,8 @@ Fecha o trabalho. Depende de praticamente tudo o que veio antes. Concluídas: 0 
    - Depende de: P5, P8, P14, P10 ✓
 84. [ ] **J29** Testar menus, HUD, áudio, transições, vitória e derrota — Julia
    - Depende de: P16, P11, P26
-85. [ ] **P28** Testar as dez áreas, dificuldade, desempenho e carregamento — Pedro
+85. [ ] **P28** Testar as áreas, dificuldade, desempenho e carregamento — Pedro
    - Depende de: P25, J20
-   - Nota: o título do cartão ainda segue o plano antigo; o total de áreas depende da quantidade de cada fase
 86. [ ] **P20** Entrega técnica — configurar exportação e gerar versão executável — Pedro
    - Depende de: P17
 87. [ ] **P29** Corrigir erros, validar a build final e preparar o pacote de entrega — Pedro
@@ -453,7 +431,7 @@ Quantas tarefas pendentes dependem de cada uma, direta ou indiretamente. Vale co
 
 | Tarefa | Responsável | Tarefas que esperam por ela |
 |---|---|---|
-| **J5** Como será uma fase? — Duas áreas com desafios crescentes, checkpoint e encerramento próprio | Julia | 47 |
+| **J5** Como será uma fase? — Áreas em quantidade própria de cada fase, com desafios crescentes, checkpoint e encerramento próprio | Julia | 47 |
 | **J4** Mecânica principal — movimentação lateral, combate, esquiva, exploração e interação | Julia | 42 |
 | **A14** Confirmar regras, mecânica principal e controles | Aurélio | 41 |
 | **J6** Fase 1 — Afrodite: introdução, exploração e puzzles com espelhos e símbolos | Julia | 41 |
