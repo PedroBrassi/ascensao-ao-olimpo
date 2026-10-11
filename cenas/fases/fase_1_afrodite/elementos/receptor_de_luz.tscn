@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://w5tm0qg4p0kj"]
+
+[ext_resource type="Script" uid="uid://b55b2fjr1cg1k" path="res://scripts/fases/fase_1_afrodite/receptor_de_luz.gd" id="1_l2dme"]
+
+[node name="ReceptorDeLuz" type="Node2D" unique_id=1190296466]
+script = ExtResource("1_l2dme")
+
+[node name="Brilho" type="ColorRect" parent="." unique_id=1364291354]
+visible = false
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+mouse_filter = 2
+color = Color(1, 0.95, 0.6, 0.25)
+
+[node name="Moldura" type="ColorRect" parent="." unique_id=1032066622]
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+mouse_filter = 2
+color = Color(0.2, 0.22, 0.3, 1)
+
+[node name="Vazio" type="ColorRect" parent="." unique_id=326437566]
+offset_left = -12.0
+offset_top = -12.0
+offset_right = 12.0
+offset_bottom = 12.0
+mouse_filter = 2
+color = Color(0.1, 0.11, 0.16, 1)
+
+[node name="Nucleo" type="Polygon2D" parent="." unique_id=633255850]
+visible = false
+color = Color(1, 0.95, 0.6, 1)
+polygon = PackedVector2Array(0, -14, 14, 0, 0, 14, -14, 0)

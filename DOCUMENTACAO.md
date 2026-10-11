@@ -15,17 +15,18 @@ Situação em 11/10/2026. O [README.md](README.md) explica a organização do re
 7. [Dano e vida](#7-dano-e-vida)
 8. [Checkpoint, queda e reaparecimento](#8-checkpoint-queda-e-reaparecimento)
 9. [Interação com objetos](#9-interação-com-objetos)
-10. [Áreas e câmera](#10-áreas-e-câmera)
-11. [Portal e conclusão de área](#11-portal-e-conclusão-de-área)
-12. [Progresso e salvamento](#12-progresso-e-salvamento)
-13. [Transição entre cenas](#13-transição-entre-cenas)
-14. [Interface](#14-interface)
-15. [Áreas de teste](#15-áreas-de-teste)
-16. [Como fazer](#16-como-fazer)
-17. [Decisões provisórias](#17-decisões-provisórias)
-18. [O que ainda não existe](#18-o-que-ainda-não-existe)
-19. [Plano das mecânicas principais](#19-plano-das-mecânicas-principais)
-20. [Tarefas cobertas](#20-tarefas-cobertas)
+10. [Puzzle de luz de Afrodite](#10-puzzle-de-luz-de-afrodite)
+11. [Áreas e câmera](#11-áreas-e-câmera)
+12. [Portal e conclusão de área](#12-portal-e-conclusão-de-área)
+13. [Progresso e salvamento](#13-progresso-e-salvamento)
+14. [Transição entre cenas](#14-transição-entre-cenas)
+15. [Interface](#15-interface)
+16. [Áreas de teste](#16-áreas-de-teste)
+17. [Como fazer](#17-como-fazer)
+18. [Decisões provisórias](#18-decisões-provisórias)
+19. [O que ainda não existe](#19-o-que-ainda-não-existe)
+20. [Plano das mecânicas principais](#20-plano-das-mecânicas-principais)
+21. [Tarefas cobertas](#21-tarefas-cobertas)
 
 ---
 
@@ -37,7 +38,8 @@ O jogo já tem um ciclo completo, do menu até a liberação de fases:
 - Personagem que anda, pula e cai, com câmera que o acompanha.
 - Três vidas, dano por contato, invencibilidade temporária e HUD das vidas.
 - Checkpoint, queda no buraco e reaparecimento.
-- Interação com objetos, e o espelho da fase de Afrodite, que troca de orientação ao ser acionado.
+- Interação com objetos.
+- Puzzle de luz de Afrodite em versão mínima: fonte, feixe, espelhos que o personagem vira e receptor.
 - Tela de derrota e menu de pausa, com saída para o menu principal.
 - Portal que conclui a área e leva à próxima cena, com escurecimento da tela.
 - Progresso com liberação de fases, gravado em arquivo.
@@ -119,7 +121,9 @@ Perigos e interativos têm máscara 2: só enxergam o personagem. O personagem t
 | `scripts/sistemas/vida.gd` | usada dentro do jogador | Pontos de vida e invencibilidade |
 | `scripts/sistemas/interativo.gd` | usada dentro do espelho | Marca um objeto como acionável |
 | `scripts/jogador/interacao_do_jogador.gd` | nó `Interacao` do jogador | Escolhe e aciona o objeto mais próximo |
-| `scripts/fases/fase_1_afrodite/espelho.gd` | `cenas/fases/fase_1_afrodite/elementos/espelho.tscn` | Espelho do puzzle de Afrodite |
+| `scripts/fases/fase_1_afrodite/espelho.gd` | `cenas/fases/fase_1_afrodite/elementos/espelho.tscn` | Espelho do puzzle de luz |
+| `scripts/fases/fase_1_afrodite/fonte_de_luz.gd` | `cenas/fases/fase_1_afrodite/elementos/fonte_de_luz.tscn` | Fonte de luz: emite e calcula o feixe |
+| `scripts/fases/fase_1_afrodite/receptor_de_luz.gd` | `cenas/fases/fase_1_afrodite/elementos/receptor_de_luz.tscn` | Receptor: fica ativo enquanto recebe luz |
 | `scripts/sistemas/transicao.gd` | autoload, sem cena | Escurecimento nas trocas de cena |
 | `scripts/sistemas/progresso.gd` | autoload, sem cena | Fases liberadas e salvamento |
 | `scripts/fases/area_de_jogo.gd` | raiz de cada área | Fase, área e limites da câmera |
@@ -132,7 +136,7 @@ Perigos e interativos têm máscara 2: só enxergam o personagem. O personagem t
 | `scripts/ui/menu_principal.gd` | `cenas/ui/menu_principal.tscn` | Menu principal |
 | `scripts/ui/selecao_de_fase.gd` | `cenas/ui/selecao_de_fase.tscn` | Seleção de fase |
 
-As áreas de teste ficam em `cenas/fases/teste/`. Cada fase definitiva tem a sua pasta em `cenas/fases/`, com uma subpasta `elementos/` para as cenas que só ela usa, e uma pasta de mesmo nome em `scripts/fases/` para os scripts desses elementos. Por enquanto só a de Afrodite tem conteúdo: o espelho. As regras completas estão na seção 4 do README.
+As áreas de teste ficam em `cenas/fases/teste/`. Cada fase definitiva tem a sua pasta em `cenas/fases/`, com uma subpasta `elementos/` para as cenas que só ela usa, e uma pasta de mesmo nome em `scripts/fases/` para os scripts desses elementos. Por enquanto só a de Afrodite tem conteúdo: as peças do puzzle de luz. As regras completas estão na seção 4 do README.
 
 Cada script tem um `class_name` igual ao nome do arquivo em maiúsculas iniciais (`Jogador`, `Vida`, `Portal` e assim por diante), que é o que permite escrever `if corpo is Jogador`.
 
@@ -265,7 +269,7 @@ O checkpoint não devolve vida. As vidas voltam ao máximo quando a cena é reca
 
 **Arquivos:** `scripts/sistemas/interativo.gd`, `scripts/jogador/interacao_do_jogador.gd` e, como primeiro objeto, `scripts/fases/fase_1_afrodite/espelho.gd`.
 
-**Situação:** implementado e coberto por testes automáticos. Falta o teste manual no editor.
+**Situação:** implementado e coberto por testes automáticos.
 
 A interação tem duas peças:
 
@@ -308,7 +312,7 @@ Todo `Interativo` entra sozinho no grupo `interativos`. É por esse grupo que o 
 | `selecao_mudou(objeto)` | sinal | Emitido quando o objeto selecionado muda |
 | `interagiu(objeto)` | sinal | Emitido quando o personagem aciona um objeto |
 
-**Espelho** (`cenas/fases/fase_1_afrodite/elementos/espelho.tscn`). É a primeira peça do puzzle de luz de Afrodite. Tem duas orientações, `/` e `\`, e troca de uma para a outra a cada interação.
+**Espelho** (`cenas/fases/fase_1_afrodite/elementos/espelho.tscn`). É o primeiro objeto que usa a interação, e uma das peças do puzzle de luz da seção 10. Tem duas orientações, `/` e `\`, e troca de uma para a outra a cada interação.
 
 ```
 Espelho (Node2D)             origem no centro do espelho
@@ -325,13 +329,78 @@ Espelho (Node2D)             origem no centro do espelho
 | `orientacao` | variável | Orientação atual. É este valor que o cálculo da luz vai ler |
 | `alternar()` | função | Troca `/` por `\` e vice-versa |
 | `definir_orientacao(nova)` | função | Põe uma orientação específica |
+| `refletir(direcao)` | função | Recebe a direção em que a luz chega e devolve a direção em que ela sai |
 | `orientacao_mudou(orientacao)` | sinal | Emitido a cada mudança |
 
 A orientação é um valor guardado no script, e não a rotação do desenho. O desenho é provisório: uma linha diagonal dentro de um quadrado. Quando a arte chegar, cada orientação ganha a sua imagem, sem mexer na lógica.
 
-Por enquanto o espelho só muda de orientação. Ainda não existem a fonte de luz, o feixe nem o receptor.
+O script do espelho roda também dentro do editor (`@tool`), só para o desenho mostrar a orientação inicial escolhida no Inspetor.
 
-## 10. Áreas e câmera
+## 10. Puzzle de luz de Afrodite
+
+**Arquivos:** `scripts/fases/fase_1_afrodite/fonte_de_luz.gd`, `receptor_de_luz.gd` e `espelho.gd`, com as cenas de mesmo nome em `cenas/fases/fase_1_afrodite/elementos/`.
+
+**Situação:** versão mínima implementada e coberta por testes automáticos. Falta o teste manual no editor. O receptor ainda não controla nada: ligar o puzzle a um mecanismo e à saída é a etapa 3.
+
+O puzzle tem três peças:
+
+| Peça | Papel |
+|---|---|
+| `FonteDeLuz` | Emite um feixe reto e calcula o caminho dele |
+| `Espelho` | Muda a direção do feixe. O personagem vira o espelho com a tecla de interação |
+| `ReceptorDeLuz` | Fica ativo enquanto o feixe chega até ele |
+
+**Regras da luz:**
+
+- O feixe anda só na horizontal e na vertical.
+- O espelho `/` troca direita por cima e esquerda por baixo. O espelho `\` troca direita por baixo e esquerda por cima. Os dois lados do espelho refletem.
+- O feixe termina no receptor: a luz não passa dele.
+- Paredes, chão e plataformas param o feixe. Vale para todo corpo na camada 1 (mundo).
+- O personagem não bloqueia a luz.
+- O feixe sofre no máximo 16 reflexões (`max_reflexoes`). Isso encerra o caminho quando os espelhos formam um circuito fechado.
+- O caminho é recalculado a cada quadro de física, então a luz reage na hora a um espelho virado ou a um obstáculo que apareça.
+
+**Alinhamento.** A luz acerta um espelho ou receptor quando o **centro** da peça está na linha do feixe, com tolerância de 12 pixels (`tolerancia_de_alinhamento`). Ao montar um puzzle, ponha as peças com o mesmo `y` para um trecho horizontal e o mesmo `x` para um trecho vertical. Uma peça fora da tolerância é ignorada, e a luz passa direto.
+
+**FonteDeLuz**
+
+| Nome | Tipo | Para que serve |
+|---|---|---|
+| `direcao` | propriedade | Para onde a luz sai: `DIREITA`, `BAIXO`, `ESQUERDA` ou `CIMA` |
+| `ligada` | propriedade | Desligue para a fonte parar de emitir |
+| `max_reflexoes` | propriedade, 16 | Limite de reflexões do feixe |
+| `alcance_maximo` | propriedade, 4000 | Distância percorrida quando a luz não encontra nada, em pixels |
+| `tolerancia_de_alinhamento` | propriedade, 12 | Desvio máximo entre a linha do feixe e o centro de uma peça |
+| `camadas_que_bloqueiam` | propriedade, camada 1 | Camadas de física que param a luz |
+| `pontos_do_feixe` | variável | Pontos por onde o feixe passa, da fonte até onde a luz para |
+| `receptor_atingido` | variável | Receptor em que o feixe termina, ou nulo |
+| `reflexoes` | variável | Quantas reflexões o feixe atual sofreu |
+| `feixe_mudou` | sinal | Emitido quando o caminho do feixe muda |
+
+**ReceptorDeLuz**
+
+| Nome | Tipo | Para que serve |
+|---|---|---|
+| `ativo` | variável | Verdadeiro enquanto recebe luz |
+| `ativado` | sinal | Emitido quando passa a receber luz |
+| `desativado` | sinal | Emitido quando deixa de receber |
+| `estado_mudou(ativo)` | sinal | Emitido nas duas mudanças |
+
+O receptor aceita luz vinda de qualquer direção. Com mais de uma fonte, ele fica ativo enquanto pelo menos uma o ilumina.
+
+**Estado do puzzle:**
+
+| Situação | O que acontece |
+|---|---|
+| Reaparecer no checkpoint depois de uma queda | Espelhos e receptor continuam como estavam |
+| Reiniciar a área ou tentar de novo depois da derrota | Tudo volta ao estado inicial |
+| Pausa | O puzzle fica congelado |
+
+**Desenho provisório.** A fonte é um quadrado laranja com uma seta, o feixe é uma linha clara e o receptor é um quadrado escuro vazio. Ligado, o receptor ganha um losango claro no meio e um brilho em volta: a mudança é de forma, e não só de cor. O feixe é desenhado uma camada atrás das outras peças (`z_index` -1), para não riscar os espelhos nem as indicações de tecla. Nada disso é arte final.
+
+A seta da fonte e o desenho do espelho aparecem também no editor, conforme o que estiver no Inspetor. O feixe só existe com o jogo rodando.
+
+## 11. Áreas e câmera
 
 **Arquivo:** `scripts/fases/area_de_jogo.gd`.
 
@@ -347,7 +416,7 @@ Ao carregar, a área passa os limites para a câmera do personagem, que deixa de
 
 `fase` e `area` são o que o portal usa para registrar a conclusão. Uma área com `fase = 0` nunca conta para o progresso, o que serve para cenas de experimento.
 
-## 11. Portal e conclusão de área
+## 12. Portal e conclusão de área
 
 **Arquivos:** `scripts/objetos/portal.gd` e `cenas/objetos/portal.tscn`.
 
@@ -361,7 +430,7 @@ O portal da última área de uma fase deve apontar para `res://cenas/ui/selecao_
 
 Cada portal funciona uma vez só. Com `proxima_cena` vazio, ele registra a conclusão e avisa no console que não há próxima cena.
 
-## 12. Progresso e salvamento
+## 13. Progresso e salvamento
 
 **Arquivo:** `scripts/sistemas/progresso.gd`, autoload `Progresso`.
 
@@ -399,7 +468,7 @@ Cada portal funciona uma vez só. Com `proxima_cena` vazio, ele registra a concl
 
 Cada área concluída aparece como `"fase-area"`. Na leitura, nada do arquivo é usado sem conferência: números fora da faixa são corrigidos, áreas inexistentes são descartadas, e um arquivo ilegível faz o jogo começar do zero com um aviso no console, em vez de dar erro.
 
-## 13. Transição entre cenas
+## 14. Transição entre cenas
 
 **Arquivo:** `scripts/sistemas/transicao.gd`, autoload `Transicao`.
 
@@ -415,7 +484,7 @@ Quem usa hoje: os botões do menu principal e da seleção de fase, o portal, o 
 
 Toda troca de cena nova deve usar a `Transicao`, e não `change_scene_to_file` direto.
 
-## 14. Interface
+## 15. Interface
 
 Todas as telas seguem a mesma montagem: um `Control` do tamanho da tela, um `Fundo` (`ColorRect`), um `Centro` (`CenterContainer`) e dentro dele uma `Caixa` (`VBoxContainer`) com o título e os botões. Os botões recebem foco ao abrir, então dá para usar setas e Enter ou o controle.
 
@@ -447,7 +516,7 @@ A derrota e a pausa funcionam com o jogo pausado porque as duas cenas estão no 
 
 Os nomes das fases são o texto dos botões `Fase1` a `Fase5` na cena, e podem ser trocados pelo editor. A cena de entrada de cada fase fica na propriedade `cenas_das_fases`, uma lista com cinco caminhos. Hoje só o primeiro está preenchido, com a primeira área de teste.
 
-## 15. Áreas de teste
+## 16. Áreas de teste
 
 Ficam em `cenas/fases/teste/` e servem para experimentar os sistemas. Por enquanto estão marcadas como fase 1, áreas 1 e 2, para o progresso poder ser testado.
 
@@ -457,15 +526,19 @@ Ficam em `cenas/fases/teste/` e servem para experimentar os sistemas. Por enquan
 |---|---|
 | Personagem | Começa em x = 200 |
 | Dois espelhos | Em x = 260 e 340, acima da cabeça do personagem. O primeiro começa em `/` e o segundo em `\` |
+| Fonte de luz | Em x = 260, no alto, apontando para baixo |
+| Receptor de luz | Em x = 340, no alto |
 | Três plataformas | Em x = 500, 820 e 1200 |
 | Espinhos | Em x = 1000, no chão |
 | Checkpoint | Em x = 1500 |
 | Buraco | Entre x = 1700 e 1860, com a zona de queda embaixo |
 | Portal | Em x = 2460, leva à área 2 |
 
+Os espelhos, a fonte e o receptor formam um puzzle: a luz desce até o primeiro espelho, e a solução é virar os dois, deixando o primeiro em `\` e o segundo em `/`. Assim a luz segue para a direita e sobe até o receptor.
+
 **`area_teste_2.tscn`**, com 1280 pixels de largura (uma tela): chão, uma plataforma e um portal em x = 1160 que leva à seleção de fase.
 
-## 16. Como fazer
+## 17. Como fazer
 
 **Criar uma área nova**
 
@@ -492,9 +565,11 @@ Ficam em `cenas/fases/teste/` e servem para experimentar os sistemas. Por enquan
 
 **Pôr um espelho em uma área.** Instancie `cenas/fases/fase_1_afrodite/elementos/espelho.tscn`, posicione pelo centro e escolha `Orientacao Inicial` no Inspetor.
 
+**Montar um puzzle de luz.** Instancie `fonte_de_luz.tscn`, `espelho.tscn` e `receptor_de_luz.tscn`, da pasta `cenas/fases/fase_1_afrodite/elementos/`. Escolha a `Direcao` da fonte e a `Orientacao Inicial` de cada espelho. Alinhe as peças pelos centros: mesmo `y` nos trechos horizontais e mesmo `x` nos verticais. Deixe os espelhos ao alcance do personagem, e confira rodando a área com F6.
+
 **Zerar o progresso para testar.** Apague o arquivo `progresso.json` em Projeto > Abrir Pasta de Dados do Usuário.
 
-## 17. Decisões provisórias
+## 18. Decisões provisórias
 
 Escolhas feitas para o código andar, que o grupo ainda precisa confirmar:
 
@@ -513,11 +588,13 @@ Escolhas feitas para o código andar, que o grupo ainda precisa confirmar:
 - **Valores de movimento e de salto**, que foram ajustados no olho.
 - **Alcance da interação:** 72 pixels por padrão e 80 no espelho.
 - **A luz do puzzle de Afrodite anda só na horizontal e na vertical**, e os espelhos têm duas orientações diagonais.
+- **O personagem não bloqueia a luz.**
+- **O receptor aceita luz de qualquer direção**, e o espelho reflete dos dois lados.
 
-## 18. O que ainda não existe
+## 19. O que ainda não existe
 
 - Ataque e esquiva.
-- Fonte de luz, feixe e receptor do puzzle de Afrodite. Só o espelho existe.
+- Mecanismo acionado pelo receptor e saída que depende do puzzle.
 - Inimigos, chefes e barra de vida de chefe.
 - Plataformas móveis, armadilhas, portas, mecanismos e puzzles.
 - Tela de vitória, pontuação e contadores.
@@ -532,19 +609,20 @@ Limitações conhecidas do que já existe:
 - Não há botão para apagar o progresso; só apagando o arquivo.
 - A seleção não mostra quais fases já foram concluídas.
 - As pastas das fases de Ares, Hades, Poseidon e Zeus existem, mas ainda estão vazias.
-- No editor, o espelho aparece sempre como `/`. A orientação inicial escolhida só aparece ao rodar o jogo.
+- As peças do puzzle de luz precisam ser alinhadas pelos centros, à mão. Não há grade nem encaixe automático.
+- O receptor acende, mas ainda não controla nada.
 - A indicação do comando mostra sempre a tecla "E", mesmo para quem joga no controle.
 - A interação não confere se há parede entre o personagem e o objeto: basta a distância.
 - O espelho não tem colisão: o personagem passa na frente dele.
 
-## 19. Plano das mecânicas principais
+## 20. Plano das mecânicas principais
 
 As mecânicas do herói estão sendo feitas em oito etapas, uma por vez. Esta tabela separa o que já está no jogo do que ainda é plano.
 
 | Etapa | O que entrega | Situação |
 |---|---|---|
-| 1 | Interação com objetos, com o espelho como objeto de teste, e correção da queda | Implementada. Testes automáticos feitos; falta o teste manual no editor |
-| 2 | Puzzle mínimo: fonte de luz, feixe, espelho e receptor | Planejada |
+| 1 | Interação com objetos, com o espelho como objeto de teste, e correção da queda | Implementada e no repositório. Testes automáticos feitos; teste manual ainda não registrado |
+| 2 | Puzzle mínimo: fonte de luz, feixe, espelho e receptor | Implementada. Testes automáticos feitos; falta o teste manual no editor |
 | 3 | Puzzle ligado a um mecanismo e à liberação da saída | Planejada |
 | 4 | Quantidade de áreas configurável por fase, com cinco áreas em Afrodite | Planejada |
 | 5 | Ataque, validado com um alvo de teste | Planejada |
@@ -556,13 +634,12 @@ Decisões já tomadas para as etapas seguintes, ainda não implementadas:
 
 - **Áreas por fase.** O jogo mantém cinco fases. Afrodite terá cinco áreas, e as outras fases terão a quantidade que seus desafios pedirem, sem número fixo. Isso muda o planejamento anterior de dez áreas. Hoje o código ainda considera duas áreas por fase; a mudança é a etapa 4.
 - **Saves antigos.** Na etapa 4, as fases já liberadas continuam liberadas, e as áreas novas não são marcadas como concluídas.
-- **Luz.** Feixes só na horizontal e na vertical, e espelhos com as orientações `/` e `\`.
 - **Ataque.** Golpe corpo a corpo de 0,15 s, dano 1, intervalo de 0,35 s, uma vez por inimigo a cada golpe.
 - **Esquiva.** Cerca de 160 pixels em 0,2 s, intervalo de 0,6 s, uma vez no ar até tocar o chão, com imunidade a golpes e perigos, mas não à queda.
 
 Os números são valores iniciais, sujeitos a ajuste durante os testes.
 
-## 20. Tarefas cobertas
+## 21. Tarefas cobertas
 
 Relação entre o que está documentado aqui e os códigos do [CHECK.md](CHECK.md):
 
@@ -573,10 +650,11 @@ Relação entre o que está documentado aqui e os códigos do [CHECK.md](CHECK.m
 | P4 Movimentação, salto, queda e aterrissagem | Concluída | Seção 6 |
 | P7 Colisões, hitboxes e hurtboxes | Concluída | Seção 7 |
 | P10 Três vidas, checkpoints e reaparecimento | Concluída | Seções 7 e 8 |
-| P12 Conclusão de áreas, liberação de fases e reinício | Concluída | Seções 11 e 12 |
-| P15 Câmera 2D e limites das áreas | Concluída | Seção 10 |
+| P12 Conclusão de áreas, liberação de fases e reinício | Concluída | Seções 12 e 13 |
+| P15 Câmera 2D e limites das áreas | Concluída | Seção 11 |
 | P21 Repositório e controle de versões | Concluída | Repositório e fluxo de branches |
 | P6 Interação com objetos e animações | Parcial | Sistema de interação e espelho (seção 9); faltam os demais objetos e as animações |
+| P14 Puzzles, água, raios e perigos ambientais | Parcial | Puzzle de luz mínimo de Afrodite (seção 10); faltam o mecanismo, a saída e os puzzles das outras fases |
 | P2 Resolução, tela e entradas | Parcial | Valores provisórios; falta fechar com as definições |
 | P11 Vitória, derrota, pontuação e contadores | Parcial | Tela de derrota |
 | P16 Menus, HUD, pausa, configurações, transições e áudio | Parcial | Menu principal, HUD, pausa com saída para o menu e transição |

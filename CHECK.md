@@ -15,10 +15,10 @@ Situação em 11/10/2026, tirada do quadro do Trello. Para atualizar, troque `[ 
 
 | Pessoa | Concluídas | Parciais | Pendentes | Total |
 |---|---|---|---|---|
-| Pedro | 8 | 7 | 14 | 29 |
+| Pedro | 8 | 8 | 13 | 29 |
 | Aurélio | 0 | 0 | 29 | 29 |
 | Julia | 0 | 1 | 28 | 29 |
-| **Total** | **8** | **8** | **71** | **87** |
+| **Total** | **8** | **9** | **70** | **87** |
 
 Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J21. Aqui cada uma conta uma vez.
 
@@ -43,7 +43,7 @@ Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J
 - [ ] **P11** Programar vitória, derrota, pontuação e contadores se aprovados *(parcial: feita a tela de derrota; faltam vitória, pontuação e contadores)*
 - [x] **P12** Programar conclusão de áreas, liberação de fases e reinício
 - [ ] **P13** Programar plataformas, armadilhas, portas e mecanismos
-- [ ] **P14** Programar puzzles, água, raios e perigos ambientais
+- [ ] **P14** Programar puzzles, água, raios e perigos ambientais *(parcial: feito o puzzle de luz mínimo de Afrodite (fonte, feixe, espelhos e receptor); faltam o mecanismo, a saída e os puzzles das outras fases)*
 - [x] **P15** Programar câmera 2D e limites das áreas
 - [ ] **P16** Programar menus, HUD, pausa, configurações, transições e áudio *(parcial: feitos menu principal, HUD das vidas, pausa e transição; faltam configurações e áudio)*
 - [ ] **P17** Criar salvamento, seleção de fase, exportação e versão executável *(parcial: feitos o salvamento do progresso e a tela de seleção de fase; faltam a exportação e o executável)*
@@ -283,6 +283,7 @@ Depende do funcionamento dos puzzles. Pode andar em paralelo com a Etapa 3. Conc
    - Depende de: A16, P6
 43. [ ] **P14** Programar puzzles, água, raios e perigos ambientais — Pedro
    - Depende de: A16, P13
+   - Parcial: feito o puzzle de luz mínimo de Afrodite (fonte, feixe, espelhos e receptor); faltam o mecanismo, a saída e os puzzles das outras fases
 
 ## Etapa 5 — Planejamento das áreas
 
