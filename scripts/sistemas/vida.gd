@@ -19,6 +19,10 @@ signal morreu
 @export var visual: CanvasItem
 
 var vida_atual := 0
+## Ligue para o dono não levar dano por um tempo, sem contagem: quem liga
+## é quem desliga. A esquiva do personagem usa isso. Não vale para dano que
+## ignora a invencibilidade, como a queda no buraco.
+var imune := false
 var _invencivel := 0.0
 
 
@@ -45,12 +49,13 @@ func esta_morto() -> bool:
 	return vida_atual <= 0
 
 
-## Tira vida. Durante a invencibilidade o dano é ignorado, a não ser que
-## `ignorar_invencibilidade` venha verdadeiro (é o caso da queda no buraco).
+## Tira vida. Durante a invencibilidade, ou com `imune` ligado, o dano é
+## ignorado, a não ser que `ignorar_invencibilidade` venha verdadeiro (é o
+## caso da queda no buraco).
 func receber_dano(quantidade: int, ignorar_invencibilidade := false) -> void:
 	if quantidade <= 0 or esta_morto():
 		return
-	if esta_invencivel() and not ignorar_invencibilidade:
+	if (esta_invencivel() or imune) and not ignorar_invencibilidade:
 		return
 	vida_atual = maxi(vida_atual - quantidade, 0)
 	vida_mudou.emit(vida_atual, vida_maxima)

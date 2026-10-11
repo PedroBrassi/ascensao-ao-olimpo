@@ -40,7 +40,7 @@ Três tarefas aparecem duas vezes no Trello, em cartões repetidos: P15, P16 e J
 - [ ] **P2** Configurar resolução, tela e entradas do jogador *(parcial: resolução e teclas provisórias já estão no projeto; falta fechar com as definições)*
 - [x] **P3** Organizar cenas, scripts, recursos e pastas
 - [x] **P4** Programar movimentação, corrida, salto, queda e aterrissagem
-- [ ] **P5** Programar esquiva, ataque e recebimento de dano *(parcial: feitos o ataque e o recebimento de dano; falta a esquiva)*
+- [ ] **P5** Programar esquiva, ataque e recebimento de dano *(parcial: ataque, esquiva e recebimento de dano prontos; falta o teste manual da esquiva)*
 - [ ] **P6** Programar interação com objetos e integrar animações *(parcial: feitos o sistema de interação e o espelho de Afrodite; faltam os demais objetos e as animações)*
 - [x] **P7** Criar colisões, hitboxes e hurtboxes
 - [ ] **P8** Programar inimigos principais, chefes e padrões de Zeus
@@ -269,7 +269,7 @@ Depende das regras, dos controles e do comportamento dos inimigos, definidos na 
 
 37. [ ] **P5** Programar esquiva, ataque e recebimento de dano — Pedro
    - Depende de: A14, P7 ✓
-   - Parcial: feitos o ataque e o recebimento de dano; falta a esquiva
+   - Parcial: ataque, esquiva e recebimento de dano prontos; falta o teste manual da esquiva
 38. [ ] **P9** Criar inimigo-base e comportamentos de patrulha, perseguição e ataque — Pedro
    - Depende de: A15, P5
 39. [ ] **P8** Programar inimigos principais, chefes e padrões de Zeus — Pedro

@@ -51,6 +51,7 @@ var _quadro_da_ultima_queda := -1
 @onready var _visual: Node2D = $Visual
 @onready var _vida: Vida = $Vida
 @onready var _camera: Camera2D = $Camera
+@onready var _esquiva := get_node_or_null("Esquiva") as EsquivaDoJogador
 
 
 func _ready() -> void:
@@ -58,6 +59,10 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _esquiva != null and _esquiva.esquivando:
+		_mover_na_esquiva()
+		return
+
 	var direcao := Input.get_axis("mover_esquerda", "mover_direita")
 
 	_aplicar_gravidade(delta)
@@ -90,9 +95,22 @@ func cair() -> void:
 
 
 func reaparecer() -> void:
+	if _esquiva != null:
+		_esquiva.cancelar()  # quem reaparece não continua esquivando
 	global_position = ponto_de_retorno
 	velocity = Vector2.ZERO
 	_camera.reset_smoothing()  # a câmera pula direto, sem deslizar pela área
+
+
+## Durante a esquiva o personagem só anda na horizontal, sem gravidade e
+## sem obedecer aos comandos de andar e pular. Paredes e chão continuam
+## valendo: bater em uma parede termina a esquiva.
+func _mover_na_esquiva() -> void:
+	velocity = Vector2(_esquiva.velocidade() * _esquiva.lado, 0.0)
+	move_and_slide()
+	_atualizar_estado_do_chao()
+	if is_on_wall():
+		_esquiva.encerrar()
 
 
 func _aplicar_gravidade(delta: float) -> void:

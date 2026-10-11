@@ -14,21 +14,22 @@ Situação em 11/10/2026. O [README.md](README.md) explica a organização do re
 6. [Personagem](#6-personagem)
 7. [Dano e vida](#7-dano-e-vida)
 8. [Ataque](#8-ataque)
-9. [Checkpoint, queda e reaparecimento](#9-checkpoint-queda-e-reaparecimento)
-10. [Interação com objetos](#10-interação-com-objetos)
-11. [Puzzle de luz de Afrodite](#11-puzzle-de-luz-de-afrodite)
-12. [Acionadores, porta e saída condicionada](#12-acionadores-porta-e-saída-condicionada)
-13. [Áreas e câmera](#13-áreas-e-câmera)
-14. [Portal e conclusão de área](#14-portal-e-conclusão-de-área)
-15. [Progresso e salvamento](#15-progresso-e-salvamento)
-16. [Transição entre cenas](#16-transição-entre-cenas)
-17. [Interface](#17-interface)
-18. [Áreas de teste](#18-áreas-de-teste)
-19. [Como fazer](#19-como-fazer)
-20. [Decisões provisórias](#20-decisões-provisórias)
-21. [O que ainda não existe](#21-o-que-ainda-não-existe)
-22. [Plano das mecânicas principais](#22-plano-das-mecânicas-principais)
-23. [Tarefas cobertas](#23-tarefas-cobertas)
+9. [Esquiva](#9-esquiva)
+10. [Checkpoint, queda e reaparecimento](#10-checkpoint-queda-e-reaparecimento)
+11. [Interação com objetos](#11-interação-com-objetos)
+12. [Puzzle de luz de Afrodite](#12-puzzle-de-luz-de-afrodite)
+13. [Acionadores, porta e saída condicionada](#13-acionadores-porta-e-saída-condicionada)
+14. [Áreas e câmera](#14-áreas-e-câmera)
+15. [Portal e conclusão de área](#15-portal-e-conclusão-de-área)
+16. [Progresso e salvamento](#16-progresso-e-salvamento)
+17. [Transição entre cenas](#17-transição-entre-cenas)
+18. [Interface](#18-interface)
+19. [Áreas de teste](#19-áreas-de-teste)
+20. [Como fazer](#20-como-fazer)
+21. [Decisões provisórias](#21-decisões-provisórias)
+22. [O que ainda não existe](#22-o-que-ainda-não-existe)
+23. [Plano das mecânicas principais](#23-plano-das-mecânicas-principais)
+24. [Tarefas cobertas](#24-tarefas-cobertas)
 
 ---
 
@@ -42,6 +43,7 @@ O jogo já tem um ciclo completo, do menu até a liberação de fases:
 - Checkpoint, queda no buraco e reaparecimento.
 - Interação com objetos.
 - Ataque corpo a corpo do personagem, com alvos de treino para testar.
+- Esquiva, com imunidade a golpes e perigos enquanto dura.
 - Puzzle de luz de Afrodite em versão mínima: fonte, feixe, espelhos que o personagem vira e receptor.
 - Porta que abre com o puzzle resolvido, e saída que só funciona com ele resolvido.
 - Tela de derrota e menu de pausa, com saída para o menu principal.
@@ -65,11 +67,12 @@ Controles que já funcionam:
 | Andar | A e D, ou setas para os lados | Direcional ou analógico esquerdo |
 | Pular | Espaço, W ou seta para cima | A |
 | Atacar | J | X |
+| Esquivar | K ou Shift | B |
 | Interagir | E | Y |
 | Pausar | Esc | Start |
 | Navegar nos menus | Setas e Enter | Direcional e A |
 
-A ação `esquivar` (K ou Shift) já está cadastrada no projeto, mas nenhum script a usa ainda.
+Todas as ações cadastradas no projeto já são usadas.
 
 ## 3. Fluxo do jogo
 
@@ -130,6 +133,7 @@ Perigos e interativos têm máscara 2: só enxergam o personagem. O personagem t
 | `scripts/sistemas/acionadores.gd` | sem cena | Funções de apoio para objetos que dependem de acionadores |
 | `scripts/jogador/interacao_do_jogador.gd` | nó `Interacao` do jogador | Escolhe e aciona o objeto mais próximo |
 | `scripts/jogador/ataque_do_jogador.gd` | nó `Ataque` do jogador | Golpe corpo a corpo do personagem |
+| `scripts/jogador/esquiva_do_jogador.gd` | nó `Esquiva` do jogador | Esquiva: regras, tempo e imunidade |
 | `scripts/fases/teste/alvo_de_treino.gd` | `cenas/fases/teste/alvo_de_treino.tscn` | Alvo parado, só para testar o ataque |
 | `scripts/fases/fase_1_afrodite/espelho.gd` | `cenas/fases/fase_1_afrodite/elementos/espelho.tscn` | Espelho do puzzle de luz |
 | `scripts/fases/fase_1_afrodite/fonte_de_luz.gd` | `cenas/fases/fase_1_afrodite/elementos/fonte_de_luz.tscn` | Fonte de luz: emite e calcula o feixe |
@@ -164,9 +168,10 @@ Jogador (CharacterBody2D, camada 2, grupo "jogador")
 ├── Camera (Camera2D)        suavização de posição ligada, velocidade 8
 ├── Hurtbox (Area2D)         retângulo de 28×60, onde ele pode ser atingido
 ├── Vida (Node)              três vidas
-├── Interacao (Node2D)       no meio do corpo; escolhe e aciona objetos (seção 10)
-└── Ataque (Node2D)          golpe corpo a corpo (seção 8)
-    └── Hitbox (Area2D)      região do golpe, de 44×48, ligada só durante o golpe
+├── Interacao (Node2D)       no meio do corpo; escolhe e aciona objetos (seção 11)
+├── Ataque (Node2D)          golpe corpo a corpo (seção 8)
+│   └── Hitbox (Area2D)      região do golpe, de 44×48, ligada só durante o golpe
+└── Esquiva (Node)           esquiva (seção 9)
 ```
 
 A origem do personagem fica nos pés. Para posicionar, basta pôr o `y` do personagem igual ao `y` do topo do chão.
@@ -249,10 +254,11 @@ A hitbox tem dois modos. No **contínuo**, o padrão, ela golpeia a cada quadro,
 | `hurtbox` | propriedade | De qual hurtbox vêm os golpes |
 | `visual` | propriedade, opcional | Nó que pisca durante a invencibilidade |
 | `vida_atual` | variável | Vida no momento |
+| `imune` | variável | Ligada, o dono não leva dano. Quem liga é quem desliga; a esquiva usa isso |
 | `vida_mudou(atual, maxima)` | sinal | Emitido a cada mudança. É o que o HUD escuta |
 | `sofreu_dano(quantidade)` | sinal | Emitido quando um golpe tira vida |
 | `morreu` | sinal | Emitido uma única vez, quando a vida chega a zero |
-| `receber_dano(quantidade, ignorar_invencibilidade)` | função | Tira vida. Respeita a invencibilidade, a não ser que o segundo valor venha verdadeiro, como na queda |
+| `receber_dano(quantidade, ignorar_invencibilidade)` | função | Tira vida. Respeita a invencibilidade e a imunidade, a não ser que o segundo valor venha verdadeiro, como na queda |
 | `restaurar()` | função | Volta à vida cheia |
 | `esta_invencivel()`, `esta_morto()` | funções | Consultas |
 
@@ -289,7 +295,7 @@ O personagem dá um golpe corpo a corpo, curto, para o lado em que está olhando
 | `duracao` | propriedade, 0,15 s | Tempo em que a região do golpe fica ativa |
 | `intervalo` | propriedade, 0,35 s | Tempo mínimo entre o começo de dois golpes |
 | `distancia` | propriedade, 38 | Distância do meio do personagem ao meio da região do golpe |
-| `habilitado` | propriedade | Desligue para o personagem deixar de atacar por um tempo. A esquiva vai usar isso |
+| `habilitado` | propriedade | Desligue para o personagem deixar de atacar por um tempo. A esquiva usa isso |
 | `atacando` | variável | Verdadeiro do começo ao fim do golpe |
 | `lado` | variável | Lado do golpe atual ou do último: 1 direita, -1 esquerda |
 | `pode_atacar()` | função | Diz se um golpe pode começar agora |
@@ -304,7 +310,64 @@ Os sinais `atacou` e `terminou` ainda não têm ninguém escutando. Eles existem
 
 **Para quem for fazer inimigos.** Ponha a `Hurtbox` do inimigo na camada 3 e deixe o `tempo_de_invencibilidade` da `Vida` dele em 0. O ataque já garante um golpe por inimigo; com a invencibilidade padrão de 1 s, dois de cada três golpes do personagem seriam ignorados.
 
-## 9. Checkpoint, queda e reaparecimento
+## 9. Esquiva
+
+**Arquivos:** `scripts/jogador/esquiva_do_jogador.gd`, no nó `Esquiva` do personagem, com apoio de `jogador.gd` (o movimento) e de `vida.gd` (a imunidade).
+
+**Situação:** implementado e coberto por testes automáticos. Falta o teste manual no editor.
+
+A esquiva é um deslocamento rápido e curto, para o lado em que o personagem está olhando quando ela começa.
+
+**Regras:**
+
+- Um botão de esquiva (K ou Shift no teclado, B no controle).
+- O personagem percorre 160 pixels em 0,2 s, na horizontal e sem gravidade.
+- Entre o começo de uma esquiva e o começo da seguinte passam pelo menos 0,6 s.
+- Funciona no chão e no ar. No ar, pode ser usada uma vez até o personagem tocar o chão de novo. Vale também para quem caiu de uma borda sem pular.
+- Uma esquiva que começa no chão e sai pela borda não gasta a esquiva do ar.
+- Paredes, chão e portas fechadas seguram a esquiva. Bater em uma parede termina a esquiva na hora.
+- Inimigos não seguram: o personagem passa por eles.
+- Durante a esquiva o personagem não leva dano de golpes nem de perigos, como os espinhos.
+- A zona de queda continua valendo: quem entra nela esquivando perde uma vida e reaparece.
+- Durante a esquiva não é possível atacar, interagir, andar nem pular.
+- A esquiva não começa no meio de um golpe: é preciso o golpe terminar.
+- Segurar o botão não repete a esquiva.
+
+**Como ela termina:**
+
+| Motivo | O que acontece com a velocidade |
+|---|---|
+| Acabou o tempo, com o jogador segurando o mesmo lado | O personagem segue na velocidade de caminhada |
+| Acabou o tempo, sem direção ou com o outro lado | O personagem para |
+| Bateu em uma parede | O personagem para |
+| Reapareceu no checkpoint ou perdeu a última vida | A esquiva é cancelada e a velocidade zera |
+
+Em nenhum caso sobra a velocidade da esquiva, que é de 800 pixels por segundo.
+
+**Um quadro de imunidade a mais.** Quando a esquiva acaba, a física ainda acha, por um quadro, que o personagem está onde estava antes. Sem cuidado, um perigo que ele acabou de atravessar ainda o acertaria. Por isso a imunidade dura um quadro além da esquiva, cerca de 0,017 s. Quem termina a esquiva em cima dos espinhos leva o dano logo em seguida.
+
+| Nome | Tipo | Para que serve |
+|---|---|---|
+| `distancia` | propriedade, 160 | Distância percorrida quando nada atrapalha, em pixels |
+| `duracao` | propriedade, 0,2 s | Tempo que a esquiva dura |
+| `intervalo` | propriedade, 0,6 s | Tempo mínimo entre o começo de duas esquivas |
+| `habilitada` | propriedade | Desligue para o personagem deixar de esquivar por um tempo |
+| `esquivando` | variável | Verdadeiro do começo ao fim da esquiva |
+| `lado` | variável | Lado da esquiva atual ou da última: 1 direita, -1 esquerda |
+| `pode_esquivar()` | função | Diz se uma esquiva pode começar agora |
+| `velocidade()` | função | Velocidade horizontal durante a esquiva |
+| `encerrar()` | função | Termina a esquiva normalmente |
+| `cancelar()` | função | Interrompe a esquiva e zera a velocidade. Usada no reaparecimento e na morte |
+| `comecou(lado)` | sinal | Emitido quando a esquiva começa |
+| `terminou` | sinal | Emitido quando a esquiva termina, por qualquer motivo |
+
+**Quem faz o quê.** O nó `Esquiva` decide quando a esquiva começa e termina, liga a imunidade na `Vida` e desliga o ataque e a interação enquanto ela dura. Quem move o personagem é o `Jogador`: durante a esquiva ele deixa de lado os comandos de andar e pular e só anda na horizontal.
+
+**Troca de cena.** Recarregar ou trocar de cena cria um personagem novo, então nenhum estado da esquiva passa de uma cena para a outra.
+
+**Desenho provisório.** Durante a esquiva o personagem fica meio transparente. Os sinais `comecou` e `terminou` ainda não têm ninguém escutando: existem para a animação e o som.
+
+## 10. Checkpoint, queda e reaparecimento
 
 **Arquivos:** `scripts/objetos/checkpoint.gd`, `zona_de_queda.gd` e as funções `cair` e `reaparecer` do jogador.
 
@@ -320,14 +383,15 @@ Os sinais `atacou` e `terminou` ainda não têm ninguém escutando. Eles existem
 | Cair no buraco | Perde uma vida e volta ao último checkpoint |
 | Cair no buraco sem checkpoint ativado | Perde uma vida e volta à posição inicial da área |
 | Cair no buraco durante a invencibilidade | Perde uma vida do mesmo jeito e volta ao checkpoint |
+| Entrar em uma zona de queda durante a esquiva | Perde uma vida do mesmo jeito, a esquiva é cancelada e ele volta ao checkpoint |
 | Cair no buraco com uma vida só | Abre a tela de derrota, sem reaparecer |
 | Perder a terceira vida nos espinhos | Abre a tela de derrota |
 
-A invencibilidade protege de golpes, não de buraco. Cada queda conta uma vez, mesmo que duas zonas de queda estejam encostadas. Depois de reaparecer, o personagem fica 1 s sem levar golpes.
+A invencibilidade e a imunidade da esquiva protegem de golpes, não de buraco. Cada queda conta uma vez, mesmo que duas zonas de queda estejam encostadas. Depois de reaparecer, o personagem fica 1 s sem levar golpes.
 
 O checkpoint não devolve vida. As vidas voltam ao máximo quando a cena é recarregada ou trocada, porque o personagem é criado de novo junto com a cena.
 
-## 10. Interação com objetos
+## 11. Interação com objetos
 
 **Arquivos:** `scripts/sistemas/interativo.gd`, `scripts/jogador/interacao_do_jogador.gd` e, como primeiro objeto, `scripts/fases/fase_1_afrodite/espelho.gd`.
 
@@ -368,13 +432,13 @@ Todo `Interativo` entra sozinho no grupo `interativos`. É por esse grupo que o 
 
 | Nome | Tipo | Para que serve |
 |---|---|---|
-| `habilitada` | propriedade | Desligue para o personagem deixar de interagir por um tempo. A esquiva vai usar isso |
+| `habilitada` | propriedade | Desligue para o personagem deixar de interagir por um tempo. A esquiva usa isso |
 | `margem_de_troca` | propriedade, 4 | Diferença mínima de distância para trocar de objeto |
 | `selecionado` | variável | Objeto que será acionado, ou nulo |
 | `selecao_mudou(objeto)` | sinal | Emitido quando o objeto selecionado muda |
 | `interagiu(objeto)` | sinal | Emitido quando o personagem aciona um objeto |
 
-**Espelho** (`cenas/fases/fase_1_afrodite/elementos/espelho.tscn`). É o primeiro objeto que usa a interação, e uma das peças do puzzle de luz da seção 11. Tem duas orientações, `/` e `\`, e troca de uma para a outra a cada interação.
+**Espelho** (`cenas/fases/fase_1_afrodite/elementos/espelho.tscn`). É o primeiro objeto que usa a interação, e uma das peças do puzzle de luz da seção 12. Tem duas orientações, `/` e `\`, e troca de uma para a outra a cada interação.
 
 ```
 Espelho (Node2D)             origem no centro do espelho
@@ -398,11 +462,11 @@ A orientação é um valor guardado no script, e não a rotação do desenho. O 
 
 O script do espelho roda também dentro do editor (`@tool`), só para o desenho mostrar a orientação inicial escolhida no Inspetor.
 
-## 11. Puzzle de luz de Afrodite
+## 12. Puzzle de luz de Afrodite
 
 **Arquivos:** `scripts/fases/fase_1_afrodite/fonte_de_luz.gd`, `receptor_de_luz.gd` e `espelho.gd`, com as cenas de mesmo nome em `cenas/fases/fase_1_afrodite/elementos/`.
 
-**Situação:** versão mínima implementada e coberta por testes automáticos. O receptor já pode controlar uma porta e a saída da área: veja a seção 12.
+**Situação:** versão mínima implementada e coberta por testes automáticos. O receptor já pode controlar uma porta e a saída da área: veja a seção 13.
 
 O puzzle tem três peças:
 
@@ -462,7 +526,7 @@ O receptor aceita luz vinda de qualquer direção. Com mais de uma fonte, ele fi
 
 A seta da fonte e o desenho do espelho aparecem também no editor, conforme o que estiver no Inspetor. O feixe só existe com o jogo rodando.
 
-## 12. Acionadores, porta e saída condicionada
+## 13. Acionadores, porta e saída condicionada
 
 **Arquivos:** `scripts/sistemas/acionadores.gd`, `scripts/objetos/porta.gd` com `cenas/objetos/porta.tscn`, e `scripts/objetos/portal.gd`.
 
@@ -522,7 +586,7 @@ Porta (StaticBody2D, camada 1)   origem na base, no meio
 - não ponha a porta no caminho da luz que a mantém aberta;
 - não faça a saída depender de um puzzle que fica do outro lado de uma porta que pode fechar.
 
-## 13. Áreas e câmera
+## 14. Áreas e câmera
 
 **Arquivo:** `scripts/fases/area_de_jogo.gd`.
 
@@ -538,9 +602,9 @@ Ao carregar, a área passa os limites para a câmera do personagem, que deixa de
 
 `fase` e `area` são o que o portal usa para registrar a conclusão. Uma área com `fase = 0` nunca conta para o progresso, o que serve para cenas de experimento.
 
-Quantas áreas cada fase tem está na tabela `Progresso.AREAS_POR_FASE` (seção 15). Se uma cena disser que é uma área que a fase não tem, como a área 7 de uma fase com cinco, o jogo avisa no console e essa cena não conta para o progresso.
+Quantas áreas cada fase tem está na tabela `Progresso.AREAS_POR_FASE` (seção 16). Se uma cena disser que é uma área que a fase não tem, como a área 7 de uma fase com cinco, o jogo avisa no console e essa cena não conta para o progresso.
 
-## 14. Portal e conclusão de área
+## 15. Portal e conclusão de área
 
 **Arquivos:** `scripts/objetos/portal.gd` e `cenas/objetos/portal.tscn`.
 
@@ -554,9 +618,9 @@ O portal da última área de uma fase deve apontar para `res://cenas/ui/selecao_
 
 Cada portal funciona uma vez só. Com `proxima_cena` vazio, ele registra a conclusão e avisa no console que não há próxima cena.
 
-O portal pode depender de um puzzle: com acionadores na lista, ele só funciona enquanto todos estiverem ativos. Os detalhes estão na seção 12.
+O portal pode depender de um puzzle: com acionadores na lista, ele só funciona enquanto todos estiverem ativos. Os detalhes estão na seção 13.
 
-## 15. Progresso e salvamento
+## 16. Progresso e salvamento
 
 **Arquivo:** `scripts/sistemas/progresso.gd`, autoload `Progresso`.
 
@@ -610,7 +674,7 @@ Para mudar a quantidade de uma fase, troque o número correspondente em `AREAS_P
 
 Cada área concluída aparece como `"fase-area"`. Na leitura, nada do arquivo é usado sem conferência: números fora da faixa são corrigidos, áreas inexistentes são descartadas, e um arquivo ilegível faz o jogo começar do zero com um aviso no console, em vez de dar erro.
 
-## 16. Transição entre cenas
+## 17. Transição entre cenas
 
 **Arquivo:** `scripts/sistemas/transicao.gd`, autoload `Transicao`.
 
@@ -626,7 +690,7 @@ Quem usa hoje: os botões do menu principal e da seleção de fase, o portal, o 
 
 Toda troca de cena nova deve usar a `Transicao`, e não `change_scene_to_file` direto.
 
-## 17. Interface
+## 18. Interface
 
 Todas as telas seguem a mesma montagem: um `Control` do tamanho da tela, um `Fundo` (`ColorRect`), um `Centro` (`CenterContainer`) e dentro dele uma `Caixa` (`VBoxContainer`) com o título e os botões. Os botões recebem foco ao abrir, então dá para usar setas e Enter ou o controle.
 
@@ -658,7 +722,7 @@ A derrota e a pausa funcionam com o jogo pausado porque as duas cenas estão no 
 
 Os nomes das fases são o texto dos botões `Fase1` a `Fase5` na cena, e podem ser trocados pelo editor. A cena de entrada de cada fase fica na propriedade `cenas_das_fases`, uma lista com cinco caminhos. Hoje só o primeiro está preenchido, com `res://cenas/fases/fase_1_afrodite/area_1.tscn`.
 
-## 18. Áreas de teste
+## 19. Áreas de teste
 
 Ficam em `cenas/fases/teste/` e servem para experimentar os sistemas. Estão marcadas como fase 0, área 0: não pertencem a nenhuma fase e atravessar os portais delas não muda o progresso. Não aparecem no menu; para jogar, abra a cena no editor e use F6.
 
@@ -684,7 +748,7 @@ Os espelhos, a fonte e o receptor formam um puzzle: a luz desce até o primeiro 
 
 **Áreas de Afrodite (esqueleto).** As cinco cenas `area_1.tscn` a `area_5.tscn`, em `cenas/fases/fase_1_afrodite/`, existem só para a progressão poder ser jogada do começo ao fim. Cada uma tem uma tela de largura, chão, duas paredes, o personagem, o HUD e um portal, além de um aviso escrito "ESQUELETO". O portal de cada uma leva à seguinte, e o da quinta leva à seleção de fase. Nenhuma delas está montada: faltam o desenho da área, os desafios e a arte. Quem for montar uma área abre a cena correspondente, constrói em cima e apaga o nó `Aviso`.
 
-## 19. Como fazer
+## 20. Como fazer
 
 **Criar uma área nova**
 
@@ -721,7 +785,7 @@ Os espelhos, a fonte e o receptor formam um puzzle: a luz desce até o primeiro 
 
 **Zerar o progresso para testar.** Apague o arquivo `progresso.json` em Projeto > Abrir Pasta de Dados do Usuário.
 
-## 20. Decisões provisórias
+## 21. Decisões provisórias
 
 Escolhas feitas para o código andar, que o grupo ainda precisa confirmar:
 
@@ -741,6 +805,9 @@ Escolhas feitas para o código andar, que o grupo ainda precisa confirmar:
 - **Valores de movimento e de salto**, que foram ajustados no olho.
 - **Alcance da interação:** 72 pixels por padrão e 80 no espelho.
 - **Ataque:** dano 1, região ativa por 0,15 s, intervalo de 0,35 s e alcance de 60 pixels, sem empurrão.
+- **Esquiva:** 160 pixels em 0,2 s, intervalo de 0,6 s, uma vez no ar, sem gravidade enquanto dura.
+- **A esquiva não começa no meio de um golpe**, e bater em uma parede termina a esquiva.
+- **Ao fim da esquiva** o personagem segue na velocidade de caminhada se o jogador segurar o mesmo lado; senão, para.
 - **A luz do puzzle de Afrodite anda só na horizontal e na vertical**, e os espelhos têm duas orientações diagonais.
 - **O personagem não bloqueia a luz.**
 - **O receptor aceita luz de qualquer direção**, e o espelho reflete dos dois lados.
@@ -748,9 +815,8 @@ Escolhas feitas para o código andar, que o grupo ainda precisa confirmar:
 - **Com vários acionadores, todos precisam estar ativos.**
 - **A porta não fecha em cima do personagem**, e fechada ela bloqueia a luz.
 
-## 21. O que ainda não existe
+## 22. O que ainda não existe
 
-- Esquiva.
 - Alavancas, placas de pressão e outros acionadores. Só o receptor de luz existe.
 - Inimigos, chefes e barra de vida de chefe.
 - Plataformas móveis, armadilhas, portas, mecanismos e puzzles.
@@ -771,12 +837,13 @@ Limitações conhecidas do que já existe:
 - A porta abre e fecha de uma vez, sem animação.
 - O golpe não confere se há parede entre o personagem e o alvo: basta o alvo estar na região.
 - Não há inimigos para atacar. O golpe só pode ser testado nos alvos de treino.
+- Durante a esquiva o personagem não pula: o comando de pulo apertado nesse intervalo é perdido.
 - O portal bloqueado só mostra as barras. Não há mensagem nem som para quem tenta entrar.
 - A indicação do comando mostra sempre a tecla "E", mesmo para quem joga no controle.
 - A interação não confere se há parede entre o personagem e o objeto: basta a distância.
 - O espelho não tem colisão: o personagem passa na frente dele.
 
-## 22. Plano das mecânicas principais
+## 23. Plano das mecânicas principais
 
 As mecânicas do herói estão sendo feitas em oito etapas, uma por vez. Esta tabela separa o que já está no jogo do que ainda é plano.
 
@@ -786,20 +853,16 @@ As mecânicas do herói estão sendo feitas em oito etapas, uma por vez. Esta ta
 | 2 | Puzzle mínimo: fonte de luz, feixe, espelho e receptor | Implementada e no repositório. Testes automáticos feitos; teste manual feito pelo Pedro em 11/10 |
 | 3 | Puzzle ligado a um mecanismo e à liberação da saída | Implementada e no repositório. Testes automáticos feitos; teste manual feito pelo Pedro em 11/10 |
 | 4 | Quantidade de áreas configurável por fase, com cinco áreas em Afrodite | Implementada e no repositório. Testes automáticos feitos; teste manual feito pelo Pedro em 11/10. As cinco áreas existem só como esqueleto |
-| 5 | Ataque, validado com um alvo de teste | Implementada. Testes automáticos feitos; falta o teste manual no editor |
-| 6 | Esquiva, com invulnerabilidade e regras de queda | Planejada |
+| 5 | Ataque, validado com um alvo de teste | Implementada e no repositório. Testes automáticos feitos; teste manual ainda não registrado |
+| 6 | Esquiva, com invulnerabilidade e regras de queda | Implementada. Testes automáticos feitos; falta o teste manual no editor |
 | 7 | Integração da arte de Afrodite e revisão de escala, câmera e legibilidade | Planejada |
 | 8 | Teste do conjunto e documentação final | Planejada |
 
 **Mudança de planejamento (11/10/2026).** O plano original era de cinco fases com duas áreas cada, dez no total. O jogo mantém as cinco fases, mas a quantidade de áreas passou a ser de cada fase: Afrodite tem cinco, e as demais terão o que seus desafios pedirem. Os dez cartões do Trello que falavam em duas ou dez áreas foram renomeados em 11/10/2026.
 
-Decisões já tomadas para as etapas seguintes, ainda não implementadas:
+Os números de alcance, duração, distância e velocidade são valores iniciais, sujeitos a ajuste durante os testes.
 
-- **Esquiva.** Cerca de 160 pixels em 0,2 s, intervalo de 0,6 s, uma vez no ar até tocar o chão, com imunidade a golpes e perigos, mas não à queda.
-
-Os números são valores iniciais, sujeitos a ajuste durante os testes.
-
-## 23. Tarefas cobertas
+## 24. Tarefas cobertas
 
 Relação entre o que está documentado aqui e os códigos do [CHECK.md](CHECK.md):
 
@@ -809,14 +872,14 @@ Relação entre o que está documentado aqui e os códigos do [CHECK.md](CHECK.m
 | P3 Organizar cenas, scripts, recursos e pastas | Concluída | Estrutura de pastas do README, com as pastas próprias de cada fase |
 | P4 Movimentação, salto, queda e aterrissagem | Concluída | Seção 6 |
 | P7 Colisões, hitboxes e hurtboxes | Concluída | Seção 7 |
-| P10 Três vidas, checkpoints e reaparecimento | Concluída | Seções 7 e 9 |
-| P12 Conclusão de áreas, liberação de fases e reinício | Concluída | Seções 14 e 15, agora com quantidade de áreas por fase |
-| P15 Câmera 2D e limites das áreas | Concluída | Seção 13 |
+| P10 Três vidas, checkpoints e reaparecimento | Concluída | Seções 7 e 10 |
+| P12 Conclusão de áreas, liberação de fases e reinício | Concluída | Seções 15 e 16, agora com quantidade de áreas por fase |
+| P15 Câmera 2D e limites das áreas | Concluída | Seção 14 |
 | P21 Repositório e controle de versões | Concluída | Repositório e fluxo de branches |
-| P5 Esquiva, ataque e recebimento de dano | Parcial | Ataque (seção 8) e recebimento de dano (seção 7); falta a esquiva |
-| P6 Interação com objetos e animações | Parcial | Sistema de interação e espelho (seção 10); faltam os demais objetos e as animações |
-| P13 Plataformas, armadilhas, portas e mecanismos | Parcial | Porta acionada por puzzle (seção 12); faltam plataformas, armadilhas e os outros mecanismos |
-| P14 Puzzles, água, raios e perigos ambientais | Parcial | Puzzle de luz de Afrodite, com porta e saída (seções 11 e 12); faltam os puzzles e perigos das outras fases |
+| P5 Esquiva, ataque e recebimento de dano | Parcial | Ataque (seção 8), esquiva (seção 9) e recebimento de dano (seção 7) prontos; falta o teste manual da esquiva |
+| P6 Interação com objetos e animações | Parcial | Sistema de interação e espelho (seção 11); faltam os demais objetos e as animações |
+| P13 Plataformas, armadilhas, portas e mecanismos | Parcial | Porta acionada por puzzle (seção 13); faltam plataformas, armadilhas e os outros mecanismos |
+| P14 Puzzles, água, raios e perigos ambientais | Parcial | Puzzle de luz de Afrodite, com porta e saída (seções 12 e 13); faltam os puzzles e perigos das outras fases |
 | P2 Resolução, tela e entradas | Parcial | Valores provisórios; falta fechar com as definições |
 | P11 Vitória, derrota, pontuação e contadores | Parcial | Tela de derrota |
 | P16 Menus, HUD, pausa, configurações, transições e áudio | Parcial | Menu principal, HUD, pausa com saída para o menu e transição |

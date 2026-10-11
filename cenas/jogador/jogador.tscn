@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://djfcowt2kcgc" path="res://scripts/jogador/interacao_do_jogador.gd" id="4_nkbb3"]
 [ext_resource type="Script" uid="uid://dqv2v621wqggm" path="res://scripts/jogador/ataque_do_jogador.gd" id="5_xtf2f"]
 [ext_resource type="Script" uid="uid://dcr05ahctq7m8" path="res://scripts/sistemas/hitbox.gd" id="6_fn8mc"]
+[ext_resource type="Script" uid="uid://dguayi4wsngxu" path="res://scripts/jogador/esquiva_do_jogador.gd" id="7_fn8mc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ismvl"]
 size = Vector2(32, 64)
@@ -86,3 +87,6 @@ offset_right = 22.0
 offset_bottom = 24.0
 mouse_filter = 2
 color = Color(1, 1, 1, 0.6)
+
+[node name="Esquiva" type="Node" parent="." unique_id=958076804]
+script = ExtResource("7_fn8mc")
